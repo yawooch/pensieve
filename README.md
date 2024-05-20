@@ -21,12 +21,14 @@
   - [ ] CRUD
   - [ ] Search
   - [ ] Todo Y/N
+  - [ ] Infinite Scroll
   - [ ] 메모글 공개/비공개
 - Calendar
   - [ ] 일일 일정 등록
   - [ ] 기간 일정 등록
-  - [ ] Callendar View(Daily/Weekly/Monthly) 변경
+  - [ ] Infinite Scroll
   - [ ] Drag&Drop 일정 수정
+  - [ ] Callendar View(Daily/Weekly/Monthly) 변경
 - Todo List
   - [ ] 기한이 있는 TODO
   - [ ] 기한이 없는 TODO
@@ -35,8 +37,25 @@
 - Admin Page
   - [ ] 메뉴 관리 (추후 메뉴 URL 관리를 관리자가 변경하도록 수정 예정)
 
-## DB 설계
+## 추후 확장 예정 기능
 
+### API 사용
+#### 공공데이터포탈 
+- WEATHER API  OR 미세먼지 API
+#### 카카오 OR 네이버 MAP
+-> 위치 기록으로 일상을 기록할수 있도록
+
+### 라이브러리
+* timeline.js 라이브러리
+* mensary.js 라이브러리
+
+### Text Memo 기능 고도화
+* 음성 -> 문자 변환 API 사용
+* ~~ OCR 라이브러리 ~~
+* Table 편집기능 추가
+
+
+## DB 설계
 
 ![ERD Cloud](https://github.com/yawooch/pensieve/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/%EC%B4%88%EA%B8%B0_ERD.gif)
 
@@ -83,8 +102,6 @@ Back  :\
   <img width="12" />
   <img src="https://skillicons.dev/icons?i=bootstrap" height="40" alt="bootstrap logo"  />
 
-### 사용 외부 API
+### 사용 API
 Full Callendar
 Infinite Scroll
-
-그 외 미정

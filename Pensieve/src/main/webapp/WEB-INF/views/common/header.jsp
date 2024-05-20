@@ -17,12 +17,10 @@
     <link rel="stylesheet" href="${path}/css/bootstrap.css">
     <link rel="stylesheet" href="${path}/css/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${path}/css/themes/prism-okaidia.css">
-    <link rel="stylesheet" href="${path}/css/custom.min.css">
+    <link rel="stylesheet" href="${path}/css/custom.css">
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KGDJBEFF3W"></script>
-
-    
-
+    <script src='${path}/js/fullcalendar/index.global.js'></script>
     <script src="${path}/js/bootstrap/bootstrap.bundle.js"></script>
     <script src="${path}/js/bootstrap/prism.js" data-manual></script>
     <script src="${path}/js/bootstrap/custom.js"></script>
@@ -62,10 +60,7 @@
           </ul>
           <ul class="navbar-nav ms-md-auto">
             <li class="nav-item">
-              <a target="_blank" rel="noopener" class="nav-link" href="#"><i class="bi bi-github"></i><span class="d-lg-none ms-2">GitHub</span></a>
-            </li>
-            <li class="nav-item">
-              <a target="_blank" rel="noopener" class="nav-link" href="#"><i class="bi bi-twitter"></i><span class="d-lg-none ms-2">Twitter</span></a>
+              <a target="_blank" rel="noopener" class="nav-link" href="#"><i class="bi bi-box-arrow-in-right"></i></i><span class="d-lg-none ms-2">Twitter</span></a>
             </li>
             <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
               <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
@@ -73,30 +68,8 @@
             </li>
             <li class="nav-item dropdown" data-bs-theme="light">
               <a class="nav-link d-flex align-items-center" href="${path}/themePage" id="version-menu">
-                <span>v5.3</span>
+                <i class="bi bi-person-circle"></i>
               </a>
-            </li>
-            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
-              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
-              <hr class="d-lg-none my-2 text-white-50">
-            </li>
-            <li class="nav-item dropdown" data-bs-theme="light">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme">
-                <i class="bi bi-circle-half"></i>
-                <span class="d-lg-none ms-2">Toggle theme</span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                    <i class="bi bi-sun-fill"></i><span class="ms-2">Light</span>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="true">
-                    <i class="bi bi-moon-stars-fill"></i><span class="ms-2">Dark</span>
-                  </button>
-                </li>
-              </ul>
             </li>
           </ul>
         </div>

@@ -6,9 +6,30 @@
 
 <c:set var="path" value="${ pageContext.request.contextPath }"/>
 
+<style>
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+</style>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
+    <script src="${path}/js/main/home.js"></script>
 <div class="container">
+
+
+  
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-3">
+              <div class="card-body">
+	            <div id="calendar"></div>
+              </div>
+            </div>
+        </div>
+      </div>
+  
       <div class="row">
         <div class="col-lg-12">
           <div class="bs-component">
@@ -24,7 +45,7 @@
                 <h5 class="card-title">Special title treatment</h5>
                 <h6 class="card-subtitle text-muted">Support card subtitle</h6>
               </div>
-              <center><img src="${path}/img/Pensieve.webp" width="50%"/></center>
+              <center><img src="${path}/img/Pensieve.webp" width="100%"/></center>
               <div class="card-body">
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               </div>
