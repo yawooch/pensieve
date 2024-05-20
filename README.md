@@ -38,6 +38,7 @@
 ## DB 설계
 
 
+![ERD Cloud](https://github.com/yawooch/pensieve/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/%EC%B4%88%EA%B8%B0_ERD.gif)
 
 ## 프로젝트 명 
 스케줄러 프로젝트(펜시브)
