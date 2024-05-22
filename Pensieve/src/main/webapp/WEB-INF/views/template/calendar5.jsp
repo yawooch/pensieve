@@ -1,30 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset='utf-8' />
-<script src='../dist/index.global.js'></script>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"              prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"               prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"         prefix="fn" %>
+<%@ taglib uri="http://www.springframework.org/security/tags"   prefix="security" %>
+
+<c:set var="path" value="${ pageContext.request.contextPath }"/>
+
+
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <script>
 
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
+      height: '100%',
+      expandRows: true,
+      slotMinTime: '08:00',
+      slotMaxTime: '20:00',
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridYear,dayGridMonth,timeGridWeek'
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       },
-      initialView: 'dayGridYear',
+      initialView: 'dayGridMonth',
       initialDate: '2023-01-12',
+      navLinks: true, // can click day/week names to navigate views
       editable: true,
       selectable: true,
+      nowIndicator: true,
       dayMaxEvents: true, // allow "more" link when too many events
-      // businessHours: true,
-      // weekends: false,
       events: [
         {
           title: 'All Day Event',
-          start: '2023-01-01'
+          start: '2023-01-01',
         },
         {
           title: 'Long Event',
@@ -85,23 +94,47 @@
 </script>
 <style>
 
-  body {
-    margin: 40px 10px;
-    padding: 0;
+  html, body {
+    overflow: hidden; /* don't do scrollbars */
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
   }
 
-  #calendar {
-    max-width: 1200px;
-    margin: 0 auto;
+  #calendar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .fc-header-toolbar {
+    /*
+    the calendar will be butting up against the edges,
+    but let's scoot in the header's buttons
+    */
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 
 </style>
 </head>
 <body>
 
-  <div id='calendar'></div>
+<div class="container">
+   <div class="row">
+     <div class="col-lg-12">
+         <div class="card mb-3">
+           <div class="card-body">
+			  <div id='calendar-container'>
+			    <div id='calendar'></div>
+			  </div>
+           </div>
+         </div>
+     </div>
+   </div>
+</div>
 
 </body>
 </html>

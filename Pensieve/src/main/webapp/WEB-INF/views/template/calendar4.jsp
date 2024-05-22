@@ -1,8 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset='utf-8' />
-<script src='../dist/index.global.js'></script>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"              prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"               prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"         prefix="fn" %>
+<%@ taglib uri="http://www.springframework.org/security/tags"   prefix="security" %>
+
+<c:set var="path" value="${ pageContext.request.contextPath }"/>
+
+
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <script>
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -59,13 +64,6 @@
 
 </script>
 <style>
-
-  body {
-    margin-top: 40px;
-    font-size: 14px;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-  }
-
   #external-events {
     position: fixed;
     left: 20px;
@@ -111,6 +109,11 @@
 </style>
 </head>
 <body>
+<div class="container">
+   <div class="row">
+     <div class="col-lg-12">
+         <div class="card mb-3">
+           <div class="card-body">
   <div id='wrap'>
 
     <div id='external-events'>
@@ -145,5 +148,10 @@
     </div>
 
   </div>
+           </div>
+         </div>
+     </div>
+   </div>
+</div>
 </body>
 </html>

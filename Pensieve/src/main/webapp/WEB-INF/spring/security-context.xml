@@ -12,10 +12,10 @@
 		  
    	<security:http pattern="/resources/**" security="none"></security:http>
 
-	<security:http auto-config="false" use-expressions="false">
-		<security:intercept-url pattern="/login" access="permitAll"/>
-		<security:intercept-url pattern="/**" access="isAuthenticated()"/>
-	</security:http>
+<!-- 	<security:http auto-config="false" use-expressions="false"> -->
+<!-- 		<security:intercept-url pattern="/login" access="permitAll"/> -->
+<!-- 		<security:intercept-url pattern="/**" access="isAuthenticated()"/> -->
+<!-- 	</security:http> -->
 
 	<security:authentication-manager>
   		<security:authentication-provider>

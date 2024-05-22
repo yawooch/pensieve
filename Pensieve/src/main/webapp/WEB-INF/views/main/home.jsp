@@ -6,6 +6,8 @@
 
 <c:set var="path" value="${ pageContext.request.contextPath }"/>
 
+
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <style>
   #calendar {
     max-width: 1100px;
@@ -13,22 +15,9 @@
   }
 
 </style>
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
     <script src="${path}/js/main/home.js"></script>
 <div class="container">
-
-
-  
-      <div class="row">
-        <div class="col-lg-12">
-            <div class="card mb-3">
-              <div class="card-body">
-	            <div id="calendar"></div>
-              </div>
-            </div>
-        </div>
-      </div>
   
       <div class="row">
         <div class="col-lg-12">
@@ -72,6 +61,16 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-3">
+              <div class="card-body">
+                <div id="calendar"></div>
+              </div>
+            </div>
         </div>
       </div>
 </div>

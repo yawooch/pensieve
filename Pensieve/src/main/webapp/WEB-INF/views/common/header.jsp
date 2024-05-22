@@ -42,8 +42,12 @@
                 <a class="dropdown-item" href="${path}/timeline/">timeline</a>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${path}/wc">우찬</a>
+            <li class="nav-item dropdown" data-bs-theme="light">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="#" id="wc">우찬</a>
+              <div class="dropdown-menu" aria-labelledby="wc">
+                <a class="dropdown-item" href="${path}/wc/text">text</a>
+                <a class="dropdown-item" href="${path}/wc/calendar">calendar</a>
+              </div>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${path}/yw">영우</a>
@@ -54,10 +58,28 @@
             <li class="nav-item">
               <a class="nav-link" href="${path}/yh">연희</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${path}/themePage" id="themes">Theme</a>
+            <li class="nav-item dropdown" data-bs-theme="light">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="${path}/" id="template">Template</a>
+              <div class="dropdown-menu" aria-labelledby="template">
+                <a class="dropdown-item" href="${path}/template/themePage" id="themes">Theme</a>
+                <a class="dropdown-item" href="${path}/template/text">text</a>
+                <a class="dropdown-item" href="${path}/template/calendar1" >calendar1 </a>
+                <a class="dropdown-item" href="${path}/template/calendar2" >calendar2 </a>
+                <a class="dropdown-item" href="${path}/template/calendar3" >calendar3 </a>
+                <a class="dropdown-item" href="${path}/template/calendar4" >calendar4 </a>
+                <a class="dropdown-item" href="${path}/template/calendar5" >calendar5 </a>
+                <a class="dropdown-item" href="${path}/template/calendar6" >calendar6 </a>
+                <a class="dropdown-item" href="${path}/template/calendar7" >calendar7 </a>
+                <a class="dropdown-item" href="${path}/template/calendar8" >calendar8 </a>
+                <a class="dropdown-item" href="${path}/template/calendar9" >calendar9 </a>
+                <a class="dropdown-item" href="${path}/template/calendar10">calendar10</a>
+                <a class="dropdown-item" href="${path}/template/calendar11">calendar11</a>
+                <a class="dropdown-item" href="${path}/template/calendar12">calendar12</a>
+                <a class="dropdown-item" href="${path}/template/calendar13">calendar13</a>
+              </div>
             </li>
           </ul>
+          
           <ul class="navbar-nav ms-md-auto">
             <li class="nav-item">
               <a target="_blank" rel="noopener" class="nav-link" href="#"><i class="bi bi-box-arrow-in-right"></i></i><span class="d-lg-none ms-2">Twitter</span></a>

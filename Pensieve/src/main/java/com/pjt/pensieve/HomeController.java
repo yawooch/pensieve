@@ -45,12 +45,6 @@ public class HomeController
         modelAndView.setViewName("main/home");
         return modelAndView;
     }
-    @RequestMapping(value = "/wc")
-    public ModelAndView wcFirstView(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("wc/home");
-        return modelAndView;
-    }
     @RequestMapping(value = "/yw")
     public ModelAndView ywFirstView(ModelAndView modelAndView)
     {
@@ -70,10 +64,100 @@ public class HomeController
         return modelAndView;
     }
 
-    @RequestMapping(value = "/themePage")
+    @RequestMapping(value = "/template/themePage")
     public ModelAndView themePage(ModelAndView modelAndView)
     {
-        modelAndView.setViewName("themePage");
+        modelAndView.setViewName("template/themePage");
         return modelAndView;
     }
+    @RequestMapping(value = "/template/calendar1")
+    public ModelAndView calendar1(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar1");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/template/calendar2")
+    public ModelAndView calendar2(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar2");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar3")
+    public ModelAndView calendar3(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar3");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar4")
+    public ModelAndView calendar4(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar4");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar5")
+    public ModelAndView calendar5(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar5");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar6")
+    public ModelAndView calendar6(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar6");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar7")
+    public ModelAndView calendar7(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar7");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar8")
+    public ModelAndView calendar8(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar8");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar9")
+    public ModelAndView calendar9(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar9");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar10")
+    public ModelAndView calendar10(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar10");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar11")
+    public ModelAndView calendar11(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar11");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar12")
+    public ModelAndView calendar12(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar12");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/template/calendar13")
+    public ModelAndView calendar13(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/calendar13");
+        return modelAndView;
+    }
+    
 }
