@@ -16,7 +16,7 @@
 
 </style>
 
-    <script src="${path}/js/main/home.js"></script>
+    <script src="${path}/js/wc/calendar.js"></script>
 <div class="container">
       <div class="row">
         <div class="col-lg-12">
