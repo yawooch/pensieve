@@ -23,4 +23,10 @@ public class TextMemoController
         modelAndView.setViewName("wc/calendar");
         return modelAndView;
     }
+    @RequestMapping(value = "/wc/timeline")
+    public ModelAndView timelineView(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("wc/timeline");
+        return modelAndView;
+    }
 }

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="${path}/css/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${path}/css/themes/prism-okaidia.css">
     <link rel="stylesheet" href="${path}/css/custom.css">
+    <script src="${path}/js/jquery/jquery-3.7.1.js"></script>
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KGDJBEFF3W"></script>
     <script src='${path}/js/fullcalendar/index.global.js'></script>
@@ -37,9 +38,9 @@
             <li class="nav-item dropdown" data-bs-theme="light">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="${path}/" id="main">Main</a>
               <div class="dropdown-menu" aria-labelledby="main">
-                <a class="dropdown-item" href="${path}/text/">text</a>
-                <a class="dropdown-item" href="${path}/calendar/">calendar</a>
-                <a class="dropdown-item" href="${path}/timeline/">timeline</a>
+                <a class="dropdown-item" href="${path}/main/text">text</a>
+                <a class="dropdown-item" href="${path}/main/calendar">calendar</a>
+                <a class="dropdown-item" href="${path}/main/timeline">timeline</a>
               </div>
             </li>
             <li class="nav-item dropdown" data-bs-theme="light">
@@ -47,6 +48,7 @@
               <div class="dropdown-menu" aria-labelledby="wc">
                 <a class="dropdown-item" href="${path}/wc/text">text</a>
                 <a class="dropdown-item" href="${path}/wc/calendar">calendar</a>
+                <a class="dropdown-item" href="${path}/wc/timeline">timeline</a>
               </div>
             </li>
             <li class="nav-item">
@@ -63,6 +65,7 @@
               <div class="dropdown-menu" aria-labelledby="template">
                 <a class="dropdown-item" href="${path}/template/themePage" id="themes">Theme</a>
                 <a class="dropdown-item" href="${path}/template/text">text</a>
+                <a class="dropdown-item" href="${path}/template/timeline"  >timeline</a>
                 <a class="dropdown-item" href="${path}/template/calendar1" >calendar1 </a>
                 <a class="dropdown-item" href="${path}/template/calendar2" >calendar2 </a>
                 <a class="dropdown-item" href="${path}/template/calendar3" >calendar3 </a>
@@ -81,18 +84,23 @@
           </ul>
           
           <ul class="navbar-nav ms-md-auto">
-            <li class="nav-item">
-              <a target="_blank" rel="noopener" class="nav-link" href="#"><i class="bi bi-box-arrow-in-right"></i></i><span class="d-lg-none ms-2">Twitter</span></a>
-            </li>
-            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
-              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
-              <hr class="d-lg-none my-2 text-white-50">
-            </li>
-            <li class="nav-item dropdown" data-bs-theme="light">
-              <a class="nav-link d-flex align-items-center" href="${path}/themePage" id="version-menu">
-                <i class="bi bi-person-circle"></i>
-              </a>
-            </li>
+          
+            <!-- 로그인 전 -->
+            <c:if test="${ empty loginMember }">
+	           <li class="nav-item">
+	             <a target="_blank" rel="noopener" class="nav-link" href="${path}/login">
+	               <i class="bi bi-box-arrow-in-right"></i>
+	             </a>
+	           </li>
+            </c:if>
+            <!-- 로그인 후 -->
+            <c:if test="${ not empty loginMember }">
+	            <li class="nav-item dropdown" data-bs-theme="light">
+	              <a class="nav-link d-flex align-items-center" href="${path}/mypage" id="version-menu">
+	                <i class="bi bi-person-circle"></i>
+	              </a>
+	            </li>
+            </c:if>
           </ul>
         </div>
       </div>

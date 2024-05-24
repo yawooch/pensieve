@@ -65,7 +65,7 @@
 </script>
 <style>
   #external-events {
-    position: fixed;
+    position: absolute;
     left: 20px;
     top: 20px;
     width: 150px;

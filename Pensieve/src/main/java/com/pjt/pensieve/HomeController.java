@@ -39,10 +39,34 @@ public class HomeController
         return "main/home";
     }
 
+    @RequestMapping(value = "/login")
+    public ModelAndView login(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/login");
+        return modelAndView;
+    }
     @RequestMapping(value = "/main")
     public ModelAndView main(ModelAndView modelAndView)
     {
         modelAndView.setViewName("main/home");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/main/calendar")
+    public ModelAndView mainCalendar(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("main/calendar");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/main/text")
+    public ModelAndView mainText(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("main/text");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/main/timeline")
+    public ModelAndView mainTimeline(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("main/timeline");
         return modelAndView;
     }
     @RequestMapping(value = "/yw")
@@ -157,6 +181,24 @@ public class HomeController
     public ModelAndView calendar13(ModelAndView modelAndView)
     {
         modelAndView.setViewName("template/calendar13");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/template/text")
+    public ModelAndView templateText(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/text");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/template/timeline")
+    public ModelAndView timeline(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("template/timeline");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/common/pageError")
+    public ModelAndView pageError(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/pageError");
         return modelAndView;
     }
     

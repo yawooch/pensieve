@@ -1,18 +1,42 @@
 
 document.addEventListener('DOMContentLoaded', function() {
+ function selectDateFunc(arg) 
+ {
+      var title = prompt('Event Title:');
+      console.log(arg);
+      if (title) {
+        calendar.addEvent({
+          title: title,
+          start: arg.start,
+          end: arg.end,
+          allDay: arg.allDay
+        })
+      }
+      calendar.unselect()
+    };
+
   var calendarEl = document.getElementById('calendar');
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      right: 'dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
+    locale:'ko',
     initialDate: '2023-01-12',
     navLinks: true, // can click day/week names to navigate views
-    businessHours: true, // display business hours
+    //businessHours: true, // display business hours
+    businessHours: {
+      // days of week. an array of zero-based day of week integers (0=Sunday)
+      daysOfWeek: [ 1, 2, 3, 4, 5 ],
+      startTime: '09:00',
+      endTime  : '18:00'
+    },
     editable: true,
+    dayMaxEvents: true, // allow "more" link when too many events
     selectable: true,
+    select: selectDateFunc,
     events: [
       {
         title: 'Business Lunch',
