@@ -79,6 +79,14 @@
 		    <version>${org.springsecurity-version}</version>
 		</dependency>
 		
+		<!-- CommonMark MarkDown 문법을 html 형식으로 바꾸어 준다 -->
+        <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark -->
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.22.0</version>
+        </dependency>
+                
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>

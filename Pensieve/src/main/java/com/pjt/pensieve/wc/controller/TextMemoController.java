@@ -3,6 +3,10 @@ package com.pjt.pensieve.wc.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.renderer.markdown.MarkdownRenderer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TextMemoController
 {
-    private MemoryService memoryservice;
+    private final MemoryService memoryservice;
     
     @RequestMapping(value = "/wc/text")
     public ModelAndView wcFirstView(ModelAndView modelAndView)
@@ -48,10 +52,24 @@ public class TextMemoController
         int result = 0;
         Map<String, Object> map = new HashMap<>();
 
-        log.info("memory : ", memory);
+        System.out.println("memory.getContent() : " + memory.getContent());
+        
+        memory.setTodoYn((memory.getTodoYn()==null?"N":"Y"));
 
+        log.info("result : ", result);
         result = memoryservice.save(memory);
+        log.info("memory.getContent() : ", memory.getContent());
 
+        memory = memoryservice.getMemoryOne(memory.getMemoryId());
+        
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(memory.getContent());
+        HtmlRenderer rederer = HtmlRenderer.builder().build();
+        String content = rederer.render(document);
+        memory.setContent(content);
+        
+//        String content = MarkdownRenderer
+        
         log.info("content : ", memory.getContent());
         log.info("title   : ", memory.getTitle());
         log.info("todoYn  : ", memory.getTodoYn());

@@ -21,7 +21,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="formModal">
 
         <div class="mb-3">
           <input type="text" class="form-control" id="title" name="title" placeholder="제목"/>
@@ -55,9 +55,8 @@
                 <button class="bi btn btn-primary rounded-circle p-3 lh-1" type="button" style="font-size:3em; background-color:#888; border-color:#888;"><i class="bi bi-mic"></i></button>
             </div>
       </div>
-      <div class="row"  data-masonry='{"percentPosition": true }'>
+      <div class="row"  data-masonry='{"percentPosition": true, "columnWidth" : ".col-lg-4", "itemSelector" :".col-lg-4"}' id="cardList">
         <div class="col-lg-4">
-          
             <div class="card mb-3">
               <div class="card-header mb-1">
 	              <div class="d-flex w-100 justify-content-between">
@@ -203,9 +202,7 @@
               <div class="card-header border-secondary mb-1">
                   <div class="d-flex w-100 justify-content-between">
                       <h5 class="mb-1">Todo Memo</h5>
-                      
                       <div class="d-flex justify-flex-end">
-<!--                       <div> -->
 	                      <div>
 		                      <input class="form-check-input" type="checkbox" value="Y" id="todo-check">
 	                      </div>
@@ -259,26 +256,66 @@
                 todoYn    : todoYn
               };
         
-        console.log(datas);
-        
         if(content == '' && title == '')
         {
             alert('빈값이 입력되었습니다. 저장되지 않았습니다.');
             $('#myModal').modal('hide');
         }
         $.ajax({
-          url:'${path}/wc/memoryInsert',
-          type:'POST',
-          dataType:'json',
+          url         : '${path}/wc/memoryInsert',
+          type        : 'POST',
+          dataType    : 'json',
           contentType : 'application/json;charset=utf-8',
-          data: JSON.stringify(datas),
+          data        : JSON.stringify(datas),
           success:function(data){
-            console.log(data);
+//             alert('저장되었습니다.');
+            setCardMemory(data.memory);
+            $('#formModal')[0].reset();
+            $('#myModal').modal('hide');
           },
           error:function(data){
-            console.log(data);
+//               alert('저장에 실패하였습니다.');
+              $('#formModal')[0].reset();
+              $('#myModal').modal('hide');
           }
         });
     });
+    
+function setCardMemory(oneMemory)
+{
+    let cardString = '';
+    
+    cardString += '<div class="col-lg-4 mb-3" memory-data="'+ oneMemory.memoryId +'">';
+    cardString += '    <div class="card">';
+    cardString += '      <div class="card-header mb-1">';
+    cardString += '          <div class="d-flex w-100 justify-content-between">';
+    cardString += '              <h5 class="mb-1">'+ oneMemory.title ==null?'':oneMemory.title +'</h5>';
+    cardString += '              <a id="btnGroupDrop'+ oneMemory.memoryId +'" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+    cardString += '                  <i class="bi bi-three-dots-vertical"></i>';
+    cardString += '              </a>';
+    cardString += '              <div class="dropdown-menu" aria-labelledby="btnGroupDrop'+ oneMemory.memoryId +'">';
+    cardString += '                <a class="dropdown-item" href="#">수정</a>';
+    cardString += '                <a class="dropdown-item" href="#">삭제</a>';
+    cardString += '              </div>';
+    cardString += '          </div>';
+    cardString += '      </div>';
+    cardString += '      <div class="card-body">';
+    cardString += '        '+ oneMemory.content;
+    cardString += '      </div>';
+    cardString += '      <div class="card-footer text-muted">';
+    cardString += '        '+ oneMemory.createDate +'';
+    cardString += '      </div>';
+    cardString += '    </div>';
+    cardString += '</div>';
+
+    let cardEle = $(cardString);
+    let masonryEle = $('#cardList').masonry({
+         percentPosition: true,
+         columnWidth    : '.col-lg-4',
+         itemSelector   : '.col-lg-4'
+	});
+    masonryEle.prepend(cardEle);//요소에 추가를 하고
+    masonryEle.masonry('prepended', cardEle);//다시 레이아웃 맞추는 기능을 수행
+}
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -1,5 +1,7 @@
 package com.pjt.pensieve.wc.model.vo;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Memory
 {
-    private String memoryId; 
-    private String content;
-    private String title;
-    private String createDate;
-    private String modifyDate;
-    private String category;
-    private String todoYn;
-    private String memberNo;
+    private int           memoryId; 
+    private String        content;
+    private String        title;
+    private Date          createDate;
+    private Date          modifyDate;
+    private String        category;
+    private String        todoYn;
+    private String        memberId;
 }

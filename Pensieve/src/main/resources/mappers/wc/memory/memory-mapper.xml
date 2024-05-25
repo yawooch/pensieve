@@ -17,8 +17,8 @@
         <result property="memberId"    column="MEMBER_ID"/>
     </resultMap>
 
-    <insert id="insertMemory" parameterType="Memory" 
-        useGeneratedKeys="true" keyColumn="NO" keyProperty="no">
+    <insert    id="insertMemory" parameterType="Memory" 
+               useGeneratedKeys="true" keyColumn="MEMORY_ID" keyProperty="memoryId">
         INSERT
           INTO WC_MEMORY
         (
@@ -36,4 +36,17 @@
              , 'woochan'
         )
     </insert>
+    
+    <select    id="selectMemoryOne" parameterType="_int" resultMap="memoryResultMap">
+        SELECT MEMORY_ID
+             , CONTENT
+             , TITLE
+             , CREATE_DATE
+             , MODIFY_DATE
+             , CATEGORY
+             , TODO_YN
+             , MEMBER_ID
+          FROM WC_MEMORY
+         WHERE MEMORY_ID = #{memoryId}
+    </select>
 </mapper>

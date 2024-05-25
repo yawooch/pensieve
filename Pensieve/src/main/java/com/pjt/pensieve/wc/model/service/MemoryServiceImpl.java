@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemoryServiceImpl implements MemoryService
 {
-    private MemoryMapper memorymapper;
+    private final MemoryMapper memorymapper;
     
     @Override
     @Transactional // 에러가 생기면 자동 롤백 
@@ -27,6 +27,12 @@ public class MemoryServiceImpl implements MemoryService
         result = memorymapper.insertMemory(memory);
         
         return result;
+    }
+
+    @Override
+    public Memory getMemoryOne(int memoryId)
+    {
+        return memorymapper.selectMemoryOne(memoryId);
     }
 
 }

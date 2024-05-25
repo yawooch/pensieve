@@ -8,4 +8,6 @@ import com.pjt.pensieve.wc.model.vo.Memory;
 public interface MemoryMapper
 {
     int insertMemory(Memory memory);
+
+    Memory selectMemoryOne(int memoryId);
 }
