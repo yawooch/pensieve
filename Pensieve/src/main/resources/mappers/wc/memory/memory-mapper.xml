@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pjt.pensieve.wc.model.mapper.MemoryMapper">
+
+    <resultMap  id="memoryResultMap"   type="Memory" >
+        <id     property="memoryId"    column="MEMORY_ID"/>
+        <result property="content"     column="CONTENT"/>
+        <result property="title"       column="TITLE"/>
+        <result property="createDate"  column="CREATE_DATE"/>
+        <result property="modifyDdate" column="MODIFY_DATE"/>
+        <result property="category"    column="CATEGORY"/>
+        <result property="todoYn"      column="TODO_YN"/>
+        <result property="memberId"    column="MEMBER_ID"/>
+    </resultMap>
+
+    <insert id="insertMemory" parameterType="Memory" 
+        useGeneratedKeys="true" keyColumn="NO" keyProperty="no">
+        INSERT
+          INTO WC_MEMORY
+        (
+               MEMORY_ID
+             , CONTENT
+             , TITLE
+             , TODO_YN
+             , MEMBER_ID
+        )
+        VALUES (
+               SEQ_MEMORY_ID.NEXTVAL
+             , #{content}
+             , #{title} 
+             , #{todoYn}
+             , 'woochan'
+        )
+    </insert>
+</mapper>

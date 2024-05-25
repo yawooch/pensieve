@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="${path}/css/bootstrap.css">
     <link rel="stylesheet" href="${path}/css/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${path}/css/themes/prism-okaidia.css">
-    <link rel="stylesheet" href="${path}/css/custom.min.css">
+    <link rel="stylesheet" href="${path}/css/custom.css">
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KGDJBEFF3W"></script>
     <script>
@@ -26,13 +26,12 @@
 
       gtag('config', 'G-KGDJBEFF3W');
     </script>
-    
-
     <script src="${path}/js/bootstrap/bootstrap.bundle.js"></script>
     <script src="${path}/js/bootstrap/prism.js" data-manual></script>
     <script src="${path}/js/bootstrap/custom.js"></script>
+    
   </head>
-  <body>
+  <body style="padding-top:120px;" data-bs-theme="dark">
     <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
       <div class="container">
         <a href="${path}/" class="navbar-brand">Pensieve</a>

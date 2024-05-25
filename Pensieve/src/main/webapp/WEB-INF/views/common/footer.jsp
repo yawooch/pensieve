@@ -13,8 +13,9 @@
   </symbol>
 </svg>
     
+<div class="container-fluid bg-white">
 <!-- <div class="container-fluid fixed-bottom bg-white border-primary border-top"> -->
-<div class="container fixed-bottom bg-white">
+<div class="container">
   <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
     <div class="col-md-4 d-flex align-items-center">
       <a href="https://www.w3schools.com/bootstrap5/index.php" class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
@@ -27,6 +28,7 @@
       <li class="ms-3"><a href="https://github.com/yawooch/pensieve" style="font-size:1.7rem;"><i class="bi bi-github"></i></a></li>
     </ul>
   </footer>
+</div>
 </div>
 </body>
 </html>

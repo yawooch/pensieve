@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
  function selectDateFunc(arg) 
  {
@@ -25,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     locale:'ko',
     initialDate: '2023-01-12',
+    themeSystem:'bootstrap5',
     navLinks: true, // can click day/week names to navigate views
     //businessHours: true, // display business hours
     businessHours: {

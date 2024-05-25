@@ -24,7 +24,7 @@
 	 	  p:dataSource-ref="dataSource"
 	 	  p:configuration-ref="mybatisConfig"
 	 	  p:typeAliasesPackage="com.pjt.pensieve.*.model.vo"
-	 	  p:mapperLocations="classpath:mappers/**/*.xml"
+	 	  p:mapperLocations="classpath:mappers/**.xml"
 	/>
 
 	<bean id="sqlSession"
@@ -34,7 +34,7 @@
 	
 	<bean id="mapperScanner"
 		  class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-		  p:basePackage="com.pjt.pensieve.*.*.model.mapper"
+		  p:basePackage="com.pjt.pensieve.*.model.mapper"
 	/>
 
 	<bean id="transactionManager"

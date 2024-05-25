@@ -759,14 +759,17 @@ progress {
   margin-left: auto;
 }
 
-@media (min-width: 576px) {
-  .container-sm, .container {
-    max-width: 540px;
+@media (min-width: 100px) {
+  .fc * {
+    font-size:8px;
   }
 }
 @media (min-width: 768px) {
   .container-md, .container-sm, .container {
     max-width: 720px;
+  }
+  .fc * {
+    font-size:16px;
   }
 }
 @media (min-width: 992px) {

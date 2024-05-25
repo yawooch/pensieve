@@ -24,7 +24,7 @@
         <form>
 
         <div class="mb-3">
-          <input type="text" class="form-control" id="content" name="content" rows="3" placeholder="제목"/>
+          <input type="text" class="form-control" id="title" name="title" placeholder="제목"/>
         </div>
         <div class="mb-3">
           <textarea class="form-control" id="content" name="content" rows="3" placeholder="내용을 입력하세요"></textarea>
@@ -34,13 +34,13 @@
       </div>
       <div class="modal-footer" style="justify-content: space-between;">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="Y" id="todo-check">
+          <input class="form-check-input" type="checkbox" value="Y" id="todo-check" name="todoYn">
           <label class="form-check-label" for="todo-check">
             Todo Memo
           </label>
         </div>
         <div>
-	        <button type="button" class="btn btn-primary">저장</button>
+	        <button type="button" class="btn btn-primary" id="saveText">저장</button>
 	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
         </div>
       </div>
@@ -245,5 +245,40 @@
             </div>
       </div>
 </div>
+
+<script>
+    $('#saveText').on('click',()=>
+    {
+        let title     = $('#title').val();
+        let content   = $('#content').val();
+        let todoYn    = $('#todo-check:checked').val();
+        
+        let datas = {
+                title     : title,
+                content   : content,
+                todoYn    : todoYn
+              };
+        
+        console.log(datas);
+        
+        if(content == '' && title == '')
+        {
+            alert('빈값이 입력되었습니다. 저장되지 않았습니다.');
+            $('#myModal').modal('hide');
+        }
+        $.ajax({
+          url:'${path}/wc/memoryInsert',
+          type:'POST',
+          dataType:'json',
+          contentType : 'application/json;charset=utf-8',
+          data: JSON.stringify(datas),
+          success:function(data){
+            console.log(data);
+          },
+          error:function(data){
+            console.log(data);
+          }
+        });
+    });
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-    

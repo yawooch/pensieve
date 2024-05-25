@@ -54,7 +54,8 @@
         <input type="checkbox" value="remember-me"> Remember me
       </label>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <button class="w-100 btn btn-lg btn-primary"   type="submit">Sign in</button>
+    <button class="w-100 btn btn-lg btn-secondary mt-2" type="button">Join us</button>
   </form>
 </main>
 
