@@ -9,6 +9,7 @@
     <resultMap  id="memoryResultMap"   type="Memory" >
         <id     property="memoryId"    column="MEMORY_ID"/>
         <result property="content"     column="CONTENT"/>
+        <result property="contentOrig" column="CONTENT"/>
         <result property="title"       column="TITLE"/>
         <result property="createDate"  column="CREATE_DATE"/>
         <result property="modifyDdate" column="MODIFY_DATE"/>
@@ -37,7 +38,7 @@
         )
     </insert>
     
-    <select    id="selectMemoryOne" parameterType="_int" resultMap="memoryResultMap">
+    <select    id="selectMemory" parameterType="_int" resultMap="memoryResultMap">
         SELECT MEMORY_ID
              , CONTENT
              , TITLE
@@ -48,5 +49,35 @@
              , MEMBER_ID
           FROM WC_MEMORY
          WHERE MEMORY_ID = #{memoryId}
+    </select>
+    <select    id="selectMemories" parameterType="string" resultMap="memoryResultMap">
+        SELECT ROWNUM
+             , MEMORY_ID
+             , CONTENT
+             , TITLE
+             , CREATE_DATE
+             , MODIFY_DATE
+             , CATEGORY
+             , TODO_YN
+             , MEMBER_ID
+          FROM (
+               SELECT MEMORY_ID
+                    , CONTENT
+                    , TITLE
+                    , CREATE_DATE
+                    , MODIFY_DATE
+                    , CATEGORY
+                    , TODO_YN
+                    , MEMBER_ID
+                 FROM WC_MEMORY
+                ORDER BY
+                      MODIFY_DATE DESC
+                    , CREATE_DATE DESC
+               ) MEM
+    </select>
+    
+    <select    id="selectMemoryCount" resultType="_int">
+        SELECT COUNT(*)
+          FROM WC_MEMORY
     </select>
 </mapper>

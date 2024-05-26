@@ -10,7 +10,10 @@
 <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/masonry/">
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
  
-    
+<input type="hidden" name="currPage" value=""/>
+<button type="button" id="btnScrollTop" class="btn btn-primary btn-lg fade" style="bottom: 30px; right: 120px; position: fixed;">
+    <i class="bi bi-arrow-bar-up"></i>
+</button>
 <div class="modal fade" id="myModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -24,7 +27,7 @@
         <form id="formModal">
 
         <div class="mb-3">
-          <input type="text" class="form-control" id="title" name="title" placeholder="제목"/>
+          <input type="text" class="form-control" id="title" name="title" placeholder="제목" maxlength="17"/>
         </div>
         <div class="mb-3">
           <textarea class="form-control" id="content" name="content" rows="3" placeholder="내용을 입력하세요"></textarea>
@@ -55,187 +58,16 @@
                 <button class="bi btn btn-primary rounded-circle p-3 lh-1" type="button" style="font-size:3em; background-color:#888; border-color:#888;"><i class="bi bi-mic"></i></button>
             </div>
       </div>
-      <div class="row"  data-masonry='{"percentPosition": true, "columnWidth" : ".col-lg-4", "itemSelector" :".col-lg-4"}' id="cardList">
-        <div class="col-lg-4">
-            <div class="card mb-3">
-              <div class="card-header mb-1">
-	              <div class="d-flex w-100 justify-content-between">
-	                  <h5 class="mb-1">Card header</h5>
-	                  <a id="btnGroupDrop1" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    	                  <i class="bi bi-three-dots-vertical"></i>
-	                  </a>
-	                  <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-	                    <a class="dropdown-item" href="#">수정</a>
-	                    <a class="dropdown-item" href="#">삭제</a>
-	                  </div>
-	              </div>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <h6 class="card-subtitle text-muted">Support card subtitle</h6>
-              </div>
-              <div style="text-align:center;"><img src="${path}/img/Pensieve.webp" width="100%"/></div>
-              <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              </div>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-              </ul>
-              <div class="card-body">
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-              <div class="card-footer text-muted">
-                2 days ago
-              </div>
-          </div>
-        </div>
-          
-        <div class="col-lg-4 mb-3">
-            <div class="card">
-              <div class="card-header mb-1">
-	              <div class="d-flex w-100 justify-content-between">
-	                  <h5 class="mb-1"></h5>
-                      <a id="btnGroupDrop1" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="bi bi-three-dots-vertical"></i>
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="#">수정</a>
-                        <a class="dropdown-item" href="#">삭제</a>
-                      </div>
-	              </div>
-              </div>
-              <div class="card-body">
-                <h4 class="card-title">Card title1</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-              <div class="card-footer text-muted">
-                3 days ago
-              </div>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-3">
-            <div class="card">
-              <div class="card-header mb-1">
-	              <div class="d-flex w-100 justify-content-between">
-	                  <h5 class="mb-1"></h5>
-                      <a id="btnGroupDrop1" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="bi bi-three-dots-vertical"></i>
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="#">수정</a>
-                        <a class="dropdown-item" href="#">삭제</a>
-                      </div>
-	              </div>
-              </div>
-              <div class="card-body">
-                <h4 class="card-title">Card title2</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-              <div class="card-footer text-muted">
-                4 days ago
-              </div>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-3">
-            <div class="card">
-              <div class="card-header mb-1">
-                  <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1"></h5>
-                      <a id="btnGroupDrop1" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="bi bi-three-dots-vertical"></i>
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="#">수정</a>
-                        <a class="dropdown-item" href="#">삭제</a>
-                      </div>
-                  </div>
-              </div>
-              <div class="card-body">
-                <h4 class="card-title">Card title3</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-              <div class="card-footer text-muted">
-                5 days ago
-              </div>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-3">
-            <div class="card">
-              <div class="card-header mb-1">
-                  <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1"></h5>
-                      <a id="btnGroupDrop1" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="bi bi-three-dots-vertical"></i>
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="#">수정</a>
-                        <a class="dropdown-item" href="#">삭제</a>
-                      </div>
-                  </div>
-              </div>
-              <div class="card-body">
-                <h4 class="card-title">Card title4</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <div style="text-align:center;"><img src="${path}/img/Pensieve.webp" width="100%"/></div>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-              <div class="card-footer text-muted">
-                6 days ago
-              </div>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-3">
-            <div class="card border-secondary">
-              <div class="card-header border-secondary mb-1">
-                  <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">Todo Memo</h5>
-                      <div class="d-flex justify-flex-end">
-	                      <div>
-		                      <input class="form-check-input" type="checkbox" value="Y" id="todo-check">
-	                      </div>
-	                      <a id="btnGroupDrop1" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                          <i class="bi bi-three-dots-vertical"></i>
-	                      </a>
-	                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-	                        <a class="dropdown-item" href="#">수정</a>
-	                        <a class="dropdown-item" href="#">삭제</a>
-	                      </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="card-body">
-                <h4 class="card-title">Card title5</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-              <div class="card-footer text-muted align-right">
-                7 days ago
-              </div>
-            </div>
-        </div>
+      <div class="row"  id="cardList" data-masonry='{"percentPosition": true, "columnWidth" : ".col-lg-4", "itemSelector" :".col-lg-4"}'>
+        
       </div>
-      <div class="row m-3">
+      <div class="row fade show m-3" id="loadingCircle" style="display:block;">
       <hr>
             <div class="d-flex gap-2 justify-content-center pb-5">
                 <div class="spinner-border text-warning" style="width:3em;height:3em;border-width:0.6em;"></div>
             </div>
       </div>
-      <div class="row m-3">
+      <div class="row m-3" id="endOfMemories" style="display:none;">
       <hr>
             <div class="d-flex gap-2 justify-content-center pb-5" style="font-size:3em;">
                 <i class="bi bi-x-circle-fill"></i>
@@ -243,79 +75,235 @@
       </div>
 </div>
 
+<p id="sentinel"></p>
+
 <script>
-    $('#saveText').on('click',()=>
-    {
-        let title     = $('#title').val();
-        let content   = $('#content').val();
-        let todoYn    = $('#todo-check:checked').val();
-        
-        let datas = {
-                title     : title,
-                content   : content,
-                todoYn    : todoYn
-              };
-        
-        if(content == '' && title == '')
-        {
-            alert('빈값이 입력되었습니다. 저장되지 않았습니다.');
-            $('#myModal').modal('hide');
-        }
-        $.ajax({
-          url         : '${path}/wc/memoryInsert',
-          type        : 'POST',
-          dataType    : 'json',
-          contentType : 'application/json;charset=utf-8',
-          data        : JSON.stringify(datas),
-          success:function(data){
-//             alert('저장되었습니다.');
-            setCardMemory(data.memory);
-            $('#formModal')[0].reset();
-            $('#myModal').modal('hide');
-          },
-          error:function(data){
-//               alert('저장에 실패하였습니다.');
-              $('#formModal')[0].reset();
-              $('#myModal').modal('hide');
+function loadMemories()
+{
+	let currPage = $('input[name=currPage]').val();
+	
+	//첫 로딩시는 빈값으로 준다.
+	if(currPage == '')
+	{
+		currPage = 0;
+		$('input[name=currPage]').val(currPage);
+	}
+	++ currPage;
+    $('input[name=currPage]').val(currPage);
+    
+	
+    let data = {
+    		currPage     : currPage
+    };
+    
+    $.ajax({
+      url         : '${path}/wc/text/memorySelect',
+      type        : 'POST',
+      data        : data,
+      beforesend: function () {
+//    	    $('#loadingCircle').show();
+          $('#sentinel').show();
+      },
+      success:function(data)
+      {
+    	  let memories = data.memories;
+    	  let totalMemories = data.totalMemories;
+    	  
+          if (totalMemories === 0) {
+//                 $('#loadingCircle').hide();
+                $('#endOfMemories').show();
+        	    $('#sentinel').hide();
+        	    //검색된 아이템이 없을 경우 관찰중인 요소를 숨긴다.
           }
+          else 
+          {
+              if (totalMemories <= currPage*3){
+               //검색된 아이템이 20개 이하일 경우 관찰중인 요소를 숨긴다.
+               $('#sentinel').hide();
+                $('#loadingCircle').hide();
+                $('#endOfMemories').show();
+           }
+           else {
+                $('#sentinel').show();
+//                   $('#loadingCircle').hide();
+           }
+       }
+    	  memories.forEach((memory, idx)=>
+    	  {
+    		  addCardMemory('append', memory);
+    	  });
+      },
+      error:function(data){
+    	  console.log('오류발생');
+          $('#loadingCircle').hide();
+      },
+      complete: function () {
+//           $('#loadingCircle').hide();
+      }
+    });
+};
+
+loadMemories();
+
+$('#saveText').on('click',()=>
+{
+    let title     = $('#title').val();
+    let content   = $('#content').val();
+    let todoYn    = $('#todo-check:checked').val();
+    
+    let datas = {
+            title     : title,
+            content   : content,
+            todoYn    : todoYn
+          };
+    
+    if(content == '' && title == '')
+    {
+        alert('빈값이 입력되었습니다. 저장되지 않았습니다.');
+        $('#myModal').modal('hide');
+    }
+    $.ajax({
+      url         : '${path}/wc/memoryInsert',
+      type        : 'POST',
+      dataType    : 'json',
+      contentType : 'application/json;charset=utf-8',
+      data        : JSON.stringify(datas),
+      success:function(data)
+      {
+        addCardMemory('prepend', data.memory);
+        $('#formModal')[0].reset();
+        $('#myModal').modal('hide');
+      },
+      error:function(data)
+      {
+          alert('저장에 실패하였습니다.');
+          $('#formModal')[0].reset();
+          $('#myModal').modal('hide');
+      }
+    });
+});
+
+    function addCardMemory(addEleStr, oneMemory)
+    {
+        let cardEle = cardMemoryMaker(oneMemory)    ;
+        
+        let masonryEle = $('#cardList').masonry({
+             percentPosition: true,
+             columnWidth    : '.col-lg-4',
+             itemSelector   : '.col-lg-4'
+        });
+        if(addEleStr=='append')
+        {
+            masonryEle.append(cardEle);//요소에 추가를 하고
+            masonryEle.masonry('appended', cardEle);//다시 레이아웃 맞추는 기능을 수행
+        }
+        if(addEleStr=='prepend')
+        {
+            masonryEle.prepend(cardEle);//요소에 추가를 하고
+            masonryEle.masonry('prepended', cardEle);//다시 레이아웃 맞추는 기능을 수행
+        }
+    }
+    function cardMemoryMaker(oneMemory)
+    {
+        let cardParentStr = '';//카드의 최상단 요소를 만들어주는 문자열을 만든다.
+        cardParentStr += '<div class="col-lg-4 mb-3" memory-data="'+ oneMemory.memoryId +'">';
+        cardParentStr += '    <div class="card' + (oneMemory.todoYn != "N"?' border-secondary':'') + '">';
+        cardParentStr += '    </div>';
+        cardParentStr += '</div>';
+        
+        let cardHeaderStr = ''; //카드 헤더 요소를 만들어주는 문자열을 만든다.
+        cardHeaderStr += '      <div class="card-header '+ (oneMemory.todoYn == "Y"?'border-secondary ':'') +'mb-1 ">'; 
+        cardHeaderStr += '          <div class="d-flex w-100 justify-content-between">';
+        cardHeaderStr += '              <h5 class="mb-1">'+ (oneMemory.title == undefined?'':oneMemory.title) +'</h5>';
+        cardHeaderStr += '              <a id="btnGroupDrop'+ oneMemory.memoryId +'" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        cardHeaderStr += '                  <i class="bi bi-three-dots-vertical"></i>';
+        cardHeaderStr += '              </a>';
+        cardHeaderStr += '              <div class="dropdown-menu" aria-labelledby="btnGroupDrop'+ oneMemory.memoryId +'">';
+        cardHeaderStr += '                <a class="dropdown-item" href="${path}/wc/memoryModify/?memoryId="'+ oneMemory.memoryId +'">수정</a>';
+        cardHeaderStr += '                <a class="dropdown-item" href="${path}/wc/memoryDelete/?memoryId="'+ oneMemory.memoryId +'">삭제</a>';
+        cardHeaderStr += '              </div>';
+        cardHeaderStr += '          </div>';
+        cardHeaderStr += '      </div>';
+        
+        let cardBodyStr = '';//카드 바디 요소를 만들어주는 문자열을 만든다.
+        cardBodyStr += '      <div class="card-body">';
+        cardBodyStr += '        '+ oneMemory.content;
+        cardBodyStr += '      </div>';
+        
+        
+        let ulEle = '';
+        let newUlList = '';
+        if($(cardBodyStr).find('ul').length !== 0)
+        {
+            ulEle = $($(cardBodyStr).find('ul').prop("outerHTML"));
+            
+            ulEle.addClass('list-group list-group-flush');
+            ulEle.find('li').addClass('list-group-item');
+            
+            newUlList = ulEle.prop("outerHTML");
+
+        }
+        let cardBodyEle = $(cardBodyStr); 
+        cardBodyEle.find('ul').remove();//remove()를하면 제외된 ele를 반환한다
+        cardBodyStr = cardBodyEle.prop("outerHTML");
+        
+        cardBodyStr += newUlList;
+
+        let date       = new Date(oneMemory.createDate);
+        let offset     = date.getTimezoneOffset() * 60000;
+        let dateOffset = new Date(date.getTime() - offset);
+        
+        let cardFooterStr = ''; //카드 푸터 요소를 만들어주는 문자열을 만든다.
+        cardFooterStr += '      <div class="card-footer text-muted">';
+        cardFooterStr += '        '+ dateOffset.toISOString().replace("T", " ").replace(/\..*/, '');
+        cardFooterStr += '      </div>';
+
+        let cardParent = $(cardParentStr);
+        cardParent.find('div.card').append(cardHeaderStr);
+        cardParent.find('div.card').append(cardBodyStr);
+        cardParent.find('div.card').append(cardFooterStr);
+        
+        let cardEle = cardParent;
+
+        return cardEle;
+    }
+//     let entries = $('#cardList div.col-lg-4');
+    
+    var intersectionObserver = new IntersectionObserver((entries, observer)=>
+    {
+        entries.forEach((entry)=>
+        {
+            // intersectionRatio가 0이라는 것은 대상을 볼 수 없다는 것이므로
+            // 아무것도 하지 않음
+            if (entry.intersectionRatio <= 0) return;
+
+            observer.observe(document.querySelector('#sentinel'));
+            
+            loadMemories();
         });
     });
-    
-function setCardMemory(oneMemory)
-{
-    let cardString = '';
-    
-    cardString += '<div class="col-lg-4 mb-3" memory-data="'+ oneMemory.memoryId +'">';
-    cardString += '    <div class="card">';
-    cardString += '      <div class="card-header mb-1">';
-    cardString += '          <div class="d-flex w-100 justify-content-between">';
-    cardString += '              <h5 class="mb-1">'+ oneMemory.title ==null?'':oneMemory.title +'</h5>';
-    cardString += '              <a id="btnGroupDrop'+ oneMemory.memoryId +'" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-    cardString += '                  <i class="bi bi-three-dots-vertical"></i>';
-    cardString += '              </a>';
-    cardString += '              <div class="dropdown-menu" aria-labelledby="btnGroupDrop'+ oneMemory.memoryId +'">';
-    cardString += '                <a class="dropdown-item" href="#">수정</a>';
-    cardString += '                <a class="dropdown-item" href="#">삭제</a>';
-    cardString += '              </div>';
-    cardString += '          </div>';
-    cardString += '      </div>';
-    cardString += '      <div class="card-body">';
-    cardString += '        '+ oneMemory.content;
-    cardString += '      </div>';
-    cardString += '      <div class="card-footer text-muted">';
-    cardString += '        '+ oneMemory.createDate +'';
-    cardString += '      </div>';
-    cardString += '    </div>';
-    cardString += '</div>';
+    // 주시 시작
+    intersectionObserver.observe(document.querySelector('#sentinel'));
 
-    let cardEle = $(cardString);
-    let masonryEle = $('#cardList').masonry({
-         percentPosition: true,
-         columnWidth    : '.col-lg-4',
-         itemSelector   : '.col-lg-4'
-	});
-    masonryEle.prepend(cardEle);//요소에 추가를 하고
-    masonryEle.masonry('prepended', cardEle);//다시 레이아웃 맞추는 기능을 수행
-}
+    window.addEventListener('scroll', function(ele){
+        let scrollY = window.scrollY;
+    
+    
+        if(scrollY >= 200)
+        {
+            $('#btnScrollTop').addClass('show');
+        }
+        else
+        {
+            $('#btnScrollTop').removeClass('show');
+        }
+    });
+    $('#btnScrollTop').on('click',()=>
+    {
+        window.scrollTo({
+            top:0,
+            behavior:'smooth'
+    });
+    });
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

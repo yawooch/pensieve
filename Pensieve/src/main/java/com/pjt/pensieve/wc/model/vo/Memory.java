@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class Memory
 {
     private int           memoryId; 
-    private String        content;
+    private String        content; 
+    private String        contentOrig;
     private String        title;
     private Date          createDate;
     private Date          modifyDate;

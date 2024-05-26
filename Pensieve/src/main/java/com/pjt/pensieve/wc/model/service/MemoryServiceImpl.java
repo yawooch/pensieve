@@ -1,8 +1,12 @@
 package com.pjt.pensieve.wc.model.service;
 
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pjt.pensieve.main.common.PageInfo;
 import com.pjt.pensieve.wc.model.mapper.MemoryMapper;
 import com.pjt.pensieve.wc.model.vo.Memory;
 
@@ -30,9 +34,27 @@ public class MemoryServiceImpl implements MemoryService
     }
 
     @Override
-    public Memory getMemoryOne(int memoryId)
+    public Memory getMemory(int memoryId)
     {
-        return memorymapper.selectMemoryOne(memoryId);
+        return memorymapper.selectMemory(memoryId);
+    }
+
+    
+    @Override
+    public List<Memory> getMemories(PageInfo pageInfo)
+    {
+        int limit = pageInfo.getListLimit();
+        int offset = (pageInfo.getCurrentPage() - 1) * limit;
+        
+        RowBounds rowBounds = new RowBounds(offset, limit);      
+     
+        return memorymapper.selectMemories(rowBounds);
+    }
+
+    @Override
+    public int getMemoryCount()
+    {
+        return memorymapper.selectMemoryCount();
     }
 
 }

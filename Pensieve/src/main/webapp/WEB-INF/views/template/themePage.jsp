@@ -31,7 +31,7 @@
     <script src="${path}/js/bootstrap/custom.js"></script>
     
   </head>
-  <body style="padding-top:120px;" data-bs-theme="dark">
+  <body style="padding-top:120px;" data-bs-theme="light">
     <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
       <div class="container">
         <a href="${path}/" class="navbar-brand">Pensieve</a>
