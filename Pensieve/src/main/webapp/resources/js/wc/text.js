@@ -147,9 +147,17 @@ $(document).ready(()=>
             behavior:'smooth'
     });
     });
+    
 });
-// document ready nd
 
+function editMemory(memoryId)
+{
+    //memoryId)' + contextPath +'/wc/memoryModify/?memoryId='+ oneMemory.memoryId +'
+    console.log('memoryId : ' + memoryId);
+    $('#myModal').modal('show');   
+}
+
+// document ready nd
 function addCardMemory(addEleStr, oneMemory)
 {
     let cardEle = cardMemoryMaker(oneMemory)    ;
@@ -173,6 +181,7 @@ function addCardMemory(addEleStr, oneMemory)
 }
 function cardMemoryMaker(oneMemory)
 {
+
     let contextPath = $('#contextPath').val();
     let cardParentStr = '';//카드의 최상단 요소를 만들어주는 문자열을 만든다.
     cardParentStr += '<div class="col-lg-4 mb-3" memory-data="'+ oneMemory.memoryId +'">';
@@ -181,7 +190,7 @@ function cardMemoryMaker(oneMemory)
     cardParentStr += '</div>';
     
     let cardHeaderStr = ''; //카드 헤더 요소를 만들어주는 문자열을 만든다.
-    cardHeaderStr += '      <div class="card-header '+ (oneMemory.todoYn == "Y"?'border-secondary ':'') +'mb-1 ">'; 
+    cardHeaderStr += '      <div class="card-header mb-1 ">'; 
     cardHeaderStr += '          <div class="d-flex w-100 justify-content-between">';
     cardHeaderStr += '              <h5 class="mb-1">'+ (oneMemory.title == undefined?'':oneMemory.title) +'</h5>';
     if(oneMemory.todoYn != "N")
@@ -193,7 +202,7 @@ function cardMemoryMaker(oneMemory)
     cardHeaderStr += '                  <i class="bi bi-three-dots-vertical"></i>';
     cardHeaderStr += '              </a>';
     cardHeaderStr += '              <div class="dropdown-menu" aria-labelledby="btnGroupDrop'+ oneMemory.memoryId +'">';
-    cardHeaderStr += '                <a class="dropdown-item" href="' + contextPath +'/wc/memoryModify/?memoryId='+ oneMemory.memoryId +'">수정</a>';
+    cardHeaderStr += '                <a class="dropdown-item" href="javascript:editMemory(' + oneMemory.memoryId +');">수정</a>';
     cardHeaderStr += '                <a class="dropdown-item" href="' + contextPath +'/wc/memoryDelete/?memoryId='+ oneMemory.memoryId +'">삭제</a>';
     cardHeaderStr += '              </div>';
     if(oneMemory.todoYn != "N")
@@ -202,6 +211,7 @@ function cardMemoryMaker(oneMemory)
     }
     cardHeaderStr += '          </div>';
     cardHeaderStr += '      </div>';
+    cardHeaderStr += '      <input type="hidden" name="contentOrig" value="'+ oneMemory.contentOrig +'">';
     
     let cardBodyStr = '';//카드 바디 요소를 만들어주는 문자열을 만든다.
     cardBodyStr += '      <div class="card-body">';
@@ -227,13 +237,16 @@ function cardMemoryMaker(oneMemory)
     
     cardBodyStr += newUlList;
 
-    let date       = new Date(oneMemory.createDate);
-    let offset     = date.getTimezoneOffset() * 60000;
-    let dateOffset = new Date(date.getTime() - offset);
+    let targetDate  = oneMemory.modifyDate==null? oneMemory.createDate:oneMemory.modifyDate;
+    let date        = new Date(targetDate);
+    let offset      = date.getTimezoneOffset() * 60000;
+    let dateOffset  = new Date(date.getTime() - offset);
+    let convertDate = dateOffset.toISOString().replace("T", " ").replace(/\..*/, '');
+    convertDate = convertDate.split(':')[0] + ':' + convertDate.split(':')[1];
     
     let cardFooterStr = ''; //카드 푸터 요소를 만들어주는 문자열을 만든다.
     cardFooterStr += '      <div class="card-footer text-muted">';
-    cardFooterStr += '        '+ dateOffset.toISOString().replace("T", " ").replace(/\..*/, '');
+    cardFooterStr += convertDate;//yyyy-mm-dd hh:mi
     cardFooterStr += '      </div>';
 
     let cardParent = $(cardParentStr);

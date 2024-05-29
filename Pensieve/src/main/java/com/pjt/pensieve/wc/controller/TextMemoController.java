@@ -10,6 +10,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +81,16 @@ public class TextMemoController
         return ResponseEntity.ok(map);
     }
     
+    @GetMapping("wc/memoryDelete")
+    public ModelAndView memoryDelete(ModelAndView modelAndView, @RequestParam("memoryId") int memoryId)
+    {
+        
+        log.info("memoryId");
+
+        modelAndView.setViewName("/wc/text");
+        
+        return modelAndView;
+    }
     @PostMapping("/wc/text/memorySelect")
     public ResponseEntity<Map<String, Object>> memorySelect(@RequestParam("currPage") int currPage)
     {
