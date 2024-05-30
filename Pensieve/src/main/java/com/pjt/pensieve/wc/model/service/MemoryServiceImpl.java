@@ -1,5 +1,6 @@
 package com.pjt.pensieve.wc.model.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -9,24 +10,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pjt.pensieve.main.common.PageInfo;
 import com.pjt.pensieve.wc.model.mapper.MemoryMapper;
 import com.pjt.pensieve.wc.model.vo.Memory;
+import com.pjt.pensieve.wc.model.vo.Todo;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class MemoryServiceImpl implements MemoryService
 {
     private final MemoryMapper memorymapper;
-    
+
     @Override
     @Transactional // 에러가 생기면 자동 롤백 
-    public int save(Memory memory)
+    public int saveMemory(Memory memory)
     {
         int result = 0;
-        
-        log.info("memory : ", memory);
         
         result = memorymapper.insertMemory(memory);
         
@@ -55,6 +53,38 @@ public class MemoryServiceImpl implements MemoryService
     public int getMemoryCount()
     {
         return memorymapper.selectMemoryCount();
+    }
+
+    @Override
+    @Transactional // 에러가 생기면 자동 롤백 
+    public int saveTodo(Todo toDo)
+    {
+        int result = 0;
+        
+        result = memorymapper.insertTodo(toDo);
+        
+        return result;
+    }
+
+    @Override
+    @Transactional // 에러가 생기면 자동 롤백 
+    public int deleteTodo(int memoryId)
+    {
+        return memorymapper.deleteTodo(memoryId);
+    }
+
+    @Override
+    @Transactional // 에러가 생기면 자동 롤백 
+    public int deleteMemory(int memoryId)
+    {
+        return memorymapper.deleteMemory(memoryId);
+    }
+
+    @Override
+    @Transactional // 에러가 생기면 자동 롤백 
+    public int checkTodo(int memoryId, LocalDateTime succDate)
+    {
+        return memorymapper.updateTodo(memoryId, succDate);
     }
 
 }

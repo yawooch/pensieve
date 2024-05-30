@@ -9,6 +9,12 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/masonry/">
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+
+
+    <link href="${path}/css/vanilaCalendar/vanilla-calendar.css" rel="stylesheet">
+    <script src="${path}/js/vanilaCalendar/vanilla-calendar.js" ></script>
+ 
+
 <script src="${path}/js/wc/text.js"></script>
 
 <input type="hidden" name="currPage"  value="" />
@@ -20,6 +26,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="formModal">
+                <input type="hidden" name="memoryId" value=""/>
                 <div class="modal-header">
                     <h5 class="modal-title">new Memo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -31,56 +38,48 @@
                     <div class="mb-3"><textarea rows="7" class="form-control" id="content" name="content" placeholder="내용을 입력하세요"></textarea></div>
                 </div>
 
-                <div class="accordion modalcard" id="accordionExample">
+                <div class="accordion modalcard" id="accordionOptions">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                 Options
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionOptions">
                         <div class="accordion-body collapsed">
                             <div>
                                 <label for="formFile" class="form-label">파일 첨부</label>
-                                <input class="form-control" type="file" id="formFile">
+                                <input class="form-control" type="file" id="formFile" name="imageFile" accept="image/*">
                             </div>
                             <div>
                                 <label class="form-check-label mt-4">TODO 설정</label>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" value="Y" id="todo-check" name="todoYn">
+                                    <input class="form-check-input" type="checkbox" value="Y" id="todoYnCheck" name="todoYn">
                                     <label class="form-check-label" for="todo-check">Todo Memo</label>
                                 </div>
                                 <div>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                                        <input  type="text"   class="form-control" aria-label="Amount (to the nearest dollar)" aria-describedby="button-addon2" readOnly>
-                                        <button type="button" class="btn btn-primary"id="button-addon2">Clear</button>
+                                        <span class="input-group-text d-flex" style="width:85px;justify-content: space-between;"><i class="bi bi-calendar"></i><span>Start</span></span>
+                                        <input  type="hidden" id="fromDateHidden" name="strDate" value="" disabled/>
+                                        <input  type="text"   class="form-control"    id="fromDate" value="" aria-describedby="btnClearFrom" readonly disabled>
+                                        <button type="button" class="btn btn-primary" id="btnClearFrom" disabled>Clear</button>
+                                    </div>
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-text d-flex" style="width:85px;justify-content: space-between;"><i class="bi bi-calendar"></i><span>To</span></span>
+                                        <input  type="hidden" id="toDateHidden" name="endDate" value="" disabled/>
+                                        <input  type="text"   class="form-control"    id="toDate" value="" aria-describedby="btnClearTo" readonly disabled>
+                                        <button type="button" class="btn btn-primary" id="btnClearTo" disabled  >Clear</button>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <label for="category" class="form-label mb-3">카테고리 선택</label>
                                 <select class="form-select" id="category" name="category">
-                                    <option value="전체"  >전체  </option>
-                                    <option value="일정"  >일정  </option>
-                                    <option value="정보"  >정보  </option>
-                                    <option value="기념일">기념일</option>
+                                    <option value="전체"      selected>전체  </option>
+                                    <option value="primary"   class="bg-primary text-white">일정  </option>
+                                    <option value="info"      class="bg-info text-white"   >정보  </option>
+                                    <option value="warning"   class="bg-warning text-white">기념일</option>
                                 </select>
-                            </div>
-                            <div>
-                                <label for="" class="form-label mb-3">카드 색상 선택</label>
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="btn-check"   name="btnradio" id="btnradio0" autocomplete="off" checked>
-                                    <label class="btn btn-outline-success"   for="btnradio0">default</label>
-                                    <input type="radio" class="btn-check"   name="btnradio" id="btnradio1" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary"   for="btnradio1">primary</label>
-                                    <input type="radio" class="btn-check"   name="btnradio" id="btnradio2" autocomplete="off" checked>
-                                    <label class="btn btn-outline-secondary" for="btnradio2">secondary</label>
-                                    <input type="radio" class="btn-check"   name="btnradio" id="btnradio3" autocomplete="off" checked>
-                                    <label class="btn btn-outline-info"      for="btnradio3">info</label>
-                                    <input type="radio" class="btn-check"   name="btnradio" id="btnradio4" autocomplete="off" checked>
-                                    <label class="btn btn-outline-warning"   for="btnradio4">warning</label>
-                                </div>
                             </div>
                         </div>
                         </div>

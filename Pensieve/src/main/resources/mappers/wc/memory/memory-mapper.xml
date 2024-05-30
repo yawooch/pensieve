@@ -7,15 +7,23 @@
 <mapper namespace="com.pjt.pensieve.wc.model.mapper.MemoryMapper">
 
     <resultMap  id="memoryResultMap"   type="Memory" >
-        <id     property="memoryId"    column="MEMORY_ID"/>
-        <result property="content"     column="CONTENT"/>
-        <result property="contentOrig" column="CONTENT"/>
-        <result property="title"       column="TITLE"/>
+        <id     property="memoryId"    column="MEMORY_ID"  />
+        <result property="content"     column="CONTENT"    />
+        <result property="contentOrig" column="CONTENT"    />
+        <result property="title"       column="TITLE"      />
         <result property="createDate"  column="CREATE_DATE"/>
         <result property="modifyDdate" column="MODIFY_DATE"/>
-        <result property="category"    column="CATEGORY"/>
-        <result property="todoYn"      column="TODO_YN"/>
-        <result property="memberId"    column="MEMBER_ID"/>
+        <result property="category"    column="CATEGORY"   />
+        <result property="todoYn"      column="TODO_YN"    />
+        <result property="memberId"    column="MEMBER_ID"  />
+        <association property="todo" columnPrefix="T_" resultMap="todoResultMap"/>
+    </resultMap>
+    
+    <resultMap  id="todoResultMap"   type="Todo" >
+        <id     property="memoryId"  column="MEMORY_ID"/>
+        <result property="strDate"   column="STR_DATE" />
+        <result property="endDate"   column="END_DATE" />
+        <result property="succDate"  column="SUCC_DATE"/>
     </resultMap>
 
     <insert    id="insertMemory" parameterType="Memory" 
@@ -26,6 +34,7 @@
                MEMORY_ID
              , CONTENT
              , TITLE
+             , CATEGORY
              , TODO_YN
              , MEMBER_ID
         )
@@ -33,10 +42,12 @@
                SEQ_MEMORY_ID.NEXTVAL
              , #{content}
              , #{title} 
+             , #{category} 
              , #{todoYn}
              , 'woochan'
         )
     </insert>
+    
     
     <select    id="selectMemory" parameterType="_int" resultMap="memoryResultMap">
         SELECT MEMORY_ID
@@ -60,16 +71,27 @@
              , CATEGORY
              , TODO_YN
              , MEMBER_ID
+             , T_MEMORY_ID
+             , T_SUCC_DATE
+             , T_STR_DATE
+             , T_END_DATE
           FROM (
-               SELECT MEMORY_ID
-                    , CONTENT
-                    , TITLE
-                    , CREATE_DATE
-                    , MODIFY_DATE
-                    , CATEGORY
-                    , TODO_YN
-                    , MEMBER_ID
-                 FROM WC_MEMORY
+               SELECT M.MEMORY_ID
+                    , M.CONTENT
+                    , M.TITLE
+                    , M.CREATE_DATE
+                    , M.MODIFY_DATE
+                    , M.CATEGORY
+                    , M.TODO_YN
+                    , M.MEMBER_ID
+                    , T.MEMORY_ID AS T_MEMORY_ID
+                    , T.SUCC_DATE AS T_SUCC_DATE
+                    , T.STR_DATE  AS T_STR_DATE
+                    , T.END_DATE  AS T_END_DATE
+                 FROM WC_MEMORY M
+                 LEFT OUTER JOIN
+                      WC_TODO   T
+                   ON T.MEMORY_ID = M.MEMORY_ID
                 ORDER BY
                       MODIFY_DATE DESC
                     , CREATE_DATE DESC
@@ -80,4 +102,42 @@
         SELECT COUNT(*)
           FROM WC_MEMORY
     </select>
+    
+    
+    <insert    id="insertTodo" parameterType="Todo" >
+        INSERT
+          INTO WC_TODO
+             (
+               MEMORY_ID
+             , STR_DATE 
+             , END_DATE 
+             , SUCC_DATE
+             )
+        VALUES
+             (
+               #{memoryId}
+             , #{strDate} 
+             , #{endDate} 
+             , #{succDate}
+             )
+    </insert>
+    
+    <delete    id="deleteTodo" parameterType="_int">
+        DELETE
+          FROM WC_TODO 
+         WHERE MEMORY_ID = #{memoryId}      
+    </delete>
+    
+    
+    <delete    id="deleteMemory" parameterType="_int">
+        DELETE
+          FROM WC_MEMORY
+         WHERE MEMORY_ID = #{memoryId}      
+    </delete>
+    
+    <update id="updateTodo"  parameterType="map">
+        UPDATE WC_TODO
+           SET SUCC_DATE = #{succDate}
+         WHERE MEMORY_ID = #{memoryId}   
+    </update>
 </mapper>

@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Memory
 {
-    private int           memoryId; 
-    private String        content; 
-    private String        contentOrig;
-    private String        title;
-    private Date          createDate;
-    private Date          modifyDate;
-    private String        category;
-    private String        todoYn;
-    private String        memberId;
+    private int    memoryId;   //메모리아이디 
+    private String content;    //내용
+    private String contentOrig;//내용원본
+    private String title;      //제목
+    private Date   createDate; //생성일자
+    private Date   modifyDate; //수정일자
+    private String category;   //카테고리
+    private String memberId;   //사용자아이디
+    private String todoYn;     //해야할일여부
+    private Todo   todo;       //해야할일상세정보
 }
