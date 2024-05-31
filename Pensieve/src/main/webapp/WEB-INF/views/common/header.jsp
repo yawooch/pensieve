@@ -60,8 +60,13 @@
             <li class="nav-item">
               <a class="nav-link" href="${path}/jy">주연</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${path}/yh">연희</a>
+            <li class="nav-item dropdown" data-bs-theme="light">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="#" id="yh">연희</a>
+              <div class="dropdown-menu" aria-labelledby="yh">
+                <a class="dropdown-item" href="${path}/yh/">text</a>
+                <a class="dropdown-item" href="${path}/yh/calendar">calendar</a>
+                <a class="dropdown-item" href="${path}/yh/timeline">timeline</a>
+              </div>
             </li>
             <li class="nav-item dropdown" data-bs-theme="light">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="${path}/" id="template">Template</a>

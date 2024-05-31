@@ -344,7 +344,7 @@ function cardMemoryMaker(oneMemory)
     cardBodyStr += newUlList;
 
     let editDate  = oneMemory.modifyDate==null? oneMemory.createDate:oneMemory.modifyDate;
-    let convertDate = parseDate(editDate, 'long');
+    let convertDate = parseDate(editDate, 'summary');
     
     let cardFooterStr = ''; //카드 푸터 요소를 만들어주는 문자열을 만든다.
     cardFooterStr += '      <div class="card-footer text-muted">';
@@ -478,6 +478,31 @@ function parseDate(targetDate, textLen)
     let convertDate = dateOffset.toISOString().replace("T", " ").replace(/\..*/, '');
     convertDate = convertDate.split(':')[0] + ':' + convertDate.split(':')[1];
     
+    if(textLen === 'summary')
+    {
+        // let diffDate   = (new Date().getTime() - dateOffset.getTime());
+        // let minuteToTime  = 60000;
+        // let hourToTime  = minuteToTime*60;
+        // let dayToTime  = hourToTime*24;
+        // let timesAgo = diffDate/hourToTime;
+
+        // console.log(dateOffset.toISOString());
+        // console.log(dateOffset.getTime());
+        // console.log(diffDate);
+        // if(timesAgo <= 0)
+        // {
+        //     timesAgo = Math.abs(diffDate/minuteToTime);
+        //     return timesAgo + ' hours ago';
+        // }
+        // if(timesAgo >= 30)
+        // {
+        //     timesAgo = diffDate/dayToTime*24*30;
+        //     return timesAgo + ' month ago';
+        // }
+        // return timesAgo + ' days ago';
+        return convertDate;
+    }
+
     if(textLen === 'short')
     {
         convertDate = convertDate.split(' ')[0];
