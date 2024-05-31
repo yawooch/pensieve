@@ -14,6 +14,18 @@
 <script src="${path}/js/vanilaCalendar/vanilla-calendar.js" ></script>
 
 <script src="${path}/js/wc/text.js"></script>
+<style>
+.missionStamp-complete
+{
+    position: absolute;
+    font-size: 90px;
+    font-weight: 900;
+    z-index: 10;
+    line-height: 145px;
+    rotate: 350deg;
+    color: var(--bs-green);
+}
+</style>
 
 <input type="hidden" name="currPage"  value="" />
 <input type="hidden" id="contextPath" value="${path}" />

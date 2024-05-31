@@ -292,6 +292,10 @@ function cardMemoryMaker(oneMemory)
     }
     
     cardParentStr += '<div class="col-lg-4 mb-3" memory-data="'+ oneMemory.memoryId +'">';
+    if(oneMemory.todoYn == "Y" &&  oneMemory.todo.succDate !== null)
+    {
+        cardParentStr += '      <div class="missionStamp-complete">complete</div>';
+    }
     cardParentStr += '    <div class="card' + cardColor + '">';
     cardParentStr += '    </div>';
     cardParentStr += '</div>';
@@ -361,7 +365,7 @@ function cardMemoryMaker(oneMemory)
         }
         cardFooterStr += '      </div>';
     }
-    cardFooterStr += '      <div> '+ (oneMemory.modifyDate==null? 'created at: ':'modified at: ') + convertDate + '</div>';//yyyy-MM-dd HH:mm
+    cardFooterStr += '      <div class="text-end italicDate"> '+ convertDate + (oneMemory.modifyDate==null? ' Created':' Modified') + '</div>';//yyyy-MM-dd HH:mm
     cardFooterStr += '      </div>';
 
     let cardParent = $(cardParentStr);
@@ -471,7 +475,6 @@ function parseDate(targetDate, textLen)
     {
         return '';
     }
-
     let date        = new Date(targetDate);
     let offset      = date.getTimezoneOffset() * 60000;
     let dateOffset  = new Date(date.getTime() - offset);
@@ -480,27 +483,42 @@ function parseDate(targetDate, textLen)
     
     if(textLen === 'summary')
     {
-        // let diffDate   = (new Date().getTime() - dateOffset.getTime());
-        // let minuteToTime  = 60000;
-        // let hourToTime  = minuteToTime*60;
-        // let dayToTime  = hourToTime*24;
-        // let timesAgo = diffDate/hourToTime;
-
-        // console.log(dateOffset.toISOString());
-        // console.log(dateOffset.getTime());
-        // console.log(diffDate);
-        // if(timesAgo <= 0)
-        // {
-        //     timesAgo = Math.abs(diffDate/minuteToTime);
-        //     return timesAgo + ' hours ago';
-        // }
-        // if(timesAgo >= 30)
-        // {
-        //     timesAgo = diffDate/dayToTime*24*30;
-        //     return timesAgo + ' month ago';
-        // }
-        // return timesAgo + ' days ago';
-        return convertDate;
+        let diffDate     = (new Date().getTime() - date.getTime());
+        let timesAgo     = parseInt(diffDate/1000);
+        let resultString = '';
+        
+        if(parseInt(diffDate/1000) !== 0 || parseInt(diffDate) !== 0)
+        {
+            resultString = ' Now,';
+        }
+        timesAgo = parseInt(diffDate/1000/60);
+        if(timesAgo !== 0)
+        {
+            resultString = timesAgo + ' Minutes ago,';
+        }
+        timesAgo = parseInt(timesAgo/60);
+        if(timesAgo !== 0)
+        {
+            resultString =  timesAgo + ' Hours ago,';
+        }
+        timesAgo = parseInt(timesAgo/24);
+        if(timesAgo !== 0)
+        {
+            resultString =  timesAgo + ' Days ago,';
+        }
+        //(diffDate/1000/60/60/24/30) 라는 수로 나눠서 확인하면 자연 로그 라는 수가 생성되어
+        // 오히려 방금 작성했는데 3Years Ago 가 나온다
+        if( parseInt(timesAgo/30) !== 0 && (new Date().getMonth() - date.getMonth()) !== 0)
+        {
+            resultString =  (new Date().getMonth() - date.getMonth()) + ' Months ago,';
+        }
+        //(diffDate/1000/60/60/24/365) 라는 수로 나눠서 확인하면 자연 로그 라는 수가 생성되어
+        // 오히려 방금 작성했는데 3Years Ago 가 나온다
+        if(parseInt(timesAgo/365) !== 0 && (new Date().getFullYear() - date.getFullYear()) !== 0)
+        {
+            resultString =  (new Date().getFullYear() - date.getFullYear()) + ' Years ago,';
+        }
+        return resultString;
     }
 
     if(textLen === 'short')

@@ -4547,6 +4547,21 @@ textarea.form-control-lg {
   background-color: var(--bs-card-cap-bg);
   border-top: var(--bs-card-border-width) solid var(--bs-card-border-color);
 }
+
+/************************************************************** 
+    woochan Custom Add Start                                  *
+    '3 Days ago Created' 같이 간지 작살로 꾸밀거임 이탤릭으로 */
+
+.card-footer>div.italicDate {
+    font-family: Montserrat, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 13px;
+    margin-bottom: -8px;
+}
+/* woochan Custom Add End                                     *
+ **************************************************************/
+
 .card-footer:last-child {
   border-radius: 0 0 var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius);
 }
