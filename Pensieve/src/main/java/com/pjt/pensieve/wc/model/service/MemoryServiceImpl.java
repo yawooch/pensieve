@@ -26,7 +26,14 @@ public class MemoryServiceImpl implements MemoryService
     {
         int result = 0;
         
-        result = memorymapper.insertMemory(memory);
+        if(memory.getMemoryId()!=0)
+        {
+            result = memorymapper.updateMemory(memory);
+        }
+        else
+        {
+            result = memorymapper.insertMemory(memory);
+        }
         
         return result;
     }
@@ -39,20 +46,20 @@ public class MemoryServiceImpl implements MemoryService
 
     
     @Override
-    public List<Memory> getMemories(PageInfo pageInfo)
+    public List<Memory> getMemories(PageInfo pageInfo,String searchWord)
     {
         int limit = pageInfo.getListLimit();
         int offset = (pageInfo.getCurrentPage() - 1) * limit;
         
         RowBounds rowBounds = new RowBounds(offset, limit);      
      
-        return memorymapper.selectMemories(rowBounds);
+        return memorymapper.selectMemories(rowBounds, searchWord);
     }
 
     @Override
-    public int getMemoryCount()
+    public int getMemoryCount(String searchWord)
     {
-        return memorymapper.selectMemoryCount();
+        return memorymapper.selectMemoryCount(searchWord);
     }
 
     @Override

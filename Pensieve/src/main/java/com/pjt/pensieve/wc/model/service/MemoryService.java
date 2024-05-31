@@ -13,9 +13,9 @@ public interface MemoryService
 
     Memory getMemory(int i);
 
-    List<Memory> getMemories(PageInfo pageInfo);
+    List<Memory> getMemories(PageInfo pageInfo,String searchWord);
 
-    int getMemoryCount();
+    int getMemoryCount(String searchWord);
 
     int saveTodo(Todo toDo);
 

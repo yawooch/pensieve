@@ -1,8 +1,10 @@
 package com.pjt.pensieve.wc.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +27,8 @@ import com.pjt.pensieve.wc.model.vo.Memory;
 import com.pjt.pensieve.wc.model.vo.Todo;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Slf4j
 @RequiredArgsConstructor
 public class TextMemoController
 {
@@ -54,21 +54,50 @@ public class TextMemoController
     }
 
     @PostMapping("/wc/text/memorySave")
-    public ResponseEntity<Map<String, Object>> memorySave(@RequestBody Memory memory)
+    public ResponseEntity<Map<String, Object>> memorySave(@RequestBody Map<String, Object> memoryMap)
     {
         int result = 0;
+        Memory memory = new Memory();
         Map<String, Object> map = new HashMap<>();
-
-        //여기서 null이 들어가면 insert 될때 null을 넣을수 없음 에러발생
-        memory.setTodoYn(memory.getTodoYn()==null?"N":"Y");
-
-        result = memoryservice.saveMemory(memory);
         
+        memory.setMemoryId(   memoryMap.get("memoryId").equals("")?0 :Integer.parseInt(memoryMap.get("memoryId").toString())) ;
+        memory.setContent(    memoryMap.get("content") ==null?"":memoryMap.get("content").toString());
+        memory.setContentOrig(memoryMap.get("content") ==null?"":memoryMap.get("content").toString());
+        memory.setTitle(      memoryMap.get("title")   ==null?"":memoryMap.get("title").toString());
+        memory.setCategory(   memoryMap.get("category")==null?"":memoryMap.get("category").toString());
+//        memory.setMemberId(null);
+        
+        //여기서 null이 들어가면 insert 될때 null을 넣을수 없음 에러발생
+        memory.setTodoYn(memoryMap.get("todoYn")==null?"N":"Y");
+        
+        result = memoryservice.saveMemory(memory);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Todo toDo = new Todo();
         //memoryId 가 생성된 후에 Todo VO를 insert한다.
         if(memory.getTodoYn().equals("Y"))
         {
             toDo.setMemoryId(memory.getMemoryId());
+            
+            Date strDate = null;
+            Date endDate = null;
+            if(!memoryMap.get("strDate").equals(""))
+            {
+                Object strDateObj = memoryMap.get("strDate");
+                LocalDate localStrDate = LocalDate.parse(strDateObj.toString(),formatter); 
+                strDate = java.sql.Date.valueOf(localStrDate);
+            }
+            if(!memoryMap.get("endDate").equals(""))
+            {
+                Object endDateObj = memoryMap.get("endDate");
+                LocalDate localEndDate = LocalDate.parse(endDateObj.toString(),formatter); 
+                endDate = java.sql.Date.valueOf(localEndDate);
+            }
+            
+            //LocalDate를 Date로 변환하는 과정(Date를 바로쓰면 try 쓰기 귀찮아서...
+            toDo.setStrDate(strDate);
+            toDo.setEndDate(endDate);
+            
             result = memoryservice.saveTodo(toDo);
         }
         //Todo VO가 delete가 되는 경우 (수정했는데 todoYn을 "N"으로 수정)
@@ -78,12 +107,11 @@ public class TextMemoController
         }
 
         memory = memoryservice.getMemory(memory.getMemoryId());
-        memory.setTodo(toDo);//키를갖고 왔을땐 Todo Vo가 없으므로 넣어준다.
         
-        Parser parser = Parser.builder().build();
-        Node document = parser.parse(memory.getContent());
+        Parser parser        = Parser.builder().build();
+        Node document        = parser.parse(memory.getContent());
         HtmlRenderer rederer = HtmlRenderer.builder().build();
-        String content = rederer.render(document);
+        String content       = rederer.render(document);
         memory.setContent(content);
         
         map.put("resultCode", result);
@@ -96,8 +124,6 @@ public class TextMemoController
     {
         int result = 0;
         
-        System.out.println("memoryId : " + memoryId);
-
         result = memoryservice.deleteMemory(memoryId);
         result = memoryservice.deleteTodo(memoryId);
         
@@ -107,26 +133,21 @@ public class TextMemoController
     }
     
     @PostMapping("/wc/text/memorySelect")
-    public ResponseEntity<Map<String, Object>> memorySelect(@RequestParam("currPage") int currPage)
+    public ResponseEntity<Map<String, Object>> memorySelect(@RequestParam("currPage") int currPage, @RequestParam("searchWord") String searchWord)
     {
-        System.out.println("currPage :" + currPage);
-        
-        
         Map<String, Object> resultMap = new HashMap<>();
+
+        System.out.println("searchWord : " + searchWord);
         
         // 전체 게시물 수 조회
-        int listCount = memoryservice.getMemoryCount();
+        int listCount = memoryservice.getMemoryCount(searchWord);
 
-        System.out.println("listCount :" + listCount);
-        
         // 페이징처리
         PageInfo pageInfo = new PageInfo(currPage, 5, listCount, 3);
 
         List<Memory> memories = new ArrayList<Memory>();
         
-        memories = memoryservice.getMemories(pageInfo);
-        
-        System.out.println(memories);
+        memories = memoryservice.getMemories(pageInfo, searchWord);
         
         for (Memory memory : memories)
         {

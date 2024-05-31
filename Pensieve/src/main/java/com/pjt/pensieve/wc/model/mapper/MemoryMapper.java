@@ -17,9 +17,9 @@ public interface MemoryMapper
 
     Memory selectMemory(int memoryId);
 
-    List<Memory> selectMemories(RowBounds rowBounds);
+    List<Memory> selectMemories(RowBounds rowBounds, @Param("searchWord") String searchWord);
 
-    int selectMemoryCount();
+    int selectMemoryCount(@Param("searchWord") String searchWord);
 
     int insertTodo(Todo toDo);
 
@@ -28,4 +28,6 @@ public interface MemoryMapper
     int deleteMemory(int memoryId);
 
     int updateTodo(@Param("memoryId") int memoryId, @Param("succDate") LocalDateTime succDate);
+
+    int updateMemory(Memory memory);
 }

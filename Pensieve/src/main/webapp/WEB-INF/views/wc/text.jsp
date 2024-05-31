@@ -10,10 +10,8 @@
 <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/masonry/">
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 
-
-    <link href="${path}/css/vanilaCalendar/vanilla-calendar.css" rel="stylesheet">
-    <script src="${path}/js/vanilaCalendar/vanilla-calendar.js" ></script>
- 
+<link href="${path}/css/vanilaCalendar/vanilla-calendar.css" rel="stylesheet">
+<script src="${path}/js/vanilaCalendar/vanilla-calendar.js" ></script>
 
 <script src="${path}/js/wc/text.js"></script>
 
@@ -55,7 +53,7 @@
                                 <label class="form-check-label mt-4">TODO 설정</label>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" value="Y" id="todoYnCheck" name="todoYn">
-                                    <label class="form-check-label" for="todo-check">Todo Memo</label>
+                                    <label class="form-check-label" for="todoYnCheck">Todo Memo</label>
                                 </div>
                                 <div>
                                     <div class="input-group mb-3">
@@ -65,7 +63,7 @@
                                         <button type="button" class="btn btn-primary" id="btnClearFrom" disabled>Clear</button>
                                     </div>
                                     <div class="input-group mb-1">
-                                        <span class="input-group-text d-flex" style="width:85px;justify-content: space-between;"><i class="bi bi-calendar"></i><span>To</span></span>
+                                        <span class="input-group-text d-flex" style="width:85px;justify-content: space-between;"><i class="bi bi-calendar"></i><span>End</span></span>
                                         <input  type="hidden" id="toDateHidden" name="endDate" value="" disabled/>
                                         <input  type="text"   class="form-control"    id="toDate" value="" aria-describedby="btnClearTo" readonly disabled>
                                         <button type="button" class="btn btn-primary" id="btnClearTo" disabled  >Clear</button>
@@ -110,11 +108,13 @@
     </div>
 
     <div class="row collapse" id="searchBox">
-        <div class="d-flex gap-2 justify-content-center pb-5">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search Keywords" aria-label="Recipient's username" aria-describedby="button-addon2">
-                <button class="btn btn-primary btn-lg" type="button" id="button-addon2">Search</button>
-            </div>
+        <div class="col-lg-12">
+	        <div class="d-flex gap-2 justify-content-center pb-5">
+	            <div class="input-group mb-3">
+	                <span class="input-group-text bg-primary text-white" id=""><i class="bi bi-search"></i></span>
+	                <input type="text" class="form-control form-control-lg" id="searchInput" name="searchWord" placeholder="Search Keywords" aria-describedby="button-addon2">
+	            </div>
+	        </div>
         </div>
     </div>
     
