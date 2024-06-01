@@ -60,6 +60,9 @@ public class TextMemoController
         Memory memory = new Memory();
         Map<String, Object> map = new HashMap<>();
         
+        System.out.println(memoryMap);
+        System.out.println(memoryMap.get("todo"));
+        
         memory.setMemoryId(   memoryMap.get("memoryId").equals("")?0 :Integer.parseInt(memoryMap.get("memoryId").toString())) ;
         memory.setContent(    memoryMap.get("content") ==null?"":memoryMap.get("content").toString());
         memory.setContentOrig(memoryMap.get("content") ==null?"":memoryMap.get("content").toString());

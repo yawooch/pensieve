@@ -20,5 +20,6 @@ public class Memory
     private String category;   //카테고리
     private String memberId;   //사용자아이디
     private String todoYn;     //해야할일여부
+    private String showDiv;    //보여주기구분
     private Todo   todo;       //해야할일상세정보
 }

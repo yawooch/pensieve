@@ -16,6 +16,7 @@
         <result property="category"    column="CATEGORY"   />
         <result property="todoYn"      column="TODO_YN"    />
         <result property="memberId"    column="MEMBER_ID"  />
+        <result property="showDiv"     column="SHOW_DIV"   />
         <association property="todo" columnPrefix="T_" resultMap="todoResultMap"/>
     </resultMap>
     
@@ -58,6 +59,7 @@
              , M.CATEGORY
              , M.TODO_YN
              , M.MEMBER_ID
+             , M.SHOW_DIV
              , T.MEMORY_ID AS T_MEMORY_ID
              , T.SUCC_DATE AS T_SUCC_DATE
              , T.STR_DATE  AS T_STR_DATE
@@ -66,7 +68,8 @@
           LEFT OUTER JOIN
                WC_TODO   T
             ON T.MEMORY_ID = M.MEMORY_ID
-         WHERE M.MEMORY_ID = #{memoryId}
+         WHERE M.SHOW_DIV = 'Y'
+           AND M.MEMORY_ID = #{memoryId}
     </select>
     <select    id="selectMemories" parameterType="string" resultMap="memoryResultMap">
         SELECT ROWNUM
@@ -99,9 +102,9 @@
                  LEFT OUTER JOIN
                       WC_TODO   T
                    ON T.MEMORY_ID = M.MEMORY_ID
-                   
+                WHERE M.SHOW_DIV = 'Y'
                 <if test="searchWord != ''">
-                WHERE (
+                  AND (
                       M.TITLE   LIKE '%'|| #{searchWord} || '%' OR
                       M.CONTENT LIKE '%'|| #{searchWord} || '%'
                       )
@@ -114,8 +117,9 @@
     <select    id="selectMemoryCount" resultType="_int">
         SELECT COUNT(*)
           FROM WC_MEMORY
+         WHERE SHOW_DIV = 'Y'
                 <if test="searchWord != ''">
-         WHERE (
+           AND (
                TITLE   LIKE '%'|| #{searchWord} || '%' OR
                CONTENT LIKE '%'|| #{searchWord} || '%'
                )
@@ -147,18 +151,18 @@
          WHERE MEMORY_ID = #{memoryId}      
     </delete>
     
-    
-    <delete    id="deleteMemory" parameterType="_int">
-        DELETE
-          FROM WC_MEMORY
-         WHERE MEMORY_ID = #{memoryId}      
-    </delete>
-    
-    <update id="updateTodo"  parameterType="map">
+    <update    id="updateTodo"  parameterType="map">
         UPDATE WC_TODO
            SET SUCC_DATE = #{succDate}
          WHERE MEMORY_ID = #{memoryId}   
     </update>
+    
+    <update    id="deleteMemory" parameterType="_int">
+        UPDATE WC_MEMORY
+           SET SHOW_DIV  = 'N'
+         WHERE MEMORY_ID = #{memoryId}
+    </update>
+    
     
     <update id="updateMemory"  parameterType="Memory">
         UPDATE WC_MEMORY

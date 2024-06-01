@@ -45,6 +45,7 @@ $(document).ready(()=>
     // 주시 시작
     intersectionObserver.observe(document.querySelector('#sentinel'));
     loadMemories();
+    loadMemories();//스크롤 Observe 해결될때까진 일단 두번 실행시키쟈..
     /***********************  Memory 관련 이벤트 끝   **********************/
 
     
@@ -110,7 +111,6 @@ $(document).ready(()=>
 });
 function saveModalMemory()
 {
-    let contextPath = $('#contextPath').val();
     let memoryId  = $('input[name=memoryId]').val();
     let title     = $('#title').val();
     let content   = $('#content').val();
@@ -151,25 +151,39 @@ function saveModalMemory()
         alert('빈값이 입력되었습니다. 저장되지 않았습니다.');
         $('#myModal').modal('hide');
     }
+
+    //memorySaveAjax생각보다 많이 쓰이네
+    memorySaveAjax(datas, ()=>
+    {
+        $('#myModal').modal('hide');
+    });
+}
+
+//넘긴데이터 대로 WC_MEMORY에 저장한다.
+function memorySaveAjax(data, completeFunction)
+{
+    let contextPath = $('#contextPath').val();
+
     $.ajax({
         url         : contextPath +'/wc/text/memorySave',
         type        : 'POST',
         dataType    : 'json',
         contentType : 'application/json;charset=utf-8',
-        data        : JSON.stringify(datas),
+        data        : JSON.stringify(data),
         success:function(data)
         {
             varMemories.set(data.memory.memoryId, data.memory);
             addCardMemory('prepend', data.memory);
-            $('#myModal').modal('hide');
         },
         error:function(data)
         {
             alert('저장에 실패하였습니다.');
-            $('#myModal').modal('hide');
-        }
+        },
+        complete:completeFunction
     });
 }
+
+
 //memory 를 가져온다.
 function loadMemories()
 {
@@ -294,7 +308,7 @@ function cardMemoryMaker(oneMemory)
     cardParentStr += '<div class="col-lg-4 mb-3" memory-data="'+ oneMemory.memoryId +'">';
     if(oneMemory.todoYn == "Y" &&  oneMemory.todo.succDate !== null)
     {
-        cardParentStr += '      <div class="missionStamp-complete">complete</div>';
+        cardParentStr += '      <div class="missionStamp-complete"><div>' + parseDate((oneMemory.todo.succDate),'long') + '</div>complete</div>';
     }
     cardParentStr += '    <div class="card' + cardColor + '">';
     cardParentStr += '    </div>';
@@ -314,6 +328,7 @@ function cardMemoryMaker(oneMemory)
     cardHeaderStr += '              </a>';
     cardHeaderStr += '              <div class="dropdown-menu" aria-labelledby="btnGroupDrop'+ oneMemory.memoryId +'">';
     cardHeaderStr += '                <a class="dropdown-item" href="javascript:editMemory(' + oneMemory.memoryId +');">수정</a>';
+    cardHeaderStr += '                <a class="dropdown-item" href="javascript:copyMemory(' + oneMemory.memoryId +');">복제</a>';
     cardHeaderStr += '                <a class="dropdown-item" href="' + contextPath +'/wc/text/memoryDelete/?memoryId='+ oneMemory.memoryId +'">삭제</a>';
     cardHeaderStr += '              </div>';
     if(oneMemory.todoYn != "N")
@@ -380,7 +395,6 @@ function cardMemoryMaker(oneMemory)
     return cardEle;
 }
 
-
 function setOpserveAction(entries, observer)
 {
     entries.forEach((entry)=>
@@ -399,6 +413,7 @@ function setOpserveAction(entries, observer)
 function closeSetting()
 {
     $('#formModal')[0].reset();
+    $('input[name=memoryId]').val('');
     $('#collapseOne').collapse('hide');
 }
 //스크롤을 내리면 scrollTop 버튼이 생성된다.
@@ -442,6 +457,7 @@ function todoYnToggle(event)
     }
 }
 
+//기억을 수정할수 있는 모달을 띄우며 세팅
 function editMemory(memoryId)
 {
     let memory = varMemories.get(memoryId);
@@ -466,6 +482,22 @@ function editMemory(memoryId)
     }
     $('textarea[name=content]').val(memory.contentOrig);
     $('#myModal').modal('show');  
+}
+
+
+//기억을 복제할수 있는 모달을 띄우며 세팅
+function copyMemory(memoryId)
+{
+    let memory = varMemories.get(memoryId);
+
+    memory.memoryId = 0;
+    memory.content  = memory.contentOrig;
+
+    memory = {strDate  : (memory.todoYn !== 'Y'?'':(memory.todo.strDate ==null?'':memory.todo.strDate )), ... memory};
+    memory = {succDate : (memory.todoYn !== 'Y'?'':(memory.todo.succDate==null?'':memory.todo.succDate)), ... memory};
+    memory = {endDate  : (memory.todoYn !== 'Y'?'':(memory.todo.endDate ==null?'':memory.todo.endDate )), ... memory};
+    
+    memorySaveAjax(memory, null);
 }
 
 //date를 넣으면 yyyy-MM-dd HH:mm 형식으로 내보낸다.
