@@ -57,8 +57,13 @@
             <li class="nav-item">
               <a class="nav-link" href="${path}/yw">영우</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${path}/jy">주연</a>
+            <li class="nav-item dropdown" data-bs-theme="light">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="${path}/jy" id="jy">주연</a>
+              <div class="dropdown-menu" aria-labelledby="jy">
+                <a class="dropdown-item" href="${path}/jy/memo">memo</a>
+                <a class="dropdown-item" href="${path}/jy/calendar">calendar</a>
+                <a class="dropdown-item" href="${path}/jy/todo">todo list</a>
+              </div>
             </li>
             <li class="nav-item dropdown" data-bs-theme="light">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="#" id="yh">연희</a>
