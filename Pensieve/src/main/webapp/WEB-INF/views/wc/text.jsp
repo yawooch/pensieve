@@ -144,19 +144,19 @@
     <div class="row" id="cardList" data-masonry='{"percentPosition": true, "columnWidth" : ".col-lg-4", "itemSelector" :".col-lg-4"}'>
     </div>
     
-    <div class="row fade show m-3" id="loadingCircle" style="display: block;">
-        <p id="sentinel"></p>
+    <div class="row fade show m-5" id="loadingCircle" style="display: block;">
         <hr>
         <div class="d-flex justify-content-center">
             <div class="spinner-border text-warning" style="width: 3em; height: 3em; border-width: 0.6em;"></div>
         </div>
     </div>
-    <div class="row m-3" id="endOfMemories" style="display: none;">
+    <div class="row m-5" id="endOfMemories" style="display: none;">
         <hr>
         <div class="d-flex gap-2 justify-content-center pb-5" style="font-size: 3em;">
             <i class="bi bi-x-circle-fill"></i>
         </div>
     </div>
+    <p id="sentinel"></p>
 </div>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
