@@ -125,7 +125,7 @@ public class TextMemoController
         return ResponseEntity.ok(map);
     }
     
-    @GetMapping("wc/text/memoryDelete")
+    @GetMapping("/text/memoryDelete")
     public ModelAndView memoryDelete(ModelAndView modelAndView, @RequestParam("memoryId") int memoryId)
     {
         int result = 0;
@@ -138,7 +138,7 @@ public class TextMemoController
         return modelAndView;
     }
     
-    @GetMapping("/text/memorySelect")
+    @PostMapping("/text/memorySelect")
     public ResponseEntity<Map<String, Object>> memorySelect(@RequestParam("currPage") int currPage, @RequestParam("searchWord") String searchWord)
     {
         Map<String, Object> resultMap = new HashMap<>();
