@@ -81,13 +81,6 @@ public class HomeController
         modelAndView.setViewName("jy/home");
         return modelAndView;
     }
-    @RequestMapping(value = "/yh")
-    public ModelAndView yhFirstView(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("yh/home");
-        return modelAndView;
-    }
-
     @RequestMapping(value = "/template/themePage")
     public ModelAndView themePage(ModelAndView modelAndView)
     {
