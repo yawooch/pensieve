@@ -27,6 +27,7 @@
     <script src='${path}/js/fullcalendar/index.global.js'></script>
     <script src="${path}/js/bootstrap/bootstrap.bundle.js"></script>
 <%--     <script src="${path}/js/bootstrap/prism.js" data-manual></script> --%>
+    <script src="${path}/js/main/moment.js"></script>
     <script src="${path}/js/bootstrap/custom.js"></script>
   </head>
   <body>
