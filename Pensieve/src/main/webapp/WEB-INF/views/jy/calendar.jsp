@@ -7,52 +7,53 @@
 <c:set var="path" value="${ pageContext.request.contextPath }"/>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<style>
+	#calendar {
+	  max-width: 1100px;
+	  margin: 40px auto;
+	}
+
+</style>
+<script src="${path}/js/jy/calendar.js"></script>
 
 <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="bs-component">
-          
-            <div class="card mb-3">
-              <h3 class="card-header mb-1">
-              <div class="d-flex w-100 justify-content-between">
-                  <h3 class="mb-1">Card header</h5>
-                  <small style="font-size:13px;">3 days ago</span>
-              </div>
-              </h3>
-              <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <h6 class="card-subtitle text-muted">Support card subtitle</h6>
-              </div>
-              <center><img src="${path}/img/Pensieve.webp" width="50%"/></center>
-              <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              </div>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-              </ul>
-              <div class="card-body">
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-              <div class="card-footer text-muted">
-                2 days ago
-              </div>
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div id="calendar"></div>
+            
+            <!-- modal 추가 -->
+            <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="taskId" class="col-form-label">일정 내용</label>
+                            <input type="text" class="form-control" id="calendar_content" name="calendar_content">
+                            <label for="taskId" class="col-form-label">시작 날짜</label>
+                            <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
+                            <label for="taskId" class="col-form-label">종료 날짜</label>
+                            <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" id="addCalendar">추가</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            id="calendarModalClose">취소</button>
+                    </div>
+
+                </div>
             </div>
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div>
+
           </div>
         </div>
-      </div>
+    </div>
+  </div>
 </div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
     
