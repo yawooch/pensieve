@@ -29,7 +29,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>
+                        <h5 class="modal-title" id="calendarModalLabel">일정을 입력하세요.</h5>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
