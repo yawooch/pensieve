@@ -29,36 +29,40 @@ import com.pjt.pensieve.wc.model.vo.Todo;
 import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequestMapping("/wc")
 @RequiredArgsConstructor
 public class TextMemoController
 {
     private final MemoryService memoryservice;
     
-    @RequestMapping(value = "/wc/text")
+    @RequestMapping(value = "/text")
     public ModelAndView wcFirstView(ModelAndView modelAndView)
     {
         modelAndView.setViewName("wc/text");
         return modelAndView;
     }
-    @RequestMapping(value = "/wc/calendar")
+    @RequestMapping(value = "/calendar")
     public ModelAndView calendarView(ModelAndView modelAndView)
     {
         modelAndView.setViewName("wc/calendar");
         return modelAndView;
     }
-    @RequestMapping(value = "/wc/timeline")
+    @RequestMapping(value = "/timeline")
     public ModelAndView timelineView(ModelAndView modelAndView)
     {
         modelAndView.setViewName("wc/timeline");
         return modelAndView;
     }
 
-    @PostMapping("/wc/text/memorySave")
+    @PostMapping("/text/memorySave")
     public ResponseEntity<Map<String, Object>> memorySave(@RequestBody Map<String, Object> memoryMap)
     {
         int result = 0;
         Memory memory = new Memory();
         Map<String, Object> map = new HashMap<>();
+        
+        System.out.println(memoryMap);
+        System.out.println(memoryMap.get("todo"));
         
         memory.setMemoryId(   memoryMap.get("memoryId").equals("")?0 :Integer.parseInt(memoryMap.get("memoryId").toString())) ;
         memory.setContent(    memoryMap.get("content") ==null?"":memoryMap.get("content").toString());
@@ -77,6 +81,8 @@ public class TextMemoController
         //memoryId 가 생성된 후에 Todo VO를 insert한다.
         if(memory.getTodoYn().equals("Y"))
         {
+            result = memoryservice.deleteTodo(memory.getMemoryId());
+            
             toDo.setMemoryId(memory.getMemoryId());
             
             Date strDate = null;
@@ -119,7 +125,7 @@ public class TextMemoController
         return ResponseEntity.ok(map);
     }
     
-    @GetMapping("wc/text/memoryDelete")
+    @GetMapping("/text/memoryDelete")
     public ModelAndView memoryDelete(ModelAndView modelAndView, @RequestParam("memoryId") int memoryId)
     {
         int result = 0;
@@ -132,7 +138,7 @@ public class TextMemoController
         return modelAndView;
     }
     
-    @PostMapping("/wc/text/memorySelect")
+    @PostMapping("/text/memorySelect")
     public ResponseEntity<Map<String, Object>> memorySelect(@RequestParam("currPage") int currPage, @RequestParam("searchWord") String searchWord)
     {
         Map<String, Object> resultMap = new HashMap<>();
@@ -143,7 +149,7 @@ public class TextMemoController
         int listCount = memoryservice.getMemoryCount(searchWord);
 
         // 페이징처리
-        PageInfo pageInfo = new PageInfo(currPage, 5, listCount, 3);
+        PageInfo pageInfo = new PageInfo(currPage, 5, listCount, 6);
 
         List<Memory> memories = new ArrayList<Memory>();
         
@@ -164,7 +170,7 @@ public class TextMemoController
         return ResponseEntity.ok(resultMap);
     }
 
-    @PostMapping("/wc/text/checkTodo")
+    @PostMapping("/text/checkTodo")
     public ResponseEntity<Map<String, Object>> checkTodo(@RequestBody Map<String, Object> request)
     {
         int result = 0;

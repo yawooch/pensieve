@@ -1,4 +1,5 @@
-var varMemories = new Map();
+var varMemories = new Map();//불러온 기억들이 저장되는 Map()
+var totalMemoryCount = 0;
 
 const vanillaOptions = {
     type: 'default',
@@ -44,33 +45,36 @@ $(document).ready(()=>
     var intersectionObserver = new IntersectionObserver(setOpserveAction);
     // 주시 시작
     intersectionObserver.observe(document.querySelector('#sentinel'));
-    loadMemories();
+    loadMemories();//스크롤 Observe 해결될때까진 일단 두번 실행시키쟈..
     /***********************  Memory 관련 이벤트 끝   **********************/
 
     
     /***********************  Scroll 관련 이벤트 시작 **********************/
     //스크롤을 내리면 scrollTop 버튼이 생성된다.
     $(document).on('scroll', showBtnScroll);
+
+    //스크롤을 끝까지 내렸는데 아직 데이터가 다 나오지 않으면 기억을 불러온다.
+    onscrollend = ()=>
+    {
+        let currPage = $('input[name=currPage]').val();
+
+        if(totalMemoryCount >= (currPage*6))
+        {
+            loadMemories();
+        }
+    };
     
     //스크롤을 상단으로 이동시키는 함수
     $('#btnScrollTop').on('click',btnScrollTop);
     /***********************  Scroll 관련 이벤트 끝   **********************/
 
     /***********************  검색 관련 이벤트 시작 **********************/
-    function searchEvent(event)
+    document.getElementById('searchInput').addEventListener('keyup', (event)=>
     {
-        console.log(event);
-        // let reg = /[가-힣ㄱ-ㅎa-zA-Z0-9~!@#$%^&*()_+|\\,.\/;'":]\[\]\{\}/gi;
-        // let data = event.data===null?'':event.data;
-        // let word = data.replace(reg,'');
-        // if (word === '') { return; }
-
         if(event.key !== 'Enter')
         {
             return ;
         }
-        
-        // $('#cardList').remove();
         let masonryEle = $('#cardList').masonry({
             percentPosition: true,
             columnWidth    : '.col-lg-4',
@@ -84,33 +88,13 @@ $(document).ready(()=>
         });
         $('input[name=currPage]').val('');
 
-
-        // createDelay(loadMemories, 1000);
         loadMemories();
-    }
-    const createDelay = (callback, ms)=>
-    {
-        let instance;
-        console.log(instance);
-        return ()=>
-        {
-            clearTimeout(instance);
-            instance = setTimeout(callback, 1000);
-        }
-    }
-    // document.getElementById('searchInput').addEventListener('keydown', searchEvent);
-    // document.getElementById('searchInput').addEventListener('keypress', searchEvent);
-    document.getElementById('searchInput').addEventListener('keyup', searchEvent);
-    // document.getElementById('searchInput').addEventListener('input', searchEvent);
-    // $("#searchInput").on("keypress", searchEvent);
-    // $("#searchInput").on("keyup", searchEvent);
-    // $("#searchInput").on("keydown", searchEvent);
+    });
 
     /***********************  검색 관련 이벤트 끝   **********************/
 });
 function saveModalMemory()
 {
-    let contextPath = $('#contextPath').val();
     let memoryId  = $('input[name=memoryId]').val();
     let title     = $('#title').val();
     let content   = $('#content').val();
@@ -121,11 +105,11 @@ function saveModalMemory()
     
     //Date 입력시 validation 검사
     //Todo에서 strDate만 있는건 없다는 가정하에 validation진행
-    if((endDate === '' && strDate !== '') || (new Date(endDate).getTime() >= new Date(strDate).getTime()))
+    if((endDate === '' && strDate !== '') || (new Date(endDate).getTime() < new Date(strDate).getTime()))
     {
-        let tempDate = strDate;
-        strDate = endDate;
-        endDate = tempDate;
+        let tempDate = endDate;
+        endDate = strDate;
+        strDate = tempDate;
     }
 
     if(content.trim() === '')
@@ -151,30 +135,41 @@ function saveModalMemory()
         alert('빈값이 입력되었습니다. 저장되지 않았습니다.');
         $('#myModal').modal('hide');
     }
+
+    //memorySaveAjax생각보다 많이 쓰이네
+    memorySaveAjax(datas, ()=>
+    {
+        $('#myModal').modal('hide');
+    });
+}
+//넘긴데이터 대로 WC_MEMORY에 저장한다.
+function memorySaveAjax(data, completeFunction)
+{
+    let contextPath = $('#contextPath').val();
+
     $.ajax({
         url         : contextPath +'/wc/text/memorySave',
         type        : 'POST',
         dataType    : 'json',
         contentType : 'application/json;charset=utf-8',
-        data        : JSON.stringify(datas),
+        data        : JSON.stringify(data),
         success:function(data)
         {
             varMemories.set(data.memory.memoryId, data.memory);
             addCardMemory('prepend', data.memory);
-            $('#myModal').modal('hide');
         },
         error:function(data)
         {
             alert('저장에 실패하였습니다.');
-            $('#myModal').modal('hide');
-        }
+        },
+        complete:completeFunction
     });
 }
 //memory 를 가져온다.
 function loadMemories()
 {
-    let currPage = $('input[name=currPage]').val();
-    let searchWord = $('input[name=searchWord]').val();
+    let currPage    = $('input[name=currPage]').val();
+    let searchWord  = $('input[name=searchWord]').val();
     let contextPath = $('#contextPath').val();
     //첫 로딩시는 빈값으로 준다.
     if(currPage == '')
@@ -203,21 +198,21 @@ function loadMemories()
       success:function(data)
       {
         let memories      = data.memories;
-        let totalMemories = data.totalMemories;
+        totalMemoryCount = data.totalMemories;
           
         memories.forEach((memory)=>
         {
             varMemories.set(memory.memoryId, memory);
         });
 
-        if (totalMemories === 0) {
+        if (totalMemoryCount === 0) {
                 $('#endOfMemories').show();
                 //검색된 아이템이 없을 경우 관찰중인 요소를 숨긴다.
                 $('#sentinel').hide();
         }
         else 
         {
-            if (totalMemories <= currPage*3){
+            if (totalMemoryCount <= currPage*6){
                 //검색된 아이템이 최대카드개수 이하일 경우 관찰중인 요소를 숨긴다.
                 $('#sentinel').hide();
                 $('#loadingCircle').hide();
@@ -239,7 +234,6 @@ function loadMemories()
         }
     });
 };
-
 // document ready nd
 function addCardMemory(addEleStr, oneMemory)
 {
@@ -271,12 +265,16 @@ function addCardMemory(addEleStr, oneMemory)
     }
     
 }
+//카드형식으로 된 요소를 추가한다.
 function cardMemoryMaker(oneMemory)
 {
     let contextPath = $('#contextPath').val();
-    let cardParentStr = '';//카드의 최상단 요소를 만들어주는 문자열을 만든다.
-    
     let cardColor = '';
+    
+    let cardParent = $('<div></div>');
+    cardParent.addClass('col-lg-4 mb-3');
+    cardParent.attr('memory-data', oneMemory.memoryId);
+    cardParent.append('<div class="card"></div>');
     
     if(oneMemory.todoYn == "Y"&& oneMemory.todo.succDate === null)
     {
@@ -284,98 +282,134 @@ function cardMemoryMaker(oneMemory)
     }
     else if(oneMemory.todoYn == "Y" &&  oneMemory.todo.succDate !== null)
     {
+        let chileStamp = $('<div></div>');
+        chileStamp.addClass('missionStamp-complete');
+        chileStamp.text('complete');
+        chileStamp.prepend('<div>' + parseDate((oneMemory.todo.succDate),'long') + '</div>');
+        cardParent.prepend(chileStamp.prop('outerHTML'));
         cardColor = ' border-success';
     }
     else
     {
         cardColor = ' border-' + oneMemory.category;
     }
+    cardParent.find('div.card').addClass(cardColor);
     
-    cardParentStr += '<div class="col-lg-4 mb-3" memory-data="'+ oneMemory.memoryId +'">';
-    cardParentStr += '    <div class="card' + cardColor + '">';
-    cardParentStr += '    </div>';
-    cardParentStr += '</div>';
+    //카드 헤더 요소를 만들어주는 문자열을 만든다.
+    let cardHeaderEle = $('<div class="card-header mb-1 "></div>');
+    cardHeaderEle.append('<div class="d-flex w-100 justify-content-between"></div>');
+    cardHeaderEle.find('div.justify-content-between').append('<h5 class="mb-1">'+ (oneMemory.title == undefined?'':oneMemory.title) +'</h5>');
     
-    let cardHeaderStr = ''; //카드 헤더 요소를 만들어주는 문자열을 만든다.
-    cardHeaderStr += '      <div class="card-header mb-1 ">'; 
-    cardHeaderStr += '          <div class="d-flex w-100 justify-content-between">';
-    cardHeaderStr += '              <h5 class="mb-1">'+ (oneMemory.title == undefined?'':oneMemory.title) +'</h5>';
+    let headerContent = $('<div></div>');
+    headerContent.append('<a></a>');
+
+    let stringGrpId = 'btnGroupDrop' + oneMemory.memoryId;
+    headerContent.find('a').append('<i class="bi bi-three-dots-vertical"></i>');
+    headerContent.find('a').attr('id', stringGrpId);
+    headerContent.find('a').attr('type', 'button');
+    headerContent.find('a').attr('data-bs-toggle', 'dropdown');
+    headerContent.find('a').attr('aria-haspopup', 'true');
+    headerContent.find('a').attr('aria-expanded', 'false');
+    headerContent.find('a').addClass('text-secondary');
+    
+    headerContent.append('<div class="dropdown-menu"></div>');
+    headerContent.find('div.dropdown-menu').attr('aria-labelledby', stringGrpId);
+    headerContent.find('div.dropdown-menu').append('<a href="javascript:editMemory(' + oneMemory.memoryId +');">수정</a>');
+    headerContent.find('div.dropdown-menu').append('<a href="javascript:copyMemory(' + oneMemory.memoryId +');">복제</a>');
+    headerContent.find('div.dropdown-menu').append('<a href="' + contextPath +'/wc/text/memoryDelete/?memoryId='+ oneMemory.memoryId +'">삭제</a>');
+    headerContent.find('div.dropdown-menu>a').addClass('dropdown-item');
+
+    let cardContentStr = '';
+    
     if(oneMemory.todoYn != "N")
     {
-        cardHeaderStr += '<div class="d-flex justify-flex-end">';
-        cardHeaderStr += '<div><input class="form-check-input" type="checkbox" value="' + oneMemory.memoryId + '" name="todoCheck" '+ (oneMemory.todo.succDate!=null?'checked':'') +'></div>';
-    }
-    cardHeaderStr += '              <a id="btnGroupDrop'+ oneMemory.memoryId +'" type="button" class="text-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-    cardHeaderStr += '                  <i class="bi bi-three-dots-vertical"></i>';
-    cardHeaderStr += '              </a>';
-    cardHeaderStr += '              <div class="dropdown-menu" aria-labelledby="btnGroupDrop'+ oneMemory.memoryId +'">';
-    cardHeaderStr += '                <a class="dropdown-item" href="javascript:editMemory(' + oneMemory.memoryId +');">수정</a>';
-    cardHeaderStr += '                <a class="dropdown-item" href="' + contextPath +'/wc/text/memoryDelete/?memoryId='+ oneMemory.memoryId +'">삭제</a>';
-    cardHeaderStr += '              </div>';
-    if(oneMemory.todoYn != "N")
-    {
-        cardHeaderStr += '</div>';
-    }
-    cardHeaderStr += '          </div>';
-    cardHeaderStr += '      </div>';
-    
-    let cardBodyStr = '';//카드 바디 요소를 만들어주는 문자열을 만든다.
-    cardBodyStr += '      <div class="card-body">';
-    cardBodyStr += '        '+ oneMemory.content;
-    cardBodyStr += '      </div>';
-    
-    
-    let ulEle = '';
-    let newUlList = '';
-    if($(cardBodyStr).find('ul').length !== 0)
-    {
-        ulEle = $($(cardBodyStr).find('ul').prop("outerHTML"));
-        
-        ulEle.addClass('list-group list-group-flush');
-        ulEle.find('li').addClass('list-group-item');
-        
-        newUlList = ulEle.prop("outerHTML");
+        let todoEle = $('<div></div>');
+        todoEle.addClass('d-flex justify-flex-end');
+        todoEle.append('<div><input type="checkbox" '+ (oneMemory.todo.succDate!=null?'checked':'') +'/></div>');
+        todoEle.find('div>input').addClass('form-check-input');
+        todoEle.find('div>input').attr('name', 'todoCheck');
+        todoEle.find('div>input').val(oneMemory.memoryId);
+        todoEle.append(headerContent.prop('innerHTML'));
 
+        cardContentStr = todoEle.prop('outerHTML');
     }
-    let cardBodyEle = $(cardBodyStr); 
-    cardBodyEle.find('ul').remove();//remove()를하면 제외된 ele를 반환한다
-    cardBodyStr = cardBodyEle.prop("outerHTML");
-    
-    cardBodyStr += newUlList;
+    else
+    {
+        cardContentStr = headerContent.prop('innerHTML');
+    }
 
-    let editDate  = oneMemory.modifyDate==null? oneMemory.createDate:oneMemory.modifyDate;
-    let convertDate = parseDate(editDate, 'summary');
+    cardHeaderEle.find('div.justify-content-between').append(cardContentStr);
+
+    //카드 바디 요소를 만들어주는 문자열을 만든다.
+    let  cardBodyEle  = $('<div class="card-body">' + oneMemory.content + '</div>');
+
+    //ul은 div.card-body 와 형제요소여야한다
+    if(cardBodyEle.find('ul').length !== 0)
+    {
+        //함께 쌓여있는 요소는 없으므로 기본적인 클래스만 준다.
+        cardBodyEle.find('ul').addClass('list-group list-group-flush');
+        cardBodyEle.find('li').addClass('list-group-item list-group-item-action');
+    }
+    //img는 div에 둘러쌓여야하며, div.card-body와 형제요소여야한다.
+    if(cardBodyEle.find('img').length !== 0)
+    {
+        //img 를 p 밖으로 꺼내주고 스타일 부여
+        cardBodyEle.find('img').unwrap();
+        cardBodyEle.find('img').css('width', '100%')
+    }
+
+    //ul이 아니면 div에 쌓이게 한다.
+    let tempBodyStr = '<div>';
+
+    cardBodyEle.children().each((idx, ele)=>
+    {
+        if($(ele).prop('tagName')==='IMG')
+        {
+            tempBodyStr += '</div>';
+            tempBodyStr += '<div>' + $(ele).prop('outerHTML') + '</div>';
+            tempBodyStr += '<div>';
+        }
+        else if($(ele).prop('tagName')==='UL')
+        {
+            tempBodyStr += '</div>';
+            tempBodyStr += $(ele).prop('outerHTML');
+            tempBodyStr += '<div>';
+        }
+        else
+        {
+            tempBodyStr += $(ele).prop('outerHTML');
+        }
+    });
+    tempBodyStr += '</div>';
+    tempBodyStr = tempBodyStr.replaceAll('<div></div>', '');
+    cardBodyEle = $('<div>' + tempBodyStr + '</div>');
+
+    cardBodyEle.find('div').addClass('card-body');
+    cardBodyEle.find('div').has('img').removeClass('card-body').css('text-align','center');
+
     
-    let cardFooterStr = ''; //카드 푸터 요소를 만들어주는 문자열을 만든다.
-    cardFooterStr += '      <div class="card-footer text-muted">';
+    //카드 푸터 요소를 만들어주는 문자열을 만든다.
+    let editDate      = oneMemory.modifyDate==null? oneMemory.createDate:oneMemory.modifyDate;
+    let convertDate   = parseDate(editDate, 'summary');
+    let cardFooterEle = $('<div></div>'); 
+    cardFooterEle.addClass('card-footer text-muted');
+    cardFooterEle.prepend('<div></div>');
+    cardFooterEle.append('<div class="text-end italicDate"></div>');
+    cardFooterEle.find('div.text-end.italicDate').text(convertDate + (oneMemory.modifyDate==null? ' Created':' Modified'));
+
     if(oneMemory.todoYn =='Y')
     {
-        cardFooterStr += '      <div>';
-        if(oneMemory.todo.strDate!==null)
-        {
-            cardFooterStr += '      <span>' + parseDate(oneMemory.todo.strDate, 'short') + '</span>';//yyyy-MM-dd HH:mm
-        }
-        if(oneMemory.todo.endDate!==null)
-        {
-            cardFooterStr += '      ~ <span>' + parseDate(oneMemory.todo.endDate, 'short') + '</span>';//yyyy-MM-dd HH:mm
-        }
-        cardFooterStr += '      </div>';
+        cardFooterEle.find('div').eq(0).append(oneMemory.todo.strDate!==null?'<span>' + parseDate(oneMemory.todo.strDate, 'short') + '</span>':'');
+        cardFooterEle.find('div').eq(0).append(oneMemory.todo.endDate!==null?' ~ <span>' + parseDate(oneMemory.todo.endDate, 'short') + '</span>':'');
     }
-    cardFooterStr += '      <div> '+ (oneMemory.modifyDate==null? 'created at: ':'modified at: ') + convertDate + '</div>';//yyyy-MM-dd HH:mm
-    cardFooterStr += '      </div>';
 
-    let cardParent = $(cardParentStr);
-    cardParent.find('div.card').append(cardHeaderStr);
-    cardParent.find('div.card').append(cardBodyStr);
-    cardParent.find('div.card').append(cardFooterStr);
-    
-    let cardEle = cardParent;
+    cardParent.find('div.card').append(cardHeaderEle.prop('outerHTML'));
+    cardParent.find('div.card').append(cardBodyEle.prop('innerHTML'));
+    cardParent.find('div.card').append(cardFooterEle.prop('outerHTML'));
+    cardParent.find('input[name=todoCheck]').on('change', checkTodoFunc);
 
-    cardEle.find('input[name=todoCheck]').on('change', checkTodoFunc);
-
-    return cardEle;
+    return cardParent;
 }
-
 
 function setOpserveAction(entries, observer)
 {
@@ -390,11 +424,11 @@ function setOpserveAction(entries, observer)
         loadMemories();
     });
 }
-
 //모달이 닫힐때 발생하는 이벤트
 function closeSetting()
 {
     $('#formModal')[0].reset();
+    $('input[name=memoryId]').val('');
     $('#collapseOne').collapse('hide');
 }
 //스크롤을 내리면 scrollTop 버튼이 생성된다.
@@ -419,7 +453,6 @@ function btnScrollTop()
         behavior:'smooth'
     });
 }
-
 //모달창 TodoYn 체크 이벤트
 function todoYnToggle(event)
 {
@@ -437,7 +470,7 @@ function todoYnToggle(event)
         $('#btnClearTo, #btnClearFrom').prop('disabled',true);
     }
 }
-
+//기억을 수정할수 있는 모달을 띄우며 세팅
 function editMemory(memoryId)
 {
     let memory = varMemories.get(memoryId);
@@ -463,7 +496,24 @@ function editMemory(memoryId)
     $('textarea[name=content]').val(memory.contentOrig);
     $('#myModal').modal('show');  
 }
+//기억을 복제하는 이벤트
+function copyMemory(memoryId)
+{
+    let memory = varMemories.get(memoryId);
 
+    memory.memoryId   = 0;
+    memory.content    = memory.contentOrig;
+    memory.todoYn     = memory.todoYn==='N'?null:memory.todoYn;
+    memory.modifyDate = null;
+
+    console.log(memory);
+
+    memory = {strDate  : (memory.todoYn !== 'Y'?'':(memory.todo.strDate ==null?'':memory.todo.strDate )), ... memory};
+    memory = {succDate : (memory.todoYn !== 'Y'?'':(memory.todo.succDate==null?'':memory.todo.succDate)), ... memory};
+    memory = {endDate  : (memory.todoYn !== 'Y'?'':(memory.todo.endDate ==null?'':memory.todo.endDate )), ... memory};
+    
+    memorySaveAjax(memory, null);
+}
 //date를 넣으면 yyyy-MM-dd HH:mm 형식으로 내보낸다.
 function parseDate(targetDate, textLen)
 {
@@ -471,7 +521,6 @@ function parseDate(targetDate, textLen)
     {
         return '';
     }
-
     let date        = new Date(targetDate);
     let offset      = date.getTimezoneOffset() * 60000;
     let dateOffset  = new Date(date.getTime() - offset);
@@ -480,27 +529,42 @@ function parseDate(targetDate, textLen)
     
     if(textLen === 'summary')
     {
-        // let diffDate   = (new Date().getTime() - dateOffset.getTime());
-        // let minuteToTime  = 60000;
-        // let hourToTime  = minuteToTime*60;
-        // let dayToTime  = hourToTime*24;
-        // let timesAgo = diffDate/hourToTime;
-
-        // console.log(dateOffset.toISOString());
-        // console.log(dateOffset.getTime());
-        // console.log(diffDate);
-        // if(timesAgo <= 0)
-        // {
-        //     timesAgo = Math.abs(diffDate/minuteToTime);
-        //     return timesAgo + ' hours ago';
-        // }
-        // if(timesAgo >= 30)
-        // {
-        //     timesAgo = diffDate/dayToTime*24*30;
-        //     return timesAgo + ' month ago';
-        // }
-        // return timesAgo + ' days ago';
-        return convertDate;
+        let diffDate     = (new Date().getTime() - date.getTime());
+        let timesAgo     = parseInt(diffDate/1000);
+        let resultString = '';
+        
+        if(parseInt(diffDate/1000) !== 0 || parseInt(diffDate) !== 0)
+        {
+            resultString = ' Now,';
+        }
+        timesAgo = parseInt(diffDate/1000/60);
+        if(timesAgo !== 0)
+        {
+            resultString = timesAgo + ' Minutes ago,';
+        }
+        timesAgo = parseInt(timesAgo/60);
+        if(timesAgo !== 0)
+        {
+            resultString =  timesAgo + ' Hours ago,';
+        }
+        timesAgo = parseInt(timesAgo/24);
+        if(timesAgo !== 0)
+        {
+            resultString =  timesAgo + ' Days ago,';
+        }
+        //(diffDate/1000/60/60/24/30) 라는 수로 나눠서 확인하면 자연 로그 라는 수가 생성되어
+        // 오히려 방금 작성했는데 3Years Ago 가 나온다
+        if( parseInt(timesAgo/30) !== 0 && (new Date().getMonth() - date.getMonth()) !== 0)
+        {
+            resultString =  (new Date().getMonth() - date.getMonth()) + ' Months ago,';
+        }
+        //(diffDate/1000/60/60/24/365) 라는 수로 나눠서 확인하면 자연 로그 라는 수가 생성되어
+        // 오히려 방금 작성했는데 3Years Ago 가 나온다
+        if(parseInt(timesAgo/365) !== 0 && (new Date().getFullYear() - date.getFullYear()) !== 0)
+        {
+            resultString =  (new Date().getFullYear() - date.getFullYear()) + ' Years ago,';
+        }
+        return resultString;
     }
 
     if(textLen === 'short')
@@ -510,13 +574,12 @@ function parseDate(targetDate, textLen)
 
     return convertDate;
 }
-
+//todo를 체크할때 발생하는 이벤트
 function checkTodoFunc(event)
 {
     let contextPath = $('#contextPath').val();
     let target = $(event.target);
     let parentEle = target.parents('div.card');
-
 
     let datas = {
         memoryId      : target.val(),
@@ -531,9 +594,7 @@ function checkTodoFunc(event)
     data        : JSON.stringify(datas),
     success:function(data)
     {
-        console.log(data);
         let memory = varMemories.get(data.memoryId);
-        console.log(memory.todo.succDate, data.succDate);
         memory.todo.succDate = data.succDate;
         varMemories.set(memory.memoryId, memory);
     }           

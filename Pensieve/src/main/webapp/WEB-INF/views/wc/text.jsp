@@ -14,6 +14,29 @@
 <script src="${path}/js/vanilaCalendar/vanilla-calendar.js" ></script>
 
 <script src="${path}/js/wc/text.js"></script>
+<style>
+.missionStamp-complete
+{    
+    border: 8px solid;
+    border-radius: 18px;
+    position: absolute;
+    line-height: 90px;
+    font-size: 90px;
+    font-weight: 900;
+    z-index: 10;
+    rotate: 350deg;
+    color: var(--bs-green);
+    top: 20%;
+}
+.missionStamp-complete>div{
+    font-size: 30px;
+    line-height: 13px;
+    margin-top: 19px;
+    margin-bottom: -23px;
+    padding-left: 13px;
+    text-align:center;
+}
+</style>
 
 <input type="hidden" name="currPage"  value="" />
 <input type="hidden" id="contextPath" value="${path}" />
@@ -109,31 +132,31 @@
 
     <div class="row collapse" id="searchBox">
         <div class="col-lg-12">
-	        <div class="d-flex gap-2 justify-content-center pb-5">
-	            <div class="input-group mb-3">
-	                <span class="input-group-text bg-primary text-white" id=""><i class="bi bi-search"></i></span>
-	                <input type="text" class="form-control form-control-lg" id="searchInput" name="searchWord" placeholder="Search Keywords" aria-describedby="button-addon2">
-	            </div>
-	        </div>
+            <div class="d-flex gap-2 justify-content-center pb-5">
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-primary text-white" id=""><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control form-control-lg" id="searchInput" name="searchWord" placeholder="Search Keywords" aria-describedby="button-addon2">
+                </div>
+            </div>
         </div>
     </div>
     
     <div class="row" id="cardList" data-masonry='{"percentPosition": true, "columnWidth" : ".col-lg-4", "itemSelector" :".col-lg-4"}'>
     </div>
     
-    <div class="row fade show m-3" id="loadingCircle" style="display: block;">
+    <div class="row fade show m-5" id="loadingCircle" style="display: block;">
         <hr>
         <div class="d-flex justify-content-center">
             <div class="spinner-border text-warning" style="width: 3em; height: 3em; border-width: 0.6em;"></div>
         </div>
     </div>
-    <div class="row m-3" id="endOfMemories" style="display: none;">
+    <div class="row m-5" id="endOfMemories" style="display: none;">
         <hr>
         <div class="d-flex gap-2 justify-content-center pb-5" style="font-size: 3em;">
             <i class="bi bi-x-circle-fill"></i>
         </div>
     </div>
+    <p id="sentinel"></p>
 </div>
-<p id="sentinel"></p>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
