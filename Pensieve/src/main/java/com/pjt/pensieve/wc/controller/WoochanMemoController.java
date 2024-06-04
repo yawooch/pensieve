@@ -31,26 +31,20 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/wc")
 @RequiredArgsConstructor
-public class TextMemoController
+public class WoochanMemoController
 {
     private final MemoryService memoryservice;
     
-    @RequestMapping(value = "/text")
-    public ModelAndView wcFirstView(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("wc/text");
-        return modelAndView;
-    }
-    @RequestMapping(value = "/calendar")
-    public ModelAndView calendarView(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("wc/calendar");
-        return modelAndView;
-    }
     @RequestMapping(value = "/timeline")
     public ModelAndView timelineView(ModelAndView modelAndView)
     {
         modelAndView.setViewName("wc/timeline");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/text")
+    public ModelAndView wcFirstView(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("wc/text");
         return modelAndView;
     }
 

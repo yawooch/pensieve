@@ -301,9 +301,9 @@ function cardMemoryMaker(oneMemory)
     cardHeaderEle.find('div.justify-content-between').append('<h5 class="mb-1">'+ (oneMemory.title == undefined?'':oneMemory.title) +'</h5>');
     
     let headerContent = $('<div></div>');
-    headerContent.append('<a></a>');
+    let stringGrpId   = 'btnGroupDrop' + oneMemory.memoryId;
 
-    let stringGrpId = 'btnGroupDrop' + oneMemory.memoryId;
+    headerContent.append('<a></a>');
     headerContent.find('a').append('<i class="bi bi-three-dots-vertical"></i>');
     headerContent.find('a').attr('id', stringGrpId);
     headerContent.find('a').attr('type', 'button');
@@ -337,8 +337,8 @@ function cardMemoryMaker(oneMemory)
     {
         cardContentStr = headerContent.prop('innerHTML');
     }
-
     cardHeaderEle.find('div.justify-content-between').append(cardContentStr);
+
 
     //카드 바디 요소를 만들어주는 문자열을 만든다.
     let  cardBodyEle  = $('<div class="card-body">' + oneMemory.content + '</div>');
