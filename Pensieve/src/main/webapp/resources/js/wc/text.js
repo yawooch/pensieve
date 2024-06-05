@@ -136,8 +136,20 @@ function saveModalMemory()
         $('#myModal').modal('hide');
     }
 
+
+    let form = $('#formModal')[0];
+    let formData = new FormData(form);
+
+    var inputFile = $("input[name='imageFile']");
+    var files = inputFile[0].files;
+
+    for(var i =0;i<files.length;i++){
+        
+        formData.append("imageFile", files[i]);
+    }
+
     //memorySaveAjax생각보다 많이 쓰이네
-    memorySaveAjax(datas, ()=>
+    memorySaveAjax(formData, ()=>
     {
         $('#myModal').modal('hide');
     });
@@ -150,9 +162,12 @@ function memorySaveAjax(data, completeFunction)
     $.ajax({
         url         : contextPath +'/wc/text/memorySave',
         type        : 'POST',
-        dataType    : 'json',
-        contentType : 'application/json;charset=utf-8',
-        data        : JSON.stringify(data),
+        contentType : false,
+        processData : false,
+        // dataType    : 'json',
+        // data        : JSON.stringify(data),
+        // contentType : 'application/json;charset=utf-8',
+        data        : data,
         success:function(data)
         {
             varMemories.set(data.memory.memoryId, data.memory);
@@ -500,19 +515,38 @@ function editMemory(memoryId)
 function copyMemory(memoryId)
 {
     let memory = varMemories.get(memoryId);
+    let formData = new FormData();
 
-    memory.memoryId   = 0;
-    memory.content    = memory.contentOrig;
-    memory.todoYn     = memory.todoYn==='N'?null:memory.todoYn;
-    memory.modifyDate = null;
+    // var inputFile = $("input[name='imageFile']");
+    // var files = inputFile[0].files;
+    // for(var i =0;i<files.length;i++){
+    //     formData.append("imageFile", files[i]);
+    // }
 
-    console.log(memory);
+    formData.append("memoryId", '');
+    formData.append("content", memory.contentOrig);
+    formData.append("contentOrig", memory.contentOrig);
+    formData.append("title", memory.title);
+    formData.append("createDate", memory.createDate);
+    formData.append("modifyDate", null);
+    formData.append("category", memory.category);
+    formData.append("memberId", memory.memberId);
+    formData.append("todoYn", memory.todoYn==='N'?null:memory.todoYn);
+    formData.append("strDate", memory.todoYn !== 'Y'?'':(memory.todo.strDate ==null?'':memory.todo.strDate ));
+    formData.append("endDate", memory.todoYn !== 'Y'?'':(memory.todo.endDate ==null?'':memory.todo.endDate ));
+    formData.append("succDate", memory.todoYn !== 'Y'?'':(memory.todo.succDate==null?'':memory.todo.succDate));
+    formData.append("imageFile", null);
 
-    memory = {strDate  : (memory.todoYn !== 'Y'?'':(memory.todo.strDate ==null?'':memory.todo.strDate )), ... memory};
-    memory = {succDate : (memory.todoYn !== 'Y'?'':(memory.todo.succDate==null?'':memory.todo.succDate)), ... memory};
-    memory = {endDate  : (memory.todoYn !== 'Y'?'':(memory.todo.endDate ==null?'':memory.todo.endDate )), ... memory};
+
+    // memory.memoryId   = 0;
+    // memory.content    = memory.contentOrig;
+    // memory.todoYn     = memory.todoYn==='N'?null:memory.todoYn;
+    // memory.modifyDate = null;
+    // memory = {strDate  : (memory.todoYn !== 'Y'?'':(memory.todo.strDate ==null?'':memory.todo.strDate )), ... memory};
+    // memory = {succDate : (memory.todoYn !== 'Y'?'':(memory.todo.succDate==null?'':memory.todo.succDate)), ... memory};
+    // memory = {endDate  : (memory.todoYn !== 'Y'?'':(memory.todo.endDate ==null?'':memory.todo.endDate )), ... memory};
     
-    memorySaveAjax(memory, null);
+    memorySaveAjax(formData, null);
 }
 //date를 넣으면 yyyy-MM-dd HH:mm 형식으로 내보낸다.
 function parseDate(targetDate, textLen)

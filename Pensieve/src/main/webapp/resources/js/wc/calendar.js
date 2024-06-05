@@ -7,7 +7,7 @@ var events = [
   {
     title: "Meeting",
     start: "2024-06-13T11:00:00",
-    constraint: " ", // defined below
+    constraint: "availableForMeeting", // defined below
     color: "#257e4a",
   },
   {
@@ -33,7 +33,42 @@ var events = [
     end: "2024-06-13T16:00:00",
     display: "background",
   },
-
+  {
+    start: "2024-06-13T10:00:00",
+    end: "2024-06-13T12:00:00",
+    display: "list-item",
+    title: "WTF?",
+  },
+  {
+    groupId: 999,
+    title: 'Repeating Event',
+    start: '2024-06-12T16:00:00'
+  },
+  {
+    groupId: 999,
+    title: 'Repeating Event',
+    start: '2024-07-12T16:00:00'
+  },
+  {
+    groupId: 999,
+    title: 'Repeating Event',
+  },
+  {
+    groupId: 999,
+    title: 'Repeating Event',
+  },
+  {
+    title: 'repeating Week Event',
+    // daysOfWeek: [ 1, 2, 3, 4 ],
+    start: '2024-06-05T00:00:00',
+    duration: '0000-01-00T00:00:00'
+  },
+  {
+    start: "2024-06-10T09:00:00",
+    end: "2024-06-10T12:00:00",
+    color: "#ff9f89",
+    title: "PooPoo",
+  },
   // red areas where no events can be dropped
   {
     start: "2024-06-24",
@@ -49,6 +84,19 @@ var events = [
     display: "background",
     color: "#ff9f89",
   },
+  {
+    title: 'Click for Google',
+    url: 'http://google.com/',
+    start: '2024-06-28'
+  },
+  {
+    start: '2024-06-27',
+    end: '2024-06-28',
+    title: 'Click for Google2',
+    url: 'http://google.com/',
+    // display: "background",
+    // color: "#ff9f89",
+  }
 ];
 
 $(document).ready(() => {
@@ -61,10 +109,11 @@ $(document).ready(() => {
       center: "title",
       right : "dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth",
     },
+    initialView  : 'dayGridYear',
     locale       : "ko",
     themeSystem  : "bootstrap5",
     navLinks     : true, // can click day/week names to navigate views
-    businessHours: true, // display business hours
+    // businessHours: true, // display business hours
     businessHours: 
     {
       // days of week. an array of zero-based day of week integers (0=Sunday)
@@ -76,11 +125,20 @@ $(document).ready(() => {
     dayMaxEvents : true, // allow "more" link when too many events
     selectable   : true,
     select       : selectDateFunc,
-    events       : events
+    eventClick: function(arg) {
+      if (confirm('Are you sure you want to delete this event?')) {
+        arg.event.remove()
+      }
+    },
+    events       : events,
   });
 
-  calendar.unselect();
 
+  // calendar.Calendar.setEvents(events);
+
+  // calendar.addEvent(events);
+  
+  calendar.render();
   function selectDateFunc(arg) {
     var title = prompt("Event Title:");
     console.log(arg);
@@ -97,6 +155,6 @@ $(document).ready(() => {
         title + "이 등록되었습니다."
       );
     }
+    calendar.unselect();
   }
-  calendar.render();
 });

@@ -36,6 +36,10 @@
     padding-left: 13px;
     text-align:center;
 }
+
+ol>.list-group-item {
+    display: list-item;
+}
 </style>
 
 <input type="hidden" name="currPage"  value="" />

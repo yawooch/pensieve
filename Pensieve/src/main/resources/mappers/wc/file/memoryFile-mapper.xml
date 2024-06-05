@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pjt.pensieve.wc.model.mapper.MemoryFileMapper">
+
+    <resultMap  id="memoryFileResultMap"    type="MemoryFile" >
+        <id     property="memoryFileId"     column="MEMORY_FILE_ID"     />
+        <result property="fileOwner"        column="FILE_OWNER"         />
+        <result property="fileRelaMemoryId" column="FILE_RELA_MEMORY_ID"/>
+        <result property="fileOrigName"     column="FILE_ORIG_NAME"     />
+        <result property="fileReName"       column="FILE_RE_NAME"       />
+        <result property="fileCreateDate"   column="FILE_CREATE_DATE"   />
+        <result property="fileModifyDate"   column="FILE_MODIFY_DATE"   />
+    </resultMap>
+    
+    <insert    id="insertMemoryFile" parameterType="MemoryFile" 
+               useGeneratedKeys="true" keyColumn="MEMORY_FILE_ID" keyProperty="memoryFileId">
+        INSERT
+          INTO WC_MEMORY_FILE
+               (
+               MEMORY_FILE_ID
+             , FILE_OWNER
+             , FILE_RELA_MEMORY_ID
+             , FILE_ORIG_NAME
+             , FILE_RE_NAME
+               )
+        VALUES (
+               SEQ_MEMORY_FILE_ID.NEXTVAL
+             , #{fileOwner}
+             , #{fileRelaMemoryId}
+             , #{fileOrigName}
+             , #{fileReName}
+               )
+    </insert>
+    
+    
+    <select    id="selectMemoryFile" parameterType="_int" resultMap="memoryFileResultMap">
+        SELECT MEMORY_FILE_ID
+             , FILE_OWNER
+             , FILE_RELA_MEMORY_ID
+             , FILE_ORIG_NAME
+             , FILE_RE_NAME
+             , FILE_CREATE_DATE
+             , FILE_MODIFY_DATE
+          FROM WC_MEMORY_FILE
+         WHERE FILE_RELA_MEMORY_ID  = #{fileRelaMemoryId}
+    </select>
+    
+    <delete    id="deleteMemoryFile" parameterType="_int">
+        DELETE
+          FROM WC_MEMORY_FILE
+         WHERE FILE_RELA_MEMORY_ID  = #{fileRelaMemoryId}
+    </delete>
+    
+    <update    id="updateMemoryFile"  parameterType="map">
+        UPDATE WC_MEMORY_FILE
+           SET FILE_OWNER           = #{fileOwner}       
+             , FILE_ORIG_NAME       = #{fileOrigName}    
+             , FILE_RE_NAME         = #{fileReName}      
+             , FILE_MODIFY_DATE     = SYSDATE  
+         WHERE FILE_RELA_MEMORY_ID  = #{fileRelaMemoryId}
+           AND MEMORY_FILE_ID       = #{memoryFileId} 
+    </update>
+    
+</mapper>
