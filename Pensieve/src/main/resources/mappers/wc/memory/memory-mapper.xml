@@ -17,7 +17,8 @@
         <result property="todoYn"      column="TODO_YN"    />
         <result property="memberId"    column="MEMBER_ID"  />
         <result property="showDiv"     column="SHOW_DIV"   />
-        <association property="todo" columnPrefix="T_" resultMap="todoResultMap"/>
+        <association property="todo"        columnPrefix="T_" resultMap="todoResultMap"/>
+        <collection  property="memoryFiles" columnPrefix="F_" resultMap="memoryFileResultMap"/>
     </resultMap>
     
     <resultMap  id="todoResultMap"   type="Todo" >
@@ -27,6 +28,16 @@
         <result property="succDate"  column="SUCC_DATE"/>
     </resultMap>
 
+    <resultMap  id="memoryFileResultMap"    type="MemoryFile" >
+        <id     property="memoryFileId"     column="MEMORY_FILE_ID"     />
+        <result property="fileOwner"        column="FILE_OWNER"         />
+        <result property="fileRelaMemoryId" column="FILE_RELA_MEMORY_ID"/>
+        <result property="fileOrigName"     column="FILE_ORIG_NAME"     />
+        <result property="fileReName"       column="FILE_RE_NAME"       />
+        <result property="fileCreateDate"   column="FILE_CREATE_DATE"   />
+        <result property="fileModifyDate"   column="FILE_MODIFY_DATE"   />
+    </resultMap>
+    
     <insert    id="insertMemory" parameterType="Memory" 
                useGeneratedKeys="true" keyColumn="MEMORY_ID" keyProperty="memoryId">
         INSERT
@@ -60,14 +71,24 @@
              , M.TODO_YN
              , M.MEMBER_ID
              , M.SHOW_DIV
-             , T.MEMORY_ID AS T_MEMORY_ID
-             , T.SUCC_DATE AS T_SUCC_DATE
-             , T.STR_DATE  AS T_STR_DATE
-             , T.END_DATE  AS T_END_DATE
+             , T.MEMORY_ID            AS T_MEMORY_ID
+             , T.SUCC_DATE            AS T_SUCC_DATE
+             , T.STR_DATE             AS T_STR_DATE
+             , T.END_DATE             AS T_END_DATE
+             , F.MEMORY_FILE_ID       AS F_MEMORY_FILE_ID
+             , F.FILE_OWNER           AS F_FILE_OWNER
+             , F.FILE_RELA_MEMORY_ID  AS F_FILE_RELA_MEMORY_ID
+             , F.FILE_ORIG_NAME       AS F_FILE_ORIG_NAME
+             , F.FILE_RE_NAME         AS F_FILE_RE_NAME
+             , F.FILE_CREATE_DATE     AS F_FILE_CREATE_DATE
+             , F.FILE_MODIFY_DATE     AS F_FILE_MODIFY_DATE
           FROM WC_MEMORY M
           LEFT OUTER JOIN
                WC_TODO   T
             ON T.MEMORY_ID = M.MEMORY_ID
+          LEFT OUTER JOIN
+               WC_MEMORY_FILE   F
+            ON F.FILE_RELA_MEMORY_ID = M.MEMORY_ID
          WHERE M.SHOW_DIV = 'Y'
            AND M.MEMORY_ID = #{memoryId}
     </select>
@@ -85,6 +106,13 @@
              , T_SUCC_DATE
              , T_STR_DATE
              , T_END_DATE
+             , F_MEMORY_FILE_ID
+             , F_FILE_OWNER
+             , F_FILE_RELA_MEMORY_ID
+             , F_FILE_ORIG_NAME
+             , F_FILE_RE_NAME
+             , F_FILE_CREATE_DATE
+             , F_FILE_MODIFY_DATE
           FROM (
                SELECT M.MEMORY_ID
                     , M.CONTENT
@@ -94,14 +122,24 @@
                     , M.CATEGORY
                     , M.TODO_YN
                     , M.MEMBER_ID
-                    , T.MEMORY_ID AS T_MEMORY_ID
-                    , T.SUCC_DATE AS T_SUCC_DATE
-                    , T.STR_DATE  AS T_STR_DATE
-                    , T.END_DATE  AS T_END_DATE
+                    , T.MEMORY_ID            AS T_MEMORY_ID
+                    , T.SUCC_DATE            AS T_SUCC_DATE
+                    , T.STR_DATE             AS T_STR_DATE
+                    , T.END_DATE             AS T_END_DATE
+                    , F.MEMORY_FILE_ID       AS F_MEMORY_FILE_ID
+                    , F.FILE_OWNER           AS F_FILE_OWNER
+                    , F.FILE_RELA_MEMORY_ID  AS F_FILE_RELA_MEMORY_ID
+                    , F.FILE_ORIG_NAME       AS F_FILE_ORIG_NAME
+                    , F.FILE_RE_NAME         AS F_FILE_RE_NAME
+                    , F.FILE_CREATE_DATE     AS F_FILE_CREATE_DATE
+                    , F.FILE_MODIFY_DATE     AS F_FILE_MODIFY_DATE
                  FROM WC_MEMORY M
                  LEFT OUTER JOIN
                       WC_TODO   T
                    ON T.MEMORY_ID = M.MEMORY_ID
+                 LEFT OUTER JOIN
+                      WC_MEMORY_FILE   F
+                   ON F.FILE_RELA_MEMORY_ID = M.MEMORY_ID
                 WHERE M.SHOW_DIV = 'Y'
                 <if test="searchWord != ''">
                   AND (

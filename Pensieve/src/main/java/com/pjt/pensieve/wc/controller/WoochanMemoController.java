@@ -56,17 +56,11 @@ public class WoochanMemoController
     }
 
     @PostMapping("/text/memorySave")
-    public ResponseEntity<Map<String, Object>> memorySave(ModelAndView modelAndView, MemoryAjax requestMemory)
+    public ResponseEntity<Map<String, Object>> memorySave(MemoryAjax requestMemory, @RequestParam(value="imageFile", required=false) List<MultipartFile> imageFiles)
     {
         int result = 0;
         Memory memory = new Memory();
         Map<String, Object> map = new HashMap<>();
-//        MultipartFile imageFile = requestMemory.getImageFile();
-        MultipartFile imageFile = null;
-        
-        log.info("requestMemory : {}", requestMemory);
-        log.info("modelAndView.getModel() : {}", modelAndView.getModel());
-        log.info("modelAndView.getModel().get(\"imageFile\") : {}", modelAndView.getModel().get("imageFile"));
         
         memory.setMemoryId(   requestMemory.getMemoryId().equals("")?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
         memory.setContent(    requestMemory.getContent() ==null?"":requestMemory.getContent());
@@ -117,8 +111,8 @@ public class WoochanMemoController
         }
 
         memory = memoryservice.getMemory(memory.getMemoryId());
-        
-        result = memoryFileService.saveFile(imageFile, memory.getMemoryId(), "resources/upload/wc/memo");
+
+        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "resources/img/upload/wc/memo");
         
         Parser parser        = Parser.builder().build();
         Node document        = parser.parse(memory.getContent());
@@ -168,6 +162,8 @@ public class WoochanMemoController
             String content = rederer.render(document);
             memory.setContent(content);
         }
+        
+        log.info("memories : {}", memories);
         
         resultMap.put("totalMemories", listCount);
         resultMap.put("memories"     , memories);

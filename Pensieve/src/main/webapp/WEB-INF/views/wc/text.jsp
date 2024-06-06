@@ -40,6 +40,33 @@
 ol>.list-group-item {
     display: list-item;
 }
+
+.filename
+{
+    text-overflow: ellipsis;
+    word-break: break-all;
+    align-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 15px;
+    width: 85%;
+}
+div.attatchedFileList
+{
+    margin-top: 3px;
+    border: 4px dashed var(--bs-primary);
+}
+div.attatchedFileList>div>label
+{
+    color:var(--bs-primary);
+    margin:8px 0px 0px 8px;
+}
+div.attatchedFileList>div>ul
+{
+    margin-bottom: 0px;
+    list-style: none;
+    padding: 15px;
+}
 </style>
 
 <input type="hidden" name="currPage"  value="" />
@@ -74,7 +101,9 @@ ol>.list-group-item {
                         <div class="accordion-body collapsed">
                             <div>
                                 <label for="formFile" class="form-label">파일 첨부</label>
-                                <input class="form-control" type="file" id="formFile" name="imageFile" accept="image/*">
+                                <input class="form-control" type="file" id="formFile" name="imageFile" accept="image/*" multiple>
+                                <div class="col-12 attatchedFileList" id="fileList" style="display:none;">
+                                </div>
                             </div>
                             <div>
                                 <label class="form-check-label mt-4">TODO 설정</label>

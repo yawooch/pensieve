@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pjt.pensieve.wc.model.mapper.CalendarMapper">
+
+    <resultMap  id="specialDateResultMap"   type="SpecialDate" >
+        <id     property="dateId"       column="DATE_ID"      />
+        <result property="dateKind"     column="DATE_KIND"    />
+        <result property="dateName"     column="DATE_NAME"    />
+        <result property="isHoliday"    column="IS_HOLIDAY"   />
+        <result property="kst"          column="KST"          />
+        <result property="locdate"      column="LOCDATE"      />
+        <result property="seq"          column="SEQ"          />
+        <result property="sunLongitude" column="SUN_LONGITUDE"/>
+   </resultMap>
+    
+    
+    <insert    id="insertSpecialDateHolidays" parameterType="SpecialDate" 
+               useGeneratedKeys="true" keyColumn="DATE_ID" keyProperty="dateId">
+        INSERT
+          INTO WC_SPECIAL_DATE
+               (
+               DATE_ID
+             , DATE_KIND
+             , DATE_NAME
+             , IS_HOLIDAY
+             , LOCDATE
+             , SEQ
+               )
+        VALUES ( 
+               SEQ_DATE_ID.NEXTVAL
+             , #{dateKind}
+             , #{dateName}
+             , #{isHoliday}
+             , #{locdate}
+             , #{seq}
+               )
+    </insert>
+    
+    
+</mapper>

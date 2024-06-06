@@ -1,5 +1,7 @@
 package com.pjt.pensieve.wc.model.vo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

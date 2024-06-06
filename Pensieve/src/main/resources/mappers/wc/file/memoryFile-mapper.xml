@@ -46,7 +46,7 @@
              , FILE_CREATE_DATE
              , FILE_MODIFY_DATE
           FROM WC_MEMORY_FILE
-         WHERE FILE_RELA_MEMORY_ID  = #{fileRelaMemoryId}
+         WHERE MEMORY_FILE_ID  = #{memoryFileId}
     </select>
     
     <delete    id="deleteMemoryFile" parameterType="_int">
@@ -63,6 +63,12 @@
              , FILE_MODIFY_DATE     = SYSDATE  
          WHERE FILE_RELA_MEMORY_ID  = #{fileRelaMemoryId}
            AND MEMORY_FILE_ID       = #{memoryFileId} 
+    </update>
+    <update    id="updateDelMemoryFile"  parameterType="_int">
+        UPDATE WC_MEMORY_FILE
+           SET FILE_RELA_MEMORY_ID  = NULL      
+             , FILE_MODIFY_DATE     = SYSDATE  
+         WHERE MEMORY_FILE_ID       = #{memoryFileId} 
     </update>
     
 </mapper>

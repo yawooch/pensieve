@@ -1,6 +1,7 @@
 package com.pjt.pensieve.wc.model.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +23,5 @@ public class Memory
     private String todoYn;     //해야할일여부
     private String showDiv;    //보여주기구분
     private Todo   todo;       //해야할일상세정보
+    private List<MemoryFile>  memoryFiles;//첨부파일
 }

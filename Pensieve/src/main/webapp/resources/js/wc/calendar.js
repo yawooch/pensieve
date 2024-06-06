@@ -1,3 +1,23 @@
+$(document).ready(() => {
+
+  calendarOption['events'] = events;
+  var calendar = new FullCalendar.Calendar(document.getElementById("calendar"),calendarOption);
+  
+  calendar.render();
+
+  $.ajax({
+    url : '/pensieve/wc/calendar/getCalendarEvent/',
+    type : 'POST',
+    dataType    : 'json',
+    contentType : 'application/json;charset=utf-8',
+    success : (data)=>
+    {
+      console.log(data);
+    }
+
+  });
+
+});
 var events = [
   {
     title: "Business Lunch",
@@ -98,63 +118,51 @@ var events = [
     // color: "#ff9f89",
   }
 ];
-
-$(document).ready(() => {
-
-  var calendar = new FullCalendar.Calendar(document.getElementById("calendar"),
+var calendarOption = {
+  headerToolbar: 
   {
-    headerToolbar: 
-    {
-      left  : "prev,next today",
-      center: "title",
-      right : "dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-    },
-    initialView  : 'dayGridYear',
-    locale       : "ko",
-    themeSystem  : "bootstrap5",
-    navLinks     : true, // can click day/week names to navigate views
-    // businessHours: true, // display business hours
-    businessHours: 
-    {
-      // days of week. an array of zero-based day of week integers (0=Sunday)
-      daysOfWeek : [1, 2, 3, 4, 5],
-      startTime  : "09:00",
-      endTime    : "18:00",
-    },
-    editable     : true,
-    dayMaxEvents : true, // allow "more" link when too many events
-    selectable   : true,
-    select       : selectDateFunc,
-    eventClick: function(arg) {
-      if (confirm('Are you sure you want to delete this event?')) {
-        arg.event.remove()
-      }
-    },
-    events       : events,
-  });
-
-
-  // calendar.Calendar.setEvents(events);
-
-  // calendar.addEvent(events);
-  
-  calendar.render();
-  function selectDateFunc(arg) {
-    var title = prompt("Event Title:");
-    console.log(arg);
-    if (title) {
-      calendar.addEvent({
-        title: title,
-        start: arg.start,
-        end: arg.end,
-        allDay: arg.allDay,
-      });
-      alert(
-        arg.start.toISOString().split("T")[0] + " ~ " +
-        arg.end.toISOString().split("T")[0]   + ", " +
-        title + "이 등록되었습니다."
-      );
+    left  : "prev,next today",
+    center: "title",
+    right : "dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+  },
+  initialView  : 'dayGridYear',
+  locale       : "ko",
+  themeSystem  : "bootstrap5",
+  navLinks     : true, // can click day/week names to navigate views
+  // businessHours: true, // display business hours
+  businessHours: 
+  {
+    // days of week. an array of zero-based day of week integers (0=Sunday)
+    daysOfWeek : [1, 2, 3, 4, 5],
+    startTime  : "09:00",
+    endTime    : "18:00",
+  },
+  editable     : true,
+  dayMaxEvents : true, // allow "more" link when too many events
+  selectable   : true,
+  select       : selectDateFunc,
+  eventClick: function(arg) {
+    if (confirm('Are you sure you want to delete this event?')) {
+      arg.event.remove()
     }
-    calendar.unselect();
   }
-});
+};
+
+function selectDateFunc(arg) {
+  var title = prompt("Event Title:");
+  console.log(arg);
+  if (title) {
+    calendar.addEvent({
+      title: title,
+      start: arg.start,
+      end: arg.end,
+      allDay: arg.allDay,
+    });
+    alert(
+      arg.start.toISOString().split("T")[0] + " ~ " +
+      arg.end.toISOString().split("T")[0]   + ", " +
+      title + "이 등록되었습니다."
+    );
+  }
+  calendar.unselect();
+}

@@ -48,7 +48,14 @@ $(document).ready(()=>
     loadMemories();//스크롤 Observe 해결될때까진 일단 두번 실행시키쟈..
     /***********************  Memory 관련 이벤트 끝   **********************/
 
-    
+    $('#fileList').on('change', (event)=>
+    {
+        alert('변했!어!');
+        if($(event.target).html() == '')
+        {
+            alert('아무것도 없어!');
+        }
+    });
     /***********************  Scroll 관련 이벤트 시작 **********************/
     //스크롤을 내리면 scrollTop 버튼이 생성된다.
     $(document).on('scroll', showBtnScroll);
@@ -140,13 +147,13 @@ function saveModalMemory()
     let form = $('#formModal')[0];
     let formData = new FormData(form);
 
-    var inputFile = $("input[name='imageFile']");
-    var files = inputFile[0].files;
+    // var inputFile = $("input[name='imageFile']");
+    // var files = inputFile[0].files;
 
-    for(var i =0;i<files.length;i++){
+    // for(var i =0;i<files.length;i++){
         
-        formData.append("imageFile", files[i]);
-    }
+    //     formData.append("imageFile", files[i]);
+    // }
 
     //memorySaveAjax생각보다 많이 쓰이네
     memorySaveAjax(formData, ()=>
@@ -171,6 +178,7 @@ function memorySaveAjax(data, completeFunction)
         success:function(data)
         {
             varMemories.set(data.memory.memoryId, data.memory);
+
             addCardMemory('prepend', data.memory);
         },
         error:function(data)
@@ -355,8 +363,28 @@ function cardMemoryMaker(oneMemory)
     cardHeaderEle.find('div.justify-content-between').append(cardContentStr);
 
 
+    let cardBodyFileList = '';
+    //파일 정보가 있을때 처리
+    if(oneMemory.memoryFiles.length != 0)
+    {
+        cardBodyFileList += '<p>';
+        for (let file of oneMemory.memoryFiles) {
+            cardBodyFileList += '<img src="'+ $('#contextPath').val() +'/img/upload/wc/memo/'+ file.fileReName +'" alt="'+ file.fileOrigName +'">';
+        }
+        cardBodyFileList += '</p>';
+    }
+    cardBodyFileList += oneMemory.content;
+        
+    //파일 정보가 있을때 처리
+    if(oneMemory.memoryFiles.length != 0)
+    {
+        //카드 목록 화면에서는 삭제하지 않는다
+        cardBodyFileList += createFileList(oneMemory.memoryFiles, false);//false일 때는 삭제버튼을 보여주지 않는다.
+    }
+
+
     //카드 바디 요소를 만들어주는 문자열을 만든다.
-    let  cardBodyEle  = $('<div class="card-body">' + oneMemory.content + '</div>');
+    let  cardBodyEle  = $('<div class="card-body">' + cardBodyFileList + '</div>');
 
     //ul은 div.card-body 와 형제요소여야한다
     if(cardBodyEle.find('ul').length !== 0)
@@ -402,7 +430,6 @@ function cardMemoryMaker(oneMemory)
     cardBodyEle.find('div').addClass('card-body');
     cardBodyEle.find('div').has('img').removeClass('card-body').css('text-align','center');
 
-    
     //카드 푸터 요소를 만들어주는 문자열을 만든다.
     let editDate      = oneMemory.modifyDate==null? oneMemory.createDate:oneMemory.modifyDate;
     let convertDate   = parseDate(editDate, 'summary');
@@ -426,6 +453,23 @@ function cardMemoryMaker(oneMemory)
     return cardParent;
 }
 
+function createFileList(memoryFiles, deleteYn) {
+
+    let fileList = '<ul class="fileList">';
+    for (let file of memoryFiles) {
+        fileList += '<li class="fileItem justify-content-between d-flex">';
+        fileList += '<a class="filename" href="javascript:fileDown(' + file.fileRelaMemoryId + ', ' + file.memoryFileId + ');" style="width:'+ (deleteYn?'85%':'100%') +';">';
+        fileList += file.fileOrigName + '</a>';
+        if(deleteYn)
+        {
+            fileList += '<a class="text-link text-danger" href="javascript:void(0);" onClick="fileDelete(' + file.memoryFileId + ')" memoryFileId="' + file.memoryFileId + '">삭제</a>';
+        }
+        fileList += '</li>';
+    }
+    fileList += '</ul>';
+    return fileList;
+}
+
 function setOpserveAction(entries, observer)
 {
     entries.forEach((entry)=>
@@ -443,6 +487,8 @@ function setOpserveAction(entries, observer)
 function closeSetting()
 {
     $('#formModal')[0].reset();
+    $('#fileList').html('');
+    $('#fileList').hide();
     $('input[name=memoryId]').val('');
     $('#collapseOne').collapse('hide');
 }
@@ -495,6 +541,17 @@ function editMemory(memoryId)
     $('textarea[name=content]').val(memory.contentOrig);
     $('select[name=category] option[value=' + memory.category +']').prop('selected',true);
     
+
+    if(memory.memoryFiles.length != 0)
+    {
+        $('#fileList').show();
+        let appendStr = '<div class="col-12"><label>File List</label>';
+        appendStr += createFileList(memory.memoryFiles, true);
+        appendStr += '</div>';
+        $('#fileList').append(appendStr);
+        $('#collapseOne').collapse('show');
+    }
+
     if(memory.todoYn == 'Y')
     {
         $('#todoYnCheck').prop('checked', true);
@@ -644,4 +701,30 @@ function checkTodoFunc(event)
         parentEle.removeClass('border-success');
         parentEle.addClass('border-secondary');
     }
+}
+
+function fileDown(memoryId, memoryFileId){
+    let path         = $('#contextPath').val();
+    location.assign(`${ path }/wc/file/fileDown?memoryId=${memoryId}&memoryFileId=${memoryFileId}`);
+}
+
+function fileDelete(memoryFileId){
+    let path         = $('#contextPath').val();
+
+    $.ajax({
+        url : `${ path }/wc/file/fileDelete?memoryFileId=${memoryFileId}`,
+        type : 'POST',
+        contentType : 'json',
+        success : (data)=>
+        {
+            if(data.result == 0)
+            {
+                $('#fileList').find('a[memoryFileId='+ memoryFileId +']').parents('li').text('삭제에 실패하였습니다.');
+            }
+            else
+            {
+                $('#fileList').find('a[memoryFileId='+ memoryFileId +']').parents('li').remove();
+            }
+        }
+    });
 }

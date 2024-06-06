@@ -8,4 +8,8 @@ import com.pjt.pensieve.wc.model.vo.MemoryFile;
 public interface MemoryFileMapper
 {
     int insertMemoryFile(MemoryFile memoryFile);
+
+    MemoryFile selectMemoryFile(int memoryFileId);
+
+    int updateDelMemoryFile(int memoryFileId);
 }
