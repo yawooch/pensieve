@@ -1,7 +1,5 @@
 package com.pjt.pensieve.wc.model.vo;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +22,5 @@ public class MemoryAjax
     private String strDate;   //시작일자
     private String endDate;   //종료일자
     private String succDate;  //성공여부
+    private String repeatPeriod;  //반복기간
 }

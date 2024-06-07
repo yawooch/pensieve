@@ -15,7 +15,6 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +47,7 @@ public class WoochanMemoController
         modelAndView.setViewName("wc/timeline");
         return modelAndView;
     }
+    
     @RequestMapping(value = "/text")
     public ModelAndView wcFirstView(ModelAndView modelAndView)
     {
@@ -59,8 +59,10 @@ public class WoochanMemoController
     public ResponseEntity<Map<String, Object>> memorySave(MemoryAjax requestMemory, @RequestParam(value="imageFile", required=false) List<MultipartFile> imageFiles)
     {
         int result = 0;
-        Memory memory = new Memory();
         Map<String, Object> map = new HashMap<>();
+        Memory memory = new Memory();
+        
+        System.out.println(requestMemory.getMemoryId());
         
         memory.setMemoryId(   requestMemory.getMemoryId().equals("")?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
         memory.setContent(    requestMemory.getContent() ==null?"":requestMemory.getContent());
@@ -125,7 +127,7 @@ public class WoochanMemoController
         return ResponseEntity.ok(map);
     }
     
-    @GetMapping("/text/memoryDelete")
+    @PostMapping("/text/memoryDelete")
     public ModelAndView memoryDelete(ModelAndView modelAndView, @RequestParam("memoryId") int memoryId)
     {
         int result = 0;

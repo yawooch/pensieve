@@ -6,7 +6,7 @@
 
 <mapper namespace="com.pjt.pensieve.wc.model.mapper.CalendarMapper">
 
-    <resultMap  id="specialDateResultMap"   type="SpecialDate" >
+    <resultMap  id="specialDateResultMap" type="SpecialDate"   >
         <id     property="dateId"       column="DATE_ID"      />
         <result property="dateKind"     column="DATE_KIND"    />
         <result property="dateName"     column="DATE_NAME"    />
@@ -16,7 +16,26 @@
         <result property="seq"          column="SEQ"          />
         <result property="sunLongitude" column="SUN_LONGITUDE"/>
    </resultMap>
+   
+   
+    <resultMap  id="scheduleResultMap"    type="Schedule"     >
+        <id     property="memoryId"     column="MEMORY_ID"   />
+        <result property="strDate"      column="STR_DATE"    />
+        <result property="endDate"      column="END_DATE"    />
+        <result property="repeatPriod"  column="REPEAT_PRIOD"/>
+   </resultMap>
     
+    <resultMap  id="eventResultMap"    type="Event"     >
+        <id     property="memoryId"    column="MEMORY_ID"   />
+        <result property="strDate"     column="STR_DATE"    />
+        <result property="endDate"     column="END_DATE"    />
+        <result property="succDate"    column="SUCC_DATE"   />
+        <result property="repeatPriod" column="REPEAT_PRIOD"/>
+        <result property="title"       column="TITLE"       />
+        <result property="category"    column="CATEGORY"    />
+        <result property="content"     column="CONTENT"     />
+        <result property="todoYn"      column="TODO_YN"     />
+   </resultMap>
     
     <insert    id="insertSpecialDateHolidays" parameterType="SpecialDate" 
                useGeneratedKeys="true" keyColumn="DATE_ID" keyProperty="dateId">
@@ -40,5 +59,138 @@
                )
     </insert>
     
+    
+    <select    id="selectCommonDays" parameterType="_int" resultMap="specialDateResultMap">
+        SELECT LOCDATE
+             , DATE_NAME
+             , IS_HOLIDAY
+             , DATE_ID
+             , DATE_KIND
+             , KST
+             , SEQ
+             , SUN_LONGITUDE
+          FROM WC_SPECIAL_DATE
+         ORDER BY
+               LOCDATE
+    </select>
+    
+    
+    <delete    id="deleteSchedule" parameterType="_int">
+        DELETE 
+          FROM WC_SCHEDULE
+         WHERE MEMORY_ID = #{memoryId} 
+    </delete>
+    
+    
+    <insert    id="insertSchedule" parameterType="Schedule" keyColumn="MEMORY_ID" keyProperty="memoryId">
+        INSERT
+          INTO WC_SCHEDULE
+               (
+               MEMORY_ID
+             , STR_DATE
+             , END_DATE
+             , REPEAT_PRIOD
+               )
+        VALUES (
+               #{memoryId}
+             , #{strDate}
+             , #{endDate}
+             , #{repeatPriod}
+               )
+    </insert>
+    
+    
+    <select    id="selectEvent" parameterType="_int" resultMap="eventResultMap">
+        SELECT MEMORY_ID
+             , STR_DATE
+             , END_DATE
+             , SUCC_DATE
+             , REPEAT_PRIOD
+             , TITLE
+             , CATEGORY
+             , CONTENT
+             , TODO_YN
+          FROM (
+                SELECT M.MEMORY_ID
+                     , S.STR_DATE  AS STR_DATE
+                     , S.END_DATE  AS END_DATE
+                     , NULL        AS SUCC_DATE
+                     , S.REPEAT_PRIOD AS REPEAT_PRIOD
+                     , M.TITLE
+                     , M.CATEGORY
+                     , M.CONTENT
+                     , M.TODO_YN
+                  FROM WC_MEMORY M
+                 INNER JOIN
+                       WC_SCHEDULE S
+                    ON S.MEMORY_ID = M.MEMORY_ID
+                   AND M.SHOW_DIV  = 'Y'
+                UNION ALL
+                SELECT M.MEMORY_ID
+                     , TO_CHAR(T.STR_DATE, 'YYYY-MM-DD HH24:MI:SS')  AS STR_DATE
+                     , TO_CHAR(T.END_DATE, 'YYYY-MM-DD HH24:MI:SS')  AS END_DATE
+                     , T.SUCC_DATE AS SUCC_DATE
+                     , NULL        AS REPEAT_PRIOD
+                     , M.TITLE
+                     , M.CATEGORY
+                     , M.CONTENT
+                     , M.TODO_YN
+                  FROM WC_MEMORY M
+                 INNER JOIN
+                       WC_TODO T
+                    ON T.MEMORY_ID = M.MEMORY_ID
+                   AND M.SHOW_DIV = 'Y'
+                 WHERE T.STR_DATE IS NOT NULL
+                   AND T.END_DATE IS NOT NULL
+                )
+               <if test="memoryId != 0">
+         WHERE MEMORY_ID = #{memoryId}
+               </if>
+    </select>
+    <select    id="selectEvents" parameterType="_int" resultMap="eventResultMap">
+        SELECT MEMORY_ID
+             , STR_DATE
+             , END_DATE
+             , SUCC_DATE
+             , REPEAT_PRIOD
+             , TITLE
+             , CATEGORY
+             , CONTENT
+             , TODO_YN
+          FROM (
+                SELECT M.MEMORY_ID
+                     , S.STR_DATE  AS STR_DATE
+                     , S.END_DATE  AS END_DATE
+                     , NULL        AS SUCC_DATE
+                     , S.REPEAT_PRIOD AS REPEAT_PRIOD
+                     , M.TITLE
+                     , M.CATEGORY
+                     , M.CONTENT
+                     , M.TODO_YN
+                  FROM WC_MEMORY M
+                 INNER JOIN
+                       WC_SCHEDULE S
+                    ON S.MEMORY_ID = M.MEMORY_ID
+                   AND M.SHOW_DIV  = 'Y'
+                UNION ALL
+                SELECT M.MEMORY_ID
+                     , TO_CHAR(T.STR_DATE, 'YYYY-MM-DD HH24:MI:SS')  AS STR_DATE
+                     , TO_CHAR(T.END_DATE, 'YYYY-MM-DD HH24:MI:SS')  AS END_DATE
+                     , T.SUCC_DATE AS SUCC_DATE
+                     , NULL        AS REPEAT_PRIOD
+                     , M.TITLE
+                     , M.CATEGORY
+                     , M.CONTENT
+                     , M.TODO_YN
+                  FROM WC_MEMORY M
+                 INNER JOIN
+                       WC_TODO T
+                    ON T.MEMORY_ID = M.MEMORY_ID
+                   AND M.SHOW_DIV = 'Y'
+                 WHERE T.STR_DATE IS NOT NULL
+                   AND T.END_DATE IS NOT NULL
+                )
+          ORDER BY STR_DATE
+    </select>
     
 </mapper>

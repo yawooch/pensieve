@@ -80,6 +80,9 @@ public class MemoryFileServiceImpl implements MemoryFileService
         List<MemoryFile> memoryFileList = new ArrayList<MemoryFile>();
         int result = 0;
 
+        // 파일 저장
+        if (upfiles == null || upfiles.isEmpty()){ return 0; }
+        
         for (MultipartFile upfile : upfiles)
         {
             MemoryFile memoryFile = new MemoryFile();

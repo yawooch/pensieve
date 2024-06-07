@@ -3,10 +3,13 @@ package com.pjt.pensieve.wc.model.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pjt.pensieve.wc.api.AstronomyDateItem;
 import com.pjt.pensieve.wc.api.SpecialDateItem;
 import com.pjt.pensieve.wc.model.mapper.CalendarMapper;
+import com.pjt.pensieve.wc.model.vo.Event;
+import com.pjt.pensieve.wc.model.vo.Schedule;
 import com.pjt.pensieve.wc.model.vo.SpecialDate;
 
 import lombok.RequiredArgsConstructor;
@@ -15,8 +18,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemoryCalendarServiceImpl implements MemoryCalendarService
 {
-    private final CalendarMapper mapper; 
+    private final CalendarMapper mapper;
+    
     @Override
+    @Transactional
     public int saveHolidayInfo(List<SpecialDateItem> specialDateItems)
     {
         int result = 0;
@@ -36,6 +41,7 @@ public class MemoryCalendarServiceImpl implements MemoryCalendarService
         return result;
     }
     @Override
+    @Transactional
     public int saveAstronomyInfo(List<AstronomyDateItem> astronomyDateItems)
     {
         int result = 0;
@@ -55,6 +61,34 @@ public class MemoryCalendarServiceImpl implements MemoryCalendarService
         }
         
         return result;
+    }
+    @Override
+    public List<SpecialDate> getCommonDays()
+    {
+        return mapper.selectCommonDays();
+    }
+    
+    @Override
+    @Transactional
+    public int deleteSchedule(int memoryId)
+    {
+        return mapper.deleteSchedule(memoryId);
+    }
+    @Override
+    @Transactional
+    public int saveSchedule(Schedule schedule)
+    {
+        return mapper.insertSchedule(schedule);
+    }
+    @Override
+    public Event getEvent(int memoryId)
+    {
+        return mapper.selectEvent(memoryId);
+    }
+    @Override
+    public List<Event> getEvents()
+    {
+        return mapper.selectEvents();
     }
 
 }

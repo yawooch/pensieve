@@ -48,14 +48,6 @@ $(document).ready(()=>
     loadMemories();//스크롤 Observe 해결될때까진 일단 두번 실행시키쟈..
     /***********************  Memory 관련 이벤트 끝   **********************/
 
-    $('#fileList').on('change', (event)=>
-    {
-        alert('변했!어!');
-        if($(event.target).html() == '')
-        {
-            alert('아무것도 없어!');
-        }
-    });
     /***********************  Scroll 관련 이벤트 시작 **********************/
     //스크롤을 내리면 scrollTop 버튼이 생성된다.
     $(document).on('scroll', showBtnScroll);
@@ -100,6 +92,7 @@ $(document).ready(()=>
 
     /***********************  검색 관련 이벤트 끝   **********************/
 });
+
 function saveModalMemory()
 {
     let memoryId  = $('input[name=memoryId]').val();
@@ -143,17 +136,8 @@ function saveModalMemory()
         $('#myModal').modal('hide');
     }
 
-
     let form = $('#formModal')[0];
     let formData = new FormData(form);
-
-    // var inputFile = $("input[name='imageFile']");
-    // var files = inputFile[0].files;
-
-    // for(var i =0;i<files.length;i++){
-        
-    //     formData.append("imageFile", files[i]);
-    // }
 
     //memorySaveAjax생각보다 많이 쓰이네
     memorySaveAjax(formData, ()=>
@@ -299,11 +283,13 @@ function cardMemoryMaker(oneMemory)
     cardParent.attr('memory-data', oneMemory.memoryId);
     cardParent.append('<div class="card"></div>');
     
-    if(oneMemory.todoYn == "Y"&& oneMemory.todo.succDate === null)
+    let succDateStr = oneMemory.todoYn == "Y"?(oneMemory.todo===null?null:(oneMemory.todo.succDate===null?null:oneMemory.todo.succDate)):null;
+
+    if(oneMemory.todoYn == "Y"&& succDateStr === null)
     {
         cardColor = ' border-secondary';
     }
-    else if(oneMemory.todoYn == "Y" &&  oneMemory.todo.succDate !== null)
+    else if(oneMemory.todoYn == "Y" &&  succDateStr !== null)
     {
         let chileStamp = $('<div></div>');
         chileStamp.addClass('missionStamp-complete');
@@ -320,6 +306,7 @@ function cardMemoryMaker(oneMemory)
     
     //카드 헤더 요소를 만들어주는 문자열을 만든다.
     let cardHeaderEle = $('<div class="card-header mb-1 "></div>');
+    cardHeaderEle.css('border-color','inherit');
     cardHeaderEle.append('<div class="d-flex w-100 justify-content-between"></div>');
     cardHeaderEle.find('div.justify-content-between').append('<h5 class="mb-1">'+ (oneMemory.title == undefined?'':oneMemory.title) +'</h5>');
     
@@ -337,9 +324,9 @@ function cardMemoryMaker(oneMemory)
     
     headerContent.append('<div class="dropdown-menu"></div>');
     headerContent.find('div.dropdown-menu').attr('aria-labelledby', stringGrpId);
-    headerContent.find('div.dropdown-menu').append('<a href="javascript:editMemory(' + oneMemory.memoryId +');">수정</a>');
-    headerContent.find('div.dropdown-menu').append('<a href="javascript:copyMemory(' + oneMemory.memoryId +');">복제</a>');
-    headerContent.find('div.dropdown-menu').append('<a href="' + contextPath +'/wc/text/memoryDelete/?memoryId='+ oneMemory.memoryId +'">삭제</a>');
+    headerContent.find('div.dropdown-menu').append('<a href="javascript:editMemory('   + oneMemory.memoryId +');">수정</a>');
+    headerContent.find('div.dropdown-menu').append('<a href="javascript:copyMemory('   + oneMemory.memoryId +');">복제</a>');
+    headerContent.find('div.dropdown-menu').append('<a href="javascript:deleteMemory(' + oneMemory.memoryId +');">삭제</a>');
     headerContent.find('div.dropdown-menu>a').addClass('dropdown-item');
 
     let cardContentStr = '';
@@ -348,7 +335,7 @@ function cardMemoryMaker(oneMemory)
     {
         let todoEle = $('<div></div>');
         todoEle.addClass('d-flex justify-flex-end');
-        todoEle.append('<div><input type="checkbox" '+ (oneMemory.todo.succDate!=null?'checked':'') +'/></div>');
+        todoEle.append('<div><input type="checkbox" '+ (succDateStr!=null?'checked':'') +'/></div>');
         todoEle.find('div>input').addClass('form-check-input');
         todoEle.find('div>input').attr('name', 'todoCheck');
         todoEle.find('div>input').val(oneMemory.memoryId);
@@ -439,10 +426,12 @@ function cardMemoryMaker(oneMemory)
     cardFooterEle.append('<div class="text-end italicDate"></div>');
     cardFooterEle.find('div.text-end.italicDate').text(convertDate + (oneMemory.modifyDate==null? ' Created':' Modified'));
 
+    let strDateStr = oneMemory.todoYn == "Y"?(oneMemory.todo===null?null:(oneMemory.todo.strDate===null?null:oneMemory.todo.strDate)):null;
+    let endDateStr = oneMemory.todoYn == "Y"?(oneMemory.todo===null?null:(oneMemory.todo.endDate===null?null:oneMemory.todo.endDate)):null;
     if(oneMemory.todoYn =='Y')
     {
-        cardFooterEle.find('div').eq(0).append(oneMemory.todo.strDate!==null?'<span>' + parseDate(oneMemory.todo.strDate, 'short') + '</span>':'');
-        cardFooterEle.find('div').eq(0).append(oneMemory.todo.endDate!==null?' ~ <span>' + parseDate(oneMemory.todo.endDate, 'short') + '</span>':'');
+        cardFooterEle.find('div').eq(0).append(strDateStr!==null?'<span>' + parseDate(strDateStr, 'short') + '</span>':'');
+        cardFooterEle.find('div').eq(0).append(endDateStr!==null?' ~ <span>' + parseDate(endDateStr, 'short') + '</span>':'');
     }
 
     cardParent.find('div.card').append(cardHeaderEle.prop('outerHTML'));
@@ -452,7 +441,7 @@ function cardMemoryMaker(oneMemory)
 
     return cardParent;
 }
-
+//FileList div에 filelist를 채운다.
 function createFileList(memoryFiles, deleteYn) {
 
     let fileList = '<ul class="fileList">';
@@ -469,7 +458,7 @@ function createFileList(memoryFiles, deleteYn) {
     fileList += '</ul>';
     return fileList;
 }
-
+//스크롤을 인지하여 다음 페이지의 메모리카드를 불러온다
 function setOpserveAction(entries, observer)
 {
     entries.forEach((entry)=>
@@ -567,6 +556,20 @@ function editMemory(memoryId)
     }
     $('textarea[name=content]').val(memory.contentOrig);
     $('#myModal').modal('show');  
+}
+//기억을 삭제하는 이벤트
+function deleteMemory(memoryId)
+{
+    let path         = $('#contextPath').val();
+
+    $.ajax({
+        url : `${ path }/wc/text/memoryDelete/?memoryId=${memoryId}`,
+        type : 'POST',
+        contentType : 'json',
+        success : ()=>{
+            location.reload();
+        }
+    });
 }
 //기억을 복제하는 이벤트
 function copyMemory(memoryId)
@@ -702,12 +705,12 @@ function checkTodoFunc(event)
         parentEle.addClass('border-secondary');
     }
 }
-
+//파일을 다운받는 함수
 function fileDown(memoryId, memoryFileId){
     let path         = $('#contextPath').val();
     location.assign(`${ path }/wc/file/fileDown?memoryId=${memoryId}&memoryFileId=${memoryFileId}`);
 }
-
+//파일을 삭제하는 함수 delete 폴더로 옮기고 DB에서는 보여주지 않는다.
 function fileDelete(memoryFileId){
     let path         = $('#contextPath').val();
 

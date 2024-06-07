@@ -1,4 +1,4 @@
-# 스케줄러 프로젝트(4인)
+# 스케줄러 프로젝트(5인 스터디)
 
 ## Pensieve
 ![Pensieve](https://github.com/yawooch/pensieve/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/Pensinive.webp)
@@ -7,31 +7,31 @@
 
 
 ## 구현할 화면
-- [ ] Text Memo
-- [ ] Calendar
+- [x] Text Memo
+- [x] Calendar
 - [ ] Todo List
 - [ ] My Page
 - [ ] Admin Page
 - [ ] Login & Join
-- [ ] ~~TimeLine~~
+- [ ] TimeLine
 
 ## 화면별 구현할 기능
 
 - Text Memo
-  - [ ] CRUD
-  - [ ] Search
-  - [ ] Todo Y/N
-  - [ ] Infinite Scroll
+  - [x] CRUD
+  - [x] Search
+  - [x] Todo Y/N
+  - [x] Infinite Scroll
   - [ ] 메모글 공개/비공개
 - Calendar
-  - [ ] 일일 일정 등록
-  - [ ] 기간 일정 등록
-  - [ ] Infinite Scroll
-  - [ ] Drag&Drop 일정 수정
-  - [ ] Callendar View(Daily/Weekly/Monthly) 변경
+  - [x] 일일 일정 등록
+  - [x] 기간 일정 등록
+  - [ ] ~~Infinite Scroll~~
+  - [x] Drag&Drop 일정 수정
+  - [x] Callendar View(Daily/Weekly/Monthly) 변경
 - Todo List
-  - [ ] 기한이 있는 TODO
-  - [ ] 기한이 없는 TODO
+  - [x] 기한이 있는 TODO
+  - [X] 기한이 없는 TODO
 - My Page
   - [ ] 관심별 메모 카테고리 설정
 - Admin Page
@@ -41,15 +41,17 @@
 
 ### API 사용
 #### 공공데이터포탈 
-- WEATHER API  OR 미세먼지 API
+- [ ] WEATHER API  OR 미세먼지 API
+- [x] 공휴일 등 정보조회(기상천문) API
 #### 카카오 OR 네이버 MAP
 -> 위치 기록으로 일상을 기록할수 있도록
 
 ### 라이브러리
 * timeline.js 라이브러리
-* mensary.js 라이브러리
+* masonry.js 라이브러리
 
 ### Text Memo 기능 고도화
+* 스마트에디터 API 사용
 * 음성 -> 문자 변환 API 사용
 * ~~ OCR 라이브러리 ~~
 * Table 편집기능 추가

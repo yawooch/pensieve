@@ -1,23 +1,203 @@
-$(document).ready(() => {
-
-  calendarOption['events'] = events;
-  var calendar = new FullCalendar.Calendar(document.getElementById("calendar"),calendarOption);
+var memoryDictionary = new Map();
+var selectProps;
+var thisCalendar;
+$(document).ready(() => 
+{
+  //modal Save 버튼 클릭시
+  $('#saveText').on('click',saveModalMemory);
+  //모달이 닫힐때마다 form 안의 내용을 초기화 한다
+  $("#myModal").on('hide.bs.modal', closeSetting);
   
-  calendar.render();
+  //모달창 TodoYn 체크 이벤트
+  $('#repeatYn').on('change',repeatYnToggle);
+  // calendarOption['events'] = events;
+  var calendar = '';
 
-  $.ajax({
-    url : '/pensieve/wc/calendar/getCalendarEvent/',
+  $.ajax(
+  {
+    url :  $('#contextPath').val() +'/wc/calendar/getCalendarEvent',
     type : 'POST',
-    dataType    : 'json',
-    contentType : 'application/json;charset=utf-8',
+    // dataType    : 'json',
+    // contentType : 'application/json;charset=utf-8',
     success : (data)=>
     {
-      console.log(data);
+      let datas = new Array();
+      for(let memory of data.memories)
+      {
+        memoryDictionary.set(memory.memoryId, memory);
+        datas.push(returnEvent(memory));
+      }
+
+      calendar = new FullCalendar.Calendar(document.getElementById("calendar"),{
+        headerToolbar: 
+        {
+          left  : "prev,next today",
+          center: "title",
+          right : "dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+        },
+        initialView  : 'dayGridYear',
+        locale       : "ko",
+        themeSystem  : "bootstrap5",
+        navLinks     : true, // can click day/week names to navigate views
+        // businessHours: true, // display business hours
+        businessHours: 
+        {
+          // days of week. an array of zero-based day of week integers (0=Sunday)
+          daysOfWeek : [1, 2, 3, 4, 5],
+          startTime  : "09:00",
+          endTime    : "18:00",
+        },
+        editable     : true,
+        dayMaxEvents : true, // allow "more" link when too many events
+        selectable   : true,
+        select       : (arg)=>
+        {
+          $('#myModal').modal('show');
+          setTimeout(()=>{$('#content').focus();}, 600);
+          selectProps = arg;
+          thisCalendar = calendar;
+        },
+        eventClick : eventClickFunction,
+        eventDrop  : eventDropResizeFunction,
+        eventResize: eventDropResizeFunction,
+        dayCellContent:(info)=>
+        {
+          let number = document.createElement('a');
+          number.classList.add('fc-daygrid-day-number');
+          number.innerText = info.dayNumberText.replace('일','').replace('월',' /');
+          return {html : number.outerHTML}
+        }
+      });   
+
+      calendar.setOption('events', datas.concat(data.events));
+      calendar.render();
     }
-
   });
-
 });
+
+function eventClickFunction(arg) 
+{
+    let disableEdit = arg.event.startEditable===undefined?false:(arg.event.startEditable===false?true:false);
+
+    if (confirm('해당 이벤트를 삭제하시겠습니까?'))
+    {
+      if (disableEdit) {
+        alert("삭제할수 없는 이벤트입니다.");
+        return false;
+      }
+      arg.event.remove();
+      
+      $.ajax({
+          url : `${ $('#contextPath').val() }/wc/calendar/calendarDelete/?memoryId=${arg.event.id}`,
+          type : 'POST',
+          contentType : 'json'
+      });
+    }
+}
+
+function eventDropResizeFunction(arg) {
+    console.log(arg.event.id);
+    let data = memoryDictionary.get(parseInt(arg.event.id));
+    
+    data['todoYn']  = data['category']==='info'?'Y':null;//controller에 보낼때 이렇게 보내데?
+    data['strDate'] = moment(arg.event.start).format('yyyy-MM-DD hh:mm:ss');
+    data['endDate'] = moment(arg.event.end).format('yyyy-MM-DD hh:mm:ss');
+
+    let viewType = arg.view.type;
+
+    //"dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+    // view에 따라 보여지는 날짜 형식이 다르므로 처리방식이다르다
+    if(viewType === 'dayGridYear' || viewType === 'dayGridMonth')
+    {
+      data['strDate']   = moment(arg.event.startStr).format('yyyy-MM-DD');
+      data['endDate']   = moment(arg.event.endStr).subtract(1, 'days').format('yyyy-MM-DD');
+    }
+    if(viewType === 'timeGridWeek' || viewType === 'timeGridDay' || viewType === 'listMonth')
+    {
+      data['strDate']   = moment(arg.event.startStr).format('yyyy-MM-DD hh:mm:ss');
+      data['endDate']   = moment(arg.event.endStr).format('yyyy-MM-DD hh:mm:ss');
+    }
+      
+    //memorySaveAjax생각보다 많이 쓰이네
+    memorySaveAjax(data,
+    (data)=>{ let event = returnEvent(data.event); },
+    ()=>{ $('#myModal').modal('hide');});
+}
+
+function saveModalMemory()
+{
+  let category  = $('#category>option:selected').val();
+  let memoryId  = '0';
+  let title     = $('#category>option:selected').text();
+  let content   = $('#content').val();
+  let todoYn    = category==='info'?'Y':null;//controller에 보낼때 이렇게 보내데?
+  let strDate   = selectProps.start;
+  let endDate   = selectProps.end;
+  let repeatPeriod   = $('#repeatPeriod>option:selected').val();
+
+  thisCalendar.unselect();
+  let viewType = selectProps.view.type;
+
+  //"dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+  // view에 따라 보여지는 날짜 형식이 다르므로 처리방식이다르다
+  if(viewType === 'dayGridYear' || viewType === 'dayGridMonth')
+  {
+    strDate   = moment(selectProps.startStr).format('yyyy-MM-DD');
+    endDate   = moment(selectProps.endStr).subtract(1, 'days').format('yyyy-MM-DD');
+  }
+  if(viewType === 'timeGridWeek' || viewType === 'timeGridDay' || viewType === 'listMonth')
+  {
+      strDate   = moment(selectProps.startStr).format('yyyy-MM-DD hh:mm:ss');
+      endDate   = moment(selectProps.endStr).format('yyyy-MM-DD hh:mm:ss');
+  }
+  let datas = 
+  {
+      memoryId,
+      title,
+      content,
+      todoYn,
+      category,
+      strDate,
+      endDate,
+      repeatPeriod
+  };
+    
+  //memorySaveAjax생각보다 많이 쓰이네
+  memorySaveAjax(datas, function(data)
+  {
+    let event = returnEvent(data.event);
+
+    thisCalendar.addEvent(event);
+    
+    //사용한 전역변수는 클리어
+    thisCalendar = {};
+    selectProps  = {};
+  },
+  ()=>{ $('#myModal').modal('hide');});
+}
+//넘긴데이터 대로 WC_MEMORY에 저장한다.
+function memorySaveAjax(data, successFunction, completeFunction)
+{
+    let contextPath = $('#contextPath').val();
+
+    $.ajax({
+        url         : contextPath +'/wc/calendar/calendarSave',
+        type        : 'POST',
+        // contentType : false,
+        // processData : false,
+        dataType    : 'json',
+        data        : JSON.stringify(data),
+        contentType : 'application/json;charset=utf-8',
+        // data        : data,
+        success:successFunction,
+        error:function(data)
+        {
+            alert('저장에 실패하였습니다.');
+        },
+        complete:completeFunction
+    });
+}
+//임시(참고) events
 var events = [
   {
     title: "Business Lunch",
@@ -118,51 +298,47 @@ var events = [
     // color: "#ff9f89",
   }
 ];
-var calendarOption = {
-  headerToolbar: 
-  {
-    left  : "prev,next today",
-    center: "title",
-    right : "dayGridYear,dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-  },
-  initialView  : 'dayGridYear',
-  locale       : "ko",
-  themeSystem  : "bootstrap5",
-  navLinks     : true, // can click day/week names to navigate views
-  // businessHours: true, // display business hours
-  businessHours: 
-  {
-    // days of week. an array of zero-based day of week integers (0=Sunday)
-    daysOfWeek : [1, 2, 3, 4, 5],
-    startTime  : "09:00",
-    endTime    : "18:00",
-  },
-  editable     : true,
-  dayMaxEvents : true, // allow "more" link when too many events
-  selectable   : true,
-  select       : selectDateFunc,
-  eventClick: function(arg) {
-    if (confirm('Are you sure you want to delete this event?')) {
-      arg.event.remove()
-    }
-  }
-};
 
-function selectDateFunc(arg) {
-  var title = prompt("Event Title:");
-  console.log(arg);
-  if (title) {
-    calendar.addEvent({
-      title: title,
-      start: arg.start,
-      end: arg.end,
-      allDay: arg.allDay,
-    });
-    alert(
-      arg.start.toISOString().split("T")[0] + " ~ " +
-      arg.end.toISOString().split("T")[0]   + ", " +
-      title + "이 등록되었습니다."
-    );
+function returnEvent(oneEvent) {
+  let event = {};
+  event['id'] = oneEvent.memoryId;
+  event['title'] = oneEvent.content;
+  event['allDay'] = false;
+  
+  if (moment(oneEvent.strDate).diff(moment(oneEvent.endDate)) % 86400000 === 0) {
+    event['allDay'] = true;
+    event['end'] = moment(oneEvent.endDate).add(1, 'days').format('yyyy-MM-DD hh:mm:ss');
   }
-  calendar.unselect();
+  else
+  {
+    event['end'] = moment(oneEvent.endDate).format('yyyy-MM-DD hh:mm:ss');
+  }
+  event['start'] = moment(oneEvent.strDate).format('yyyy-MM-DD hh:mm:ss');
+  
+  // console.log(event);
+  return event;
+}
+//모달이 닫힐때 발생하는 이벤트
+function closeSetting()
+{
+    $('#formModal')[0].reset();
+    $('#collapseOne').collapse('hide');
+    $('#repeatYn').prop('checked',false);
+    $('#repeatYn').trigger('change');
+}
+//모달창 RepeatYn 체크 이벤트
+function repeatYnToggle(event)
+{
+    let target = $(event.target);
+
+    if(target.prop('checked'))
+    {
+        $('#repeatPeriod').prop('disabled',false);
+        $('#btnClearTo, #btnClearFrom').prop('disabled',false);
+      }
+      else
+      {
+        $('#repeatPeriod').prop('disabled',true);
+        $('#repeatPeriod>option').eq(0).prop('selected',true);
+      }
 }
