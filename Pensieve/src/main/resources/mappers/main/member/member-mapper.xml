@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper 
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.pjt.pensieve.member.model.mapper.MemberMapper">
-	<select id="selectCount" resultType="_int">
-		SELECT COUNT(*) FROM MEMBER
-	</select>
+<mapper namespace="com.pjt.pensieve.main.model.mapper.MemberMapper">
+
+
+    <resultMap id="memberResultMap"   type="Member" >
+       <id     property="memberNo"    column="MEMBER_NO"  />
+       <result property="memberId"    column="MEMBER_ID"  />
+       <result property="memberPw"    column="MEMBER_PW"  />
+       <result property="createDate"  column="CREATE_DATE"/>
+  </resultMap>
+    
+    <select    id="selectCount" resultType="_int">
+        SELECT COUNT(*) FROM MEMBER
+    </select>
+    
+    
+    <select    id="selectMemberById" parameterType="String" resultMap="memberResultMap">
+        SELECT MEMBER_NO
+             , MEMBER_ID
+             , MEMBER_PW
+             , CREATE_DATE
+          FROM MEMBER
+         WHERE MEMBER_ID = #{memberId}
+    </select>
+    
+    
 </mapper>

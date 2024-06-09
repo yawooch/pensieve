@@ -14,14 +14,14 @@
     <title>Pensieve</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon을 지정하는 link -->
-    <%-- <link rel="icon" type="image/ico" href="${path}/img/favicon.ico"> --%>
+<%--     <link rel="icon" type="image/ico" href="${path}/img/favicon.ico"> --%>
     <link rel="stylesheet" href="${path}/css/bootstrap.css">
     <!-- 아이콘을 사용할 수 있게하는 부트스트랩 CSS -->
     <link rel="stylesheet" href="${path}/css/font/bootstrap-icons.css">
     
 <%--     <link rel="stylesheet" href="${path}/css/themes/prism-okaidia.css"> --%>
     <link rel="stylesheet" href="${path}/css/custom.css">
-    <script src="${path}/js/jquery/jquery-3.7.1.js"></script>
+<script src="${path}/js/jquery/jquery-3.7.1.js"></script>
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KGDJBEFF3W"></script>
     <script src='${path}/js/fullcalendar/index.global.js'></script>

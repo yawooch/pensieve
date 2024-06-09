@@ -49,6 +49,8 @@
 ### 라이브러리
 * timeline.js 라이브러리
 * masonry.js 라이브러리
+* commonmark java 라이브러리
+* bootstrap5 라이브러리
 
 ### Text Memo 기능 고도화
 * 스마트에디터 API 사용

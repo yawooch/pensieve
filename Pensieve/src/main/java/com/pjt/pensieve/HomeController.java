@@ -45,6 +45,36 @@ public class HomeController
         modelAndView.setViewName("common/login");
         return modelAndView;
     }
+    @RequestMapping(value = "/login2")
+    public ModelAndView login2(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/login2");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/login3")
+    public ModelAndView login3(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/login3");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/login4")
+    public ModelAndView login4(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/login4");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/login5")
+    public ModelAndView login5(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/login5");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/login6")
+    public ModelAndView login6(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/login6");
+        return modelAndView;
+    }
     @RequestMapping(value = "/main")
     public ModelAndView main(ModelAndView modelAndView)
     {
