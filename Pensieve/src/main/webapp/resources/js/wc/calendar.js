@@ -97,11 +97,11 @@ function eventClickFunction(arg)
 
 function eventDropResizeFunction(arg) {
     console.log(arg.event.id);
-    let data = memoryDictionary.get(parseInt(arg.event.id));
+    let memory = memoryDictionary.get(parseInt(arg.event.id));
     
-    data['todoYn']  = data['category']==='info'?'Y':null;//controller에 보낼때 이렇게 보내데?
-    data['strDate'] = moment(arg.event.start).format('yyyy-MM-DD hh:mm:ss');
-    data['endDate'] = moment(arg.event.end).format('yyyy-MM-DD hh:mm:ss');
+    memory['todoYn']  = memory['category']==='secondary'?'Y':null;//controller에 보낼때 이렇게 보내데?
+    memory['strDate'] = moment(arg.event.start).format('yyyy-MM-DD hh:mm:ss');
+    memory['endDate'] = moment(arg.event.end).format('yyyy-MM-DD hh:mm:ss');
 
     let viewType = arg.view.type;
 
@@ -109,30 +109,42 @@ function eventDropResizeFunction(arg) {
     // view에 따라 보여지는 날짜 형식이 다르므로 처리방식이다르다
     if(viewType === 'dayGridYear' || viewType === 'dayGridMonth')
     {
-      data['strDate']   = moment(arg.event.startStr).format('yyyy-MM-DD');
-      data['endDate']   = moment(arg.event.endStr).subtract(1, 'days').format('yyyy-MM-DD');
+      memory['strDate']   = moment(arg.event.startStr).format('yyyy-MM-DD');
+      memory['endDate']   = moment(arg.event.endStr).subtract(1, 'days').format('yyyy-MM-DD');
     }
     if(viewType === 'timeGridWeek' || viewType === 'timeGridDay' || viewType === 'listMonth')
     {
-      data['strDate']   = moment(arg.event.startStr).format('yyyy-MM-DD hh:mm:ss');
-      data['endDate']   = moment(arg.event.endStr).format('yyyy-MM-DD hh:mm:ss');
+      memory['strDate']   = moment(arg.event.startStr).format('yyyy-MM-DD hh:mm:ss');
+      memory['endDate']   = moment(arg.event.endStr).format('yyyy-MM-DD hh:mm:ss');
     }
+
+    let formData = new FormData(form);
+
+    formData.append("memoryId", memory.memoryId);
+    formData.append("content", memory.contentOrig);
+    formData.append("contentOrig", memory.contentOrig);
+    formData.append("title", memory.title);
+    formData.append("category", memory.category);
+    formData.append("todoYn", memory.todoYn);
+    formData.append("strDate", memory.strDate);
+    formData.append("endDate", memory.endDate);
+    formData.append("succDate", memory.todoYn !== 'Y'?'':(memory.todo.succDate==null?'':memory.todo.succDate));
       
     //memorySaveAjax생각보다 많이 쓰이네
-    memorySaveAjax(data,
+    memorySaveAjax(formData,
     (data)=>{ let event = returnEvent(data.event); },
     ()=>{ $('#myModal').modal('hide');});
 }
 
 function saveModalMemory()
 {
-  let category  = $('#category>option:selected').val();
-  let memoryId  = '0';
-  let title     = $('#category>option:selected').text();
-  let content   = $('#content').val();
-  let todoYn    = category==='info'?'Y':null;//controller에 보낼때 이렇게 보내데?
-  let strDate   = selectProps.start;
-  let endDate   = selectProps.end;
+  let category       = $('#category>option:selected').val();
+  let memoryId       = '';
+  let title          = $('#category>option:selected').text();
+  let content        = $('#content').val();
+  let todoYn         = category==='secondary'?'Y':null;//controller에 보낼때 이렇게 보내데?
+  let strDate        = selectProps.start;
+  let endDate        = selectProps.end;
   let repeatPeriod   = $('#repeatPeriod>option:selected').val();
 
   thisCalendar.unselect();
@@ -150,20 +162,22 @@ function saveModalMemory()
       strDate   = moment(selectProps.startStr).format('yyyy-MM-DD hh:mm:ss');
       endDate   = moment(selectProps.endStr).format('yyyy-MM-DD hh:mm:ss');
   }
-  let datas = 
-  {
-      memoryId,
-      title,
-      content,
-      todoYn,
-      category,
-      strDate,
-      endDate,
-      repeatPeriod
-  };
-    
+  
+  let formData = new FormData();
+
+  formData.append("memoryId"    , memoryId);
+  formData.append("content"     , content);
+  formData.append("contentOrig" , content);
+  formData.append("title"       , title);
+  formData.append("category"    , category);
+  formData.append("todoYn"      , todoYn);
+  formData.append("strDate"     , strDate);
+  formData.append("endDate"     , endDate);
+  formData.append("repeatPeriod", repeatPeriod);
+
+
   //memorySaveAjax생각보다 많이 쓰이네
-  memorySaveAjax(datas, function(data)
+  memorySaveAjax(formData, function(data)
   {
     let event = returnEvent(data.event);
 
@@ -181,14 +195,14 @@ function memorySaveAjax(data, successFunction, completeFunction)
     let contextPath = $('#contextPath').val();
 
     $.ajax({
-        url         : contextPath +'/wc/calendar/calendarSave',
+        url         : contextPath +'/wc/memorySave',
         type        : 'POST',
-        // contentType : false,
-        // processData : false,
-        dataType    : 'json',
-        data        : JSON.stringify(data),
-        contentType : 'application/json;charset=utf-8',
-        // data        : data,
+        contentType : false,
+        processData : false,
+        // dataType    : 'json',
+        // data        : JSON.stringify(data),
+        // contentType : 'application/json;charset=utf-8',
+        data        : data,
         success:successFunction,
         error:function(data)
         {

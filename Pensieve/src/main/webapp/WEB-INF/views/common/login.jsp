@@ -71,7 +71,7 @@
       <div class="col align-items-center flex-col sign-in">
         <div class="form-wrapper align-items-center">
           <div class="form sign-in">
-          <form action="${path}/login" method="POST">
+          <form id="loginForm" action="${path}/login" method="POST">
             <div class="input-group form-floating">
               <input type="text" name="login-username" placeholder="Username">
               <i class="fa fa-check" aria-hidden="true" style="color:#56cc9d;"></i>
@@ -84,7 +84,7 @@
               <i class="fa fa-times" aria-hidden="true" style="color:#ff7851;"></i>
               <label>Password</label>
             </div>
-            <button id="btnLogin" type="button" onclick="location.href='${path}/';" disabled>
+            <button id="btnLogin" type="button"  disabled>
               Sign in
             </button>
             <p>
@@ -156,6 +156,7 @@
      container.classList.add('sign-in')
    }, 200)
    
+// 입력할때, focusout 될때 유효값을 검사한다.
 $('input').on('keyup focusout',(event)=>
 {
     let target    = $(event.target);
@@ -163,6 +164,7 @@ $('input').on('keyup focusout',(event)=>
     
     let formDiv = target.parents('div.form').attr('class');
     
+    //로그인 화면일때
     if(formDiv.includes('sign-in'))
     {
         if($('.form.sign-in input.is-valid').length === 2)
@@ -175,6 +177,7 @@ $('input').on('keyup focusout',(event)=>
         }
     
     }
+    //회원가입 화면일때
     else if(formDiv.includes('sign-up'))
     {
         if($('.form.sign-up input.is-valid').length === 3)
@@ -188,8 +191,31 @@ $('input').on('keyup focusout',(event)=>
     }
 });
 
+// 로그인 버튼을 눌렀을떄
+$('#btnLogin').on('click',(event)=>
+{
+	//전송하기전에 잘못된 입력이 있을 경우를 체크한다
+    if($('.form.sign-in input.is-valid').length !== 2)
+    {
+        $('#btnLogin').prop('disabled', true);  
+
+        $.each($('.form.sign-in input'),(idx, ele)=>
+        {
+            validateInput($(ele));
+            if(!$(ele).hasClass('is-valid'))
+            {
+                $(ele).focus();
+                return false;
+            }
+        }); 
+    }
+	
+	$('#loginForm').submit();
+});
+// 회원가입 버튼을 눌렀을떄
 $('#btnJoin').on('click',(event)=>
 {
+    //전송하기전에 잘못된 입력이 있을 경우를 체크한다
     if($('.form.sign-up input.is-valid').length !== 3)
     {
         $('#btnJoin').prop('disabled', true);  
@@ -204,23 +230,53 @@ $('#btnJoin').on('click',(event)=>
             }
         }); 
     }
-
     
-    let memberId = $('input[name=join-username]').val();
-    let password = $('input[name=join-username]').val();
+    let memberId = $('.form.sign-up input[name=join-username]').val();
+    let memberPw = $('.form.sign-up input[name=join-password]').val();
 
-    alert('가입이 완료되었습니다.');
+    let data = {
+            memberId,
+            memberPw,
+    };
     
-    $.each($('.form.sign-up input'),(idx, ele)=>
-    {
-        $(ele).val('');
-        validateInput($(ele));
-        $('#btnJoin').prop('disabled', true);  
-    }); 
-    toggle();
+
+    $.ajax({
+        url         : '${path}/joinMember',
+        type        : 'POST',
+        dataType    : 'json',
+        contentType : 'application/json;charset=utf-8',
+        data        : JSON.stringify(data),
+        success     : (data)=>
+        {
+        	console.log(data);
+            if(data.result === 0)
+            {
+                alert('회원 등록 중 에러가 발생했습니다.');
+            }
+            else
+            {
+                alert('가입이 완료되었습니다.');
+                
+                $.each($('.form.sign-up input'),(idx, ele)=>
+                {
+                    $(ele).val('');
+                    validateInput($(ele));
+                    $('#btnJoin').prop('disabled', true);  
+                }); 
+                toggle();
+            }
+        },
+        error : (data)=>
+        {
+            console.log(data)
+            alert('회원 등록 중 에러가 발생했습니다.');
+        }
+    });
+    
+    
     
 });
-
+// 입력된 값이 올바른 값인지 검사한다.
 function validateInput(target)
 {
     let inputType = target.attr('type');
@@ -276,6 +332,7 @@ function validateInput(target)
         return false;
     }
 }
+// 입력된 값의 검사 결과 값을 표시한다.
 function showFeedback(ele, eval, showText)
 {
    if(eval === 'valid')
@@ -309,13 +366,14 @@ function showFeedback(ele, eval, showText)
         ele.parents('div.input-group').next('.feedback').hide();
     }
 }
+// 유저네임(memberId) 중복검사 Ajax
 function duplicationCheck(target, inputVal)
 {
     let memberId = $('.form.sign-up input[name=join-username]').val();
     let data = {memberId}; 
     
     $.ajax({
-        url         : '${path}/main/member/idCheck',
+        url         : '${path}/idCheck',
         type        : 'POST',
         dataType    : 'json',
         contentType : 'application/json;charset=utf-8',

@@ -151,7 +151,7 @@ function memorySaveAjax(data, completeFunction)
     let contextPath = $('#contextPath').val();
 
     $.ajax({
-        url         : contextPath +'/wc/text/memorySave',
+        url         : contextPath +'/wc/memorySave',
         type        : 'POST',
         contentType : false,
         processData : false,

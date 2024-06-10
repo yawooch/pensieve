@@ -4,7 +4,6 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,17 +26,12 @@ import com.pjt.pensieve.wc.model.service.MemoryCalendarService;
 import com.pjt.pensieve.wc.model.service.MemoryService;
 import com.pjt.pensieve.wc.model.vo.Event;
 import com.pjt.pensieve.wc.model.vo.Memory;
-import com.pjt.pensieve.wc.model.vo.MemoryAjax;
-import com.pjt.pensieve.wc.model.vo.Schedule;
 import com.pjt.pensieve.wc.model.vo.SpecialDate;
-import com.pjt.pensieve.wc.model.vo.Todo;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 
-@Slf4j
 @RequestMapping("/wc")
 @RequiredArgsConstructor
 public class WooChanCalendarController
@@ -91,88 +85,6 @@ public class WooChanCalendarController
         
         resultMap.put("events", calendarDates);
         resultMap.put("memories", events);
-        
-        return ResponseEntity.ok(resultMap);
-    }
-    
-    @PostMapping("/calendar/calendarSave")
-    public ResponseEntity<Map<String,Object>> calendarSave(@RequestBody MemoryAjax requestMemory)
-    {
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-        int result = 0;
-        
-        log.info("request : {}", requestMemory);
-
-        Memory memory = new Memory();
-        
-        memory.setMemoryId(   requestMemory.getMemoryId().equals("0")?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
-        memory.setContent(    requestMemory.getContent() ==null?"":requestMemory.getContent());
-        memory.setContentOrig(requestMemory.getContent() ==null?"":requestMemory.getContent());
-        memory.setTitle(      requestMemory.getTitle()   ==null?"":requestMemory.getTitle());
-        memory.setCategory(   requestMemory.getCategory()==null?"":requestMemory.getCategory());
-        memory.setMemberId(null);
-        
-        //여기서 null이 들어가면 insert 될때 null을 넣을수 없음 에러발생
-        memory.setTodoYn(requestMemory.getTodoYn()==null?"N":"Y");
-        result = memoryservice.saveMemory(memory);
-
-        DateTimeFormatter formatter     = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter longFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH24:mm:ss");
-        Todo         toDo = new Todo();
-        Schedule schedule = new Schedule();
-        
-        
-        //memoryId 가 생성된 후에 Todo VO를 insert한다.
-        if(memory.getTodoYn().equals("Y"))
-        {
-            if(memory.getMemoryId() != 0)
-            {
-                result = memoryservice.deleteTodo(memory.getMemoryId());
-            }
-            
-            toDo.setMemoryId(memory.getMemoryId());
-            
-            Date strDate = null;
-            Date endDate = null;
-            if(!requestMemory.getStrDate().equals(""))
-            {
-                String strDateObj = requestMemory.getStrDate().toString();
-                DateTimeFormatter useFormatter = strDateObj.length() > 10?longFormatter:formatter;
-                strDate = java.sql.Date.valueOf(LocalDate.parse(strDateObj,useFormatter));
-            }
-            if(!requestMemory.getEndDate().equals(""))
-            {
-                String endDateObj = requestMemory.getEndDate().toString();
-                DateTimeFormatter useFormatter = endDateObj.length() > 10?longFormatter:formatter;
-                endDate = java.sql.Date.valueOf(LocalDate.parse(endDateObj,useFormatter));
-            }
-            
-            //LocalDate를 Date로 변환하는 과정(Date를 바로쓰면 try 쓰기 귀찮아서...
-            toDo.setStrDate(strDate);
-            toDo.setEndDate(endDate);
-            
-            result = memoryservice.saveTodo(toDo);
-        }
-        //Todo 가 아니면 SCHEDULE에 insert 한다.
-        else
-        {
-            if(memory.getMemoryId() != 0)
-            {
-                result = memoryCalendarService.deleteSchedule(memory.getMemoryId());
-            }
-            
-            schedule.setMemoryId(memory.getMemoryId());
-            schedule.setStrDate(requestMemory.getStrDate());
-            schedule.setEndDate(requestMemory.getEndDate());
-            schedule.setRepeatPriod(requestMemory.getRepeatPeriod());
-            
-            result = memoryCalendarService.saveSchedule(schedule);
-        }
-
-        Event event = memoryCalendarService.getEvent(memory.getMemoryId());
-
-        resultMap.put("result", result);
-        resultMap.put("event", event);
         
         return ResponseEntity.ok(resultMap);
     }

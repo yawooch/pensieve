@@ -1,6 +1,7 @@
 package com.pjt.pensieve.wc.model.service;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -92,29 +93,26 @@ public class MemoryFileServiceImpl implements MemoryFileService
             // 파일 저장
             if (upfile == null || upfile.isEmpty()){ return 0; }
             
-            try
+            String location        = null;
+            String renamedFileName = null;
+            String originalFileName = upfile.getOriginalFilename();
+            
+//                location = resourceLoader.getResource(resourcePath).getFile().getPath();
+            location = new File(resourcePath).getPath();
+            //파일명을 재정의 해서 업로드한다
+            renamedFileName = originalFileName.substring(0, originalFileName.lastIndexOf(".")) + "_" 
+                    + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmssSSS"))
+                    + originalFileName.substring(originalFileName.lastIndexOf("."));
+            
+            renamedFileName = MultipartFileUtil.save(upfile, location, renamedFileName);
+            
+            if (renamedFileName != null)
             {
-                String location        = null;
-                String renamedFileName = null;
-                String originalFileName = upfile.getOriginalFilename();
-                
-                location = resourceLoader.getResource(resourcePath).getFile().getPath();
-                //파일명을 재정의 해서 업로드한다
-                renamedFileName = originalFileName.substring(0, originalFileName.lastIndexOf(".")) + "_" 
-                        + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmssSSS"))
-                        + originalFileName.substring(originalFileName.lastIndexOf("."));
-                
-                renamedFileName = MultipartFileUtil.save(upfile, location, renamedFileName);
-                
-                if (renamedFileName != null)
-                {
-                    memoryFile.setFileOrigName(upfile.getOriginalFilename());
-                    memoryFile.setFileReName(renamedFileName);
-                }
-                
-                memoryFileList.add(memoryFile);
-                
-            } catch (IOException e) { e.printStackTrace(); }
+                memoryFile.setFileOrigName(upfile.getOriginalFilename());
+                memoryFile.setFileReName(renamedFileName);
+            }
+            
+            memoryFileList.add(memoryFile);
         }
         
         for(MemoryFile memoryFile : memoryFileList)

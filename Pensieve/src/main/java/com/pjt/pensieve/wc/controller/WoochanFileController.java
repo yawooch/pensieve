@@ -62,7 +62,8 @@ public class WoochanFileController
         try
         {
             // 1. 클라이언트로 전송할 파일을 가져온다.
-            resource = resourceLoader.getResource("resources/img/upload/wc/memo/" + rname);
+//            resource = resourceLoader.getResource("resources/img/upload/wc/memo/" + rname);
+            resource = resourceLoader.getResource("Z:/studyFileServer/img/upload/wc/memo/" + rname);
 
             // 2. 브라우저별 인코딩 처리
             boolean isMSIE = userAgent.indexOf("MSIE") != -1 || userAgent.indexOf("Trident") != -1;

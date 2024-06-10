@@ -23,10 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pjt.pensieve.main.common.PageInfo;
+import com.pjt.pensieve.wc.model.service.MemoryCalendarService;
 import com.pjt.pensieve.wc.model.service.MemoryFileService;
 import com.pjt.pensieve.wc.model.service.MemoryService;
+import com.pjt.pensieve.wc.model.vo.Event;
 import com.pjt.pensieve.wc.model.vo.Memory;
 import com.pjt.pensieve.wc.model.vo.MemoryAjax;
+import com.pjt.pensieve.wc.model.vo.Schedule;
 import com.pjt.pensieve.wc.model.vo.Todo;
 
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,7 @@ public class WoochanMemoController
 {
     private final MemoryService     memoryservice;
     private final MemoryFileService memoryFileService;
+    private final MemoryCalendarService memoryCalendarService;
     
     @RequestMapping(value = "/timeline")
     public ModelAndView timelineView(ModelAndView modelAndView)
@@ -55,14 +59,14 @@ public class WoochanMemoController
         return modelAndView;
     }
 
-    @PostMapping("/text/memorySave")
+    @PostMapping("/memorySave")
     public ResponseEntity<Map<String, Object>> memorySave(MemoryAjax requestMemory, @RequestParam(value="imageFile", required=false) List<MultipartFile> imageFiles)
     {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
         int result = 0;
-        Map<String, Object> map = new HashMap<>();
         Memory memory = new Memory();
         
-        System.out.println(requestMemory.getMemoryId());
+        System.out.println("requestMemory : " + requestMemory);
         
         memory.setMemoryId(   requestMemory.getMemoryId().equals("")?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
         memory.setContent(    requestMemory.getContent() ==null?"":requestMemory.getContent());
@@ -73,11 +77,13 @@ public class WoochanMemoController
         
         //여기서 null이 들어가면 insert 될때 null을 넣을수 없음 에러발생
         memory.setTodoYn(requestMemory.getTodoYn()==null?"N":"Y");
-        
         result = memoryservice.saveMemory(memory);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        Todo toDo = new Todo();
+        DateTimeFormatter formatter     = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter longFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH24:mm:ss");
+        Todo         toDo = new Todo();
+        Schedule schedule = new Schedule();
+        
         //memoryId 가 생성된 후에 Todo VO를 insert한다.
         if(memory.getTodoYn().equals("Y"))
         {
@@ -89,15 +95,15 @@ public class WoochanMemoController
             Date endDate = null;
             if(!requestMemory.getStrDate().equals(""))
             {
-                Object strDateObj = requestMemory.getStrDate();
-                LocalDate localStrDate = LocalDate.parse(strDateObj.toString(),formatter); 
-                strDate = java.sql.Date.valueOf(localStrDate);
+                String strDateObj = requestMemory.getStrDate().toString();
+                DateTimeFormatter useFormatter = strDateObj.length() > 10?longFormatter:formatter;
+                strDate = java.sql.Date.valueOf(LocalDate.parse(strDateObj,useFormatter));
             }
             if(!requestMemory.getEndDate().equals(""))
             {
-                Object endDateObj = requestMemory.getEndDate();
-                LocalDate localEndDate = LocalDate.parse(endDateObj.toString(),formatter); 
-                endDate = java.sql.Date.valueOf(localEndDate);
+                String endDateObj = requestMemory.getEndDate().toString();
+                DateTimeFormatter useFormatter = endDateObj.length() > 10?longFormatter:formatter;
+                endDate = java.sql.Date.valueOf(LocalDate.parse(endDateObj,useFormatter));
             }
             
             //LocalDate를 Date로 변환하는 과정(Date를 바로쓰면 try 쓰기 귀찮아서...
@@ -106,15 +112,27 @@ public class WoochanMemoController
             
             result = memoryservice.saveTodo(toDo);
         }
-        //Todo VO가 delete가 되는 경우 (수정했는데 todoYn을 "N"으로 수정)
-        if(memory.getTodoYn().equals("N")&&memory.getMemoryId()!=0)
+        //Todo 가 아니면 SCHEDULE에 insert 한다.
+        else
         {
-            result = memoryservice.deleteTodo(memory.getMemoryId());
+            if(memory.getMemoryId() != 0)
+            {
+                result = memoryCalendarService.deleteSchedule(memory.getMemoryId());
+            }
+            
+            schedule.setMemoryId(memory.getMemoryId());
+            schedule.setStrDate(requestMemory.getStrDate());
+            schedule.setEndDate(requestMemory.getEndDate());
+            schedule.setRepeatPriod(requestMemory.getRepeatPeriod());
+            
+            result = memoryCalendarService.saveSchedule(schedule);
         }
 
         memory = memoryservice.getMemory(memory.getMemoryId());
+        Event event = memoryCalendarService.getEvent(memory.getMemoryId());
 
-        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "resources/img/upload/wc/memo");
+//        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "resources/img/upload/wc/memo");
+        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "${file.path}");
         
         Parser parser        = Parser.builder().build();
         Node document        = parser.parse(memory.getContent());
@@ -122,9 +140,10 @@ public class WoochanMemoController
         String content       = rederer.render(document);
         memory.setContent(content);
         
-        map.put("resultCode", result);
-        map.put("memory"    , memory);
-        return ResponseEntity.ok(map);
+        resultMap.put("result", result);
+        resultMap.put("memory", memory);
+        resultMap.put("event" , event);
+        return ResponseEntity.ok(resultMap);
     }
     
     @PostMapping("/text/memoryDelete")
@@ -134,6 +153,7 @@ public class WoochanMemoController
         
         result = memoryservice.deleteMemory(memoryId);
         result = memoryservice.deleteTodo(memoryId);
+        result = memoryCalendarService.deleteSchedule(memoryId);
         
         modelAndView.addObject("result", result);
         modelAndView.setViewName("/wc/text");

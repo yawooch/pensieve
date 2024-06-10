@@ -46,7 +46,7 @@
                                 <select class="form-select" id="category" name="category">
                                     <option value="primary"   class="bg-primary text-white" selected>일정  </option>
                                     <option value="warning"   class="bg-warning text-white">기념일</option>
-                                    <option value="info"      class="bg-secondary text-white"   >Todo</option>
+                                    <option value="secondary" class="bg-secondary text-white"   >Todo</option>
                                 </select>
                             </div>
                             <div>

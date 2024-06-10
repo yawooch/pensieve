@@ -28,5 +28,20 @@
          WHERE MEMBER_ID = #{memberId}
     </select>
     
+    <insert    id="insertMember" parameterType="Member" keyColumn="MEMBER_NO" keyProperty="memberNo" useGeneratedKeys="true" >
+        INSERT
+          INTO MEMBER
+               (
+               MEMBER_NO
+             , MEMBER_ID
+             , MEMBER_PW
+               )
+        VALUES (
+               SEQ_MEMBER_NO.NEXTVAL
+             , #{memberId}
+             , #{memberPw}
+               )
+    </insert>
+    
     
 </mapper>

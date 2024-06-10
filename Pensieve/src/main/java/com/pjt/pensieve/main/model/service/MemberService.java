@@ -7,4 +7,6 @@ public interface MemberService
 
     Member checkMemberId(String memberId);
 
+    int enrollMember(Member requestMember);
+
 }

@@ -39,6 +39,61 @@ public class HomeController
         return "main/home";
     }
 
+    @RequestMapping(value = "/jy")
+    public ModelAndView jyFirstView(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("jy/home");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/main")
+    public ModelAndView main(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("main/home");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/main/calendar")
+    public ModelAndView mainCalendar(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("main/calendar");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/main/text")
+    public ModelAndView mainText(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("main/text");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/main/timeline")
+    public ModelAndView mainTimeline(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("main/timeline");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/common/pageError")
+    public ModelAndView pageError(ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("common/pageError");
+        return modelAndView;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @RequestMapping(value = "/login")
     public ModelAndView login(ModelAndView modelAndView)
     {
@@ -75,42 +130,9 @@ public class HomeController
         modelAndView.setViewName("common/login6");
         return modelAndView;
     }
-    @RequestMapping(value = "/main")
-    public ModelAndView main(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("main/home");
-        return modelAndView;
-    }
-    @RequestMapping(value = "/main/calendar")
-    public ModelAndView mainCalendar(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("main/calendar");
-        return modelAndView;
-    }
-    @RequestMapping(value = "/main/text")
-    public ModelAndView mainText(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("main/text");
-        return modelAndView;
-    }
-    @RequestMapping(value = "/main/timeline")
-    public ModelAndView mainTimeline(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("main/timeline");
-        return modelAndView;
-    }
-    @RequestMapping(value = "/yw")
-    public ModelAndView ywFirstView(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("yw/home");
-        return modelAndView;
-    }
-    @RequestMapping(value = "/jy")
-    public ModelAndView jyFirstView(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("jy/home");
-        return modelAndView;
-    }
+    
+    
+    
     @RequestMapping(value = "/template/themePage")
     public ModelAndView themePage(ModelAndView modelAndView)
     {
@@ -218,11 +240,4 @@ public class HomeController
         modelAndView.setViewName("template/timeline");
         return modelAndView;
     }
-    @RequestMapping(value = "/common/pageError")
-    public ModelAndView pageError(ModelAndView modelAndView)
-    {
-        modelAndView.setViewName("common/pageError");
-        return modelAndView;
-    }
-    
 }

@@ -55,8 +55,12 @@
                 <a class="dropdown-item" href="${path}/wc/timeline">timeline</a>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${path}/yw">영우</a>
+            <li class="nav-item dropdown" data-bs-theme="light">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="#" id="yw">영우</a>
+              <div class="dropdown-menu" aria-labelledby="yw">
+                <a class="dropdown-item" href="${path}/yw/text">text</a>
+                <a class="dropdown-item" href="${path}/yw/calendar">calendar</a>
+              </div>
             </li>
             <li class="nav-item dropdown" data-bs-theme="light">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="${path}/jy" id="jy">주연</a>
@@ -72,6 +76,13 @@
                 <a class="dropdown-item" href="${path}/yh/">text</a>
                 <a class="dropdown-item" href="${path}/yh/calendar">calendar</a>
                 <a class="dropdown-item" href="${path}/yh/timeline">timeline</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown" data-bs-theme="light">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  href="#" id="ja">정아</a>
+              <div class="dropdown-menu" aria-labelledby="ja">
+                <a class="dropdown-item" href="${path}/ja/text">text</a>
+                <a class="dropdown-item" href="${path}/ja/calendar">calendar</a>
               </div>
             </li>
             <li class="nav-item dropdown" data-bs-theme="light">
