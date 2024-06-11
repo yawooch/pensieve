@@ -1,11 +1,9 @@
 package com.pjt.pensieve.wc.controller;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,38 +77,15 @@ public class WoochanMemoController
         memory.setTodoYn(requestMemory.getTodoYn()==null?"N":"Y");
         result = memoryservice.saveMemory(memory);
 
-        DateTimeFormatter formatter     = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter longFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH24:mm:ss");
         Todo         toDo = new Todo();
         Schedule schedule = new Schedule();
+        
+        toDo.setMemoryId(memory.getMemoryId());
         
         //memoryId 가 생성된 후에 Todo VO를 insert한다.
         if(memory.getTodoYn().equals("Y"))
         {
-            result = memoryservice.deleteTodo(memory.getMemoryId());
-            
-            toDo.setMemoryId(memory.getMemoryId());
-            
-            Date strDate = null;
-            Date endDate = null;
-            if(!requestMemory.getStrDate().equals(""))
-            {
-                String strDateObj = requestMemory.getStrDate().toString();
-                DateTimeFormatter useFormatter = strDateObj.length() > 10?longFormatter:formatter;
-                strDate = java.sql.Date.valueOf(LocalDate.parse(strDateObj,useFormatter));
-            }
-            if(!requestMemory.getEndDate().equals(""))
-            {
-                String endDateObj = requestMemory.getEndDate().toString();
-                DateTimeFormatter useFormatter = endDateObj.length() > 10?longFormatter:formatter;
-                endDate = java.sql.Date.valueOf(LocalDate.parse(endDateObj,useFormatter));
-            }
-            
-            //LocalDate를 Date로 변환하는 과정(Date를 바로쓰면 try 쓰기 귀찮아서...
-            toDo.setStrDate(strDate);
-            toDo.setEndDate(endDate);
-            
-            result = memoryservice.saveTodo(toDo);
+            result = memoryservice.saveTodo(requestMemory, toDo);
         }
         //Todo 가 아니면 SCHEDULE에 insert 한다.
         else
@@ -145,7 +120,7 @@ public class WoochanMemoController
         resultMap.put("event" , event);
         return ResponseEntity.ok(resultMap);
     }
-    
+
     @PostMapping("/text/memoryDelete")
     public ModelAndView memoryDelete(ModelAndView modelAndView, @RequestParam("memoryId") int memoryId)
     {

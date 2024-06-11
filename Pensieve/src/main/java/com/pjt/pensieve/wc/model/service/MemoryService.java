@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.pjt.pensieve.main.common.PageInfo;
 import com.pjt.pensieve.wc.model.vo.Memory;
+import com.pjt.pensieve.wc.model.vo.MemoryAjax;
 import com.pjt.pensieve.wc.model.vo.Todo;
 
 public interface MemoryService
@@ -17,7 +18,7 @@ public interface MemoryService
 
     int getMemoryCount(String searchWord);
 
-    int saveTodo(Todo toDo);
+    int saveTodo(MemoryAjax requestMemory, Todo toDo);
 
     int deleteTodo(int memoryId);
 
