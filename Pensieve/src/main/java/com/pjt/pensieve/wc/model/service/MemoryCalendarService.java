@@ -5,7 +5,7 @@ import java.util.List;
 import com.pjt.pensieve.wc.api.AstronomyDateItem;
 import com.pjt.pensieve.wc.api.SpecialDateItem;
 import com.pjt.pensieve.wc.model.vo.Event;
-import com.pjt.pensieve.wc.model.vo.Schedule;
+import com.pjt.pensieve.wc.model.vo.MemoryAjax;
 import com.pjt.pensieve.wc.model.vo.SpecialDate;
 
 public interface MemoryCalendarService
@@ -19,7 +19,7 @@ public interface MemoryCalendarService
 
     int deleteSchedule(int memoryId);
 
-    int saveSchedule(Schedule schedule);
+    int saveSchedule(MemoryAjax requestMemory);
 
     Event getEvent(int memoryId);
 

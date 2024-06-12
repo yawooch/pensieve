@@ -9,6 +9,7 @@ import com.pjt.pensieve.wc.api.AstronomyDateItem;
 import com.pjt.pensieve.wc.api.SpecialDateItem;
 import com.pjt.pensieve.wc.model.mapper.CalendarMapper;
 import com.pjt.pensieve.wc.model.vo.Event;
+import com.pjt.pensieve.wc.model.vo.MemoryAjax;
 import com.pjt.pensieve.wc.model.vo.Schedule;
 import com.pjt.pensieve.wc.model.vo.SpecialDate;
 
@@ -76,8 +77,20 @@ public class MemoryCalendarServiceImpl implements MemoryCalendarService
     }
     @Override
     @Transactional
-    public int saveSchedule(Schedule schedule)
+    public int saveSchedule(MemoryAjax requestMemory)
     {
+        Schedule schedule = new Schedule();
+
+        schedule.setMemoryId(   requestMemory.getMemoryId().equals("")?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
+        schedule.setStrDate(requestMemory.getStrDate());
+        schedule.setEndDate(requestMemory.getEndDate());
+        schedule.setRepeatPriod(requestMemory.getRepeatPeriod());
+        
+        if(schedule.getMemoryId() != 0)
+        {
+            mapper.deleteSchedule(schedule.getMemoryId());
+        }
+        
         return mapper.insertSchedule(schedule);
     }
     @Override

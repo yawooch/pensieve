@@ -39,8 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class WoochanMemoController
 {
-    private final MemoryService     memoryservice;
-    private final MemoryFileService memoryFileService;
+    private final MemoryService         memoryservice;
+    private final MemoryFileService     memoryFileService;
     private final MemoryCalendarService memoryCalendarService;
     
     @RequestMapping(value = "/timeline")
@@ -78,7 +78,6 @@ public class WoochanMemoController
         result = memoryservice.saveMemory(memory);
 
         Todo         toDo = new Todo();
-        Schedule schedule = new Schedule();
         
         toDo.setMemoryId(memory.getMemoryId());
         
@@ -90,24 +89,14 @@ public class WoochanMemoController
         //Todo 가 아니면 SCHEDULE에 insert 한다.
         else
         {
-            if(memory.getMemoryId() != 0)
-            {
-                result = memoryCalendarService.deleteSchedule(memory.getMemoryId());
-            }
-            
-            schedule.setMemoryId(memory.getMemoryId());
-            schedule.setStrDate(requestMemory.getStrDate());
-            schedule.setEndDate(requestMemory.getEndDate());
-            schedule.setRepeatPriod(requestMemory.getRepeatPeriod());
-            
-            result = memoryCalendarService.saveSchedule(schedule);
+            result = memoryCalendarService.saveSchedule(requestMemory);
         }
 
         memory = memoryservice.getMemory(memory.getMemoryId());
         Event event = memoryCalendarService.getEvent(memory.getMemoryId());
 
-//        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "resources/img/upload/wc/memo");
-        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "${file.path}");
+        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "resources/img/upload/wc/memo");
+//        result = memoryFileService.saveFiles(imageFiles, memory.getMemoryId(), "${file.path}");
         
         Parser parser        = Parser.builder().build();
         Node document        = parser.parse(memory.getContent());
