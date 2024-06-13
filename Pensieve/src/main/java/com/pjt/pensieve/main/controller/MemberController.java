@@ -1,3 +1,4 @@
+
 package com.pjt.pensieve.main.controller;
 
 import java.util.HashMap;
@@ -5,10 +6,12 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pjt.pensieve.main.model.service.MemberService;
@@ -23,17 +26,13 @@ public class MemberController {
     private final MemberService memberService;
     
     /** memberId 중복검사를하는 request */
-    @PostMapping("/idCheck")
-    public ResponseEntity<Map<String,Object>> idCheck(@RequestBody Map<String, Object> requestMap)
+    @GetMapping("/idCheck")
+    public ResponseEntity<Map<String,Object>> idCheck(@RequestParam String memberId)
     {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         
-        String memberId     = requestMap.get("memberId").toString();
+        resultMap.put("result", memberService.isDuplicated(memberId));
         
-        Member resultMember = memberService.checkMemberId(memberId);
-
-        
-        resultMap.put("result", resultMember);
         return ResponseEntity.ok(resultMap); 
     }
     
@@ -45,7 +44,7 @@ public class MemberController {
         
         System.out.println("requestMember : " + requestMember);
         
-        int result = memberService.enrollMember(requestMember);
+        int result = memberService.saveMember(requestMember);
         
         
         System.out.println("requestMember : " + requestMember);
@@ -65,7 +64,7 @@ public class MemberController {
         System.out.println("memberPw : " + memberPw);
 
         
-        Member loginMember = memberService.checkMemberId(memberId);
+        Member loginMember = memberService.checkMemberId(memberId, memberPw);
         
         if(loginMember != null)
         {
@@ -77,5 +76,15 @@ public class MemberController {
             modelAndView.setViewName("common/login");
         }
         return modelAndView; 
+    }
+    
+
+    @GetMapping("/logout")
+    public String logout(SessionStatus status) 
+    {
+        // 세션 영역으로 확장된 Attribute를 지워준다.
+        status.setComplete();
+        
+        return "redirect:/";
     }
 }

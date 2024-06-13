@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pensieve</title>
 
+    <link rel="icon" type="image/ico" href="${path}/img/pensieve4.ico">
     <script src="${path}/js/jquery/jquery-3.7.1.js"></script>
 <!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 <%--     <link rel="stylesheet" href="${path}/css/bootstrap.css"> --%>
@@ -374,13 +375,14 @@ function duplicationCheck(target, inputVal)
     
     $.ajax({
         url         : '${path}/idCheck',
-        type        : 'POST',
+        type        : 'GET',
         dataType    : 'json',
-        contentType : 'application/json;charset=utf-8',
-        data        : JSON.stringify(data),
+//         contentType : 'application/json;charset=utf-8',
+//         data        : JSON.stringify(data),
+        data        : data,
         success     : (data)=>
         {
-            if(data.result !== null)
+            if(data.result)
             {
                 showFeedback(target, 'invalid', '이미 존재하는 유저명입니다.');
                 target.val(inputVal.replace(/[^a-z]/gi, ''));

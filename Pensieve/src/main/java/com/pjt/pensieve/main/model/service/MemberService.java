@@ -5,8 +5,10 @@ import com.pjt.pensieve.main.model.vo.Member;
 public interface MemberService
 {
 
-    Member checkMemberId(String memberId);
+    Member checkMemberId(String memberId,String memberPw);
 
-    int enrollMember(Member requestMember);
+    int saveMember(Member requestMember);
+    
+    boolean isDuplicated(String memberId);
 
 }

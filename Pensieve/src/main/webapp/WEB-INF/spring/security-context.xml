@@ -10,21 +10,27 @@
 	<bean id="bcryptPasswordEncoder"
 		  class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 		  
-   	<security:http pattern="/resources/**" security="none"></security:http>
+<!--    	<security:http pattern="/resources/**" security="none"></security:http> -->
 
-<!-- 	<security:http auto-config="false" use-expressions="false"> -->
+<!-- 	<security:http auto-config="true" use-expressions="false"> -->
 <!-- 		<security:intercept-url pattern="/login" access="permitAll"/> -->
 <!-- 		<security:intercept-url pattern="/**" access="isAuthenticated()"/> -->
 <!-- 	</security:http> -->
 
-	<security:authentication-manager>
-  		<security:authentication-provider>
-  			<security:password-encoder ref="bcryptPasswordEncoder"/>
-  			<security:user-service>
-				<security:user name="admin" 
-							   password="$2a$10$mkwYtFAfTEBhcS5hZ/9XXuWvZj.OwMCk5jxR/AZDuZlOSqMhiWzYS" 
-							   authorities="ROLE_USER,ROLE_ADMIN"/>
-  			</security:user-service>
-  		</security:authentication-provider>
-  	</security:authentication-manager>
+<!-- 	<security:authentication-manager> -->
+<!--   		<security:authentication-provider> -->
+<!--   			<security:password-encoder ref="bcryptPasswordEncoder"/> -->
+<!--   			<security:user-service> -->
+<!-- 				<security:user name="admin"  -->
+<!-- 							   password="$2a$10$mkwYtFAfTEBhcS5hZ/9XXuWvZj.OwMCk5jxR/AZDuZlOSqMhiWzYS"  -->
+<!-- 							   authorities="ROLE_USER,ROLE_ADMIN"/> -->
+<!--   			</security:user-service> -->
+<!--   		</security:authentication-provider> -->
+<!--   	</security:authentication-manager> -->
+<!--         <security:authentication-manager> -->
+<!--             <security:authentication-provider user-service-ref="memberDetailsService"> -->
+<!--                 <security:password-encoder ref="bcryptPasswordEncoder"/> -->
+<!--             </security:authentication-provider> -->
+<!--         </security:authentication-manager> -->
+
 </beans>
