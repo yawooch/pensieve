@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SpecialDate
 {
-    private int    dateId;      //Æ¯ÀÏ¾ÆÀÌµğ
-    private String dateKind;    //Á¾·ù
-    private String dateName;    //¸íÄª
-    private String isHoliday;   //ÈŞÀÏ¿©ºÎ
-    private String kst;         //ÇÑ±¹Ç¥ÁØ½Ã°£
-    private String locdate;     //³¯Â¥
-    private String seq;         //¼ø¹ø
-    private String sunLongitude;//ÅÂ¾çÈ²°æµµ
+    private int    dateId;      //íŠ¹ì¼ì•„ì´ë””
+    private String dateKind;    //ì¢…ë¥˜
+    private String dateName;    //ëª…ì¹­
+    private String isHoliday;   //íœ´ì¼ì—¬ë¶€
+    private String kst;         //í•œêµ­í‘œì¤€ì‹œê°„
+    private String locdate;     //ë‚ ì§œ
+    private String seq;         //ìˆœë²ˆ
+    private String sunLongitude;//íƒœì–‘í™©ê²½ë„
 }

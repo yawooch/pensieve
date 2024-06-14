@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $("#addCalendar").off("click").on("click", function(){  // modal의 추가 버튼 클릭 시
               var content = $("#calendar_content").val();
               var start_date = $("#calendar_start_date").val();
-              var end_date = moment($("#calendar_end_date").val()).add(1,'days');
+              var end_date = moment($("#calendar_end_date").val()).add(1, "days").format("YYYY-MM-DD");
               
               //내용 입력 여부 확인
               if(content == null || content == ""){
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var obj = {
                   "title" : content,
                   "start" : start_date,
-                  "end" : end_date
+              	  "end" : end_date
                 }//전송할 객체 생성
   
                 console.log(obj); //서버로 해당 객체를 전달해서 DB 연동 가능
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $("#addCalendar").off("click").on("click", function(){  // modal의 추가 버튼 클릭 시
           var content = $("#calendar_content").val();
           var start_date = $("#calendar_start_date").val();
-          var end_date = $("#calendar_end_date").val();
+          var end_date = moment($("#calendar_end_date").val()).add(1, "days").format("YYYY-MM-DD");
           
           //내용 입력 여부 확인
           if(content == null || content == ""){
@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
             console.log(obj); //서버로 해당 객체를 전달해서 DB 연동 가능
             calendar.addEvent(obj); // 캘린더에 이벤트 추가
+            console.log(calendar);
             $("#calendarModal").modal("hide"); // 모달 닫기
           }
         });
@@ -98,13 +99,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // 클릭한 이벤트의 정보를 모달에 설정
         $("#calendar_content").val(info.event.title);
         $("#calendar_start_date").val(info.event.start.toISOString().substring(0, 10));
-        $("#calendar_end_date").val(info.event.end ? info.event.end.toISOString().substring(0, 10) : info.event.start.toISOString().substring(0, 10));
+        $("#calendar_end_date").val(moment(info.event.end).subtract(1, "days").format("YYYY-MM-DD"));
     
         // 추가 버튼 클릭 핸들러
         $("#addCalendar").off("click").on("click", function () { // 기존 이벤트 핸들러 제거 후 새로 추가
           var content = $("#calendar_content").val();
           var start_date = $("#calendar_start_date").val();
-          var end_date = $("#calendar_end_date").val();
+          var end_date = moment($("#calendar_end_date").val()).add(1, "days").format("YYYY-MM-DD");
     
           // 내용 입력 여부 확인
           if (content == null || content == "") {
