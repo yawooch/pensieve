@@ -72,11 +72,10 @@ public class MemoryServiceImpl implements MemoryService
     {
         int result = 0;
         
-        result = memorymapper.insertTodo(toDo);
+        result = memorymapper.deleteTodo(toDo.getMemoryId());
         
         DateTimeFormatter formatter     = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter longFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH24:mm:ss");
-        result = memorymapper.deleteTodo(toDo.getMemoryId());
         
         Date strDate = null;
         Date endDate = null;
@@ -96,7 +95,9 @@ public class MemoryServiceImpl implements MemoryService
         //LocalDate를 Date로 변환하는 과정(Date를 바로쓰면 try 쓰기 귀찮아서...
         toDo.setStrDate(strDate);
         toDo.setEndDate(endDate);
-        
+
+        result = memorymapper.insertTodo(toDo);
+
         return result;
     }
 

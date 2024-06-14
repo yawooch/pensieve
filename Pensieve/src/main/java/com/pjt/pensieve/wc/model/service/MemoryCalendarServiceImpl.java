@@ -79,9 +79,12 @@ public class MemoryCalendarServiceImpl implements MemoryCalendarService
     @Transactional
     public int saveSchedule(MemoryAjax requestMemory)
     {
+        System.out.println("requestMemory : "  + requestMemory);
+        System.out.println("requestMemory.getMemoryId() : "  + requestMemory.getMemoryId());
+        
         Schedule schedule = new Schedule();
 
-        schedule.setMemoryId(   requestMemory.getMemoryId().equals("")?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
+        schedule.setMemoryId(   requestMemory.getMemoryId().equals("")||requestMemory.getMemoryId()== null?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
         schedule.setStrDate(requestMemory.getStrDate());
         schedule.setEndDate(requestMemory.getEndDate());
         schedule.setRepeatPriod(requestMemory.getRepeatPeriod());

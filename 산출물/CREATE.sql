@@ -3,6 +3,7 @@
 이영우 : ywlee0528@gmail.com
 이주연 : dkfxl95@naver.com
 손연희 : shfwy123@naver.com
+김정아 : jeongah0611@gmail.com
 
 
 -- 사용자 계정 생성하는 구문

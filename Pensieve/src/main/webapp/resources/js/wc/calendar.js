@@ -169,7 +169,7 @@ function saveModalMemory()
   formData.append("content"     , content);
   formData.append("contentOrig" , content);
   formData.append("title"       , title);
-  formData.append("category"    , category);
+  formData.append("category"    , category);  
   formData.append("todoYn"      , todoYn);
   formData.append("strDate"     , strDate);
   formData.append("endDate"     , endDate);

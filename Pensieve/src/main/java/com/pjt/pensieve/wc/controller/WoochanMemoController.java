@@ -74,10 +74,17 @@ public class WoochanMemoController
         memory.setMemberId(null);
         
         //여기서 null이 들어가면 insert 될때 null을 넣을수 없음 에러발생
-        memory.setTodoYn(requestMemory.getTodoYn()==null?"N":"Y");
+        memory.setTodoYn(requestMemory.getTodoYn()== null||requestMemory.getTodoYn().equals("null")?"N":"Y");
+        
+        System.out.println("\nmemory before: " + memory);
         result = memoryservice.saveMemory(memory);
 
+        //memroyId 가 없을때 save 하고 schedule 에 insert할 requestMemory를 세팅해준다.
+        requestMemory.setMemoryId(Integer.toString(memory.getMemoryId()));
+        
         Todo         toDo = new Todo();
+
+        System.out.println("memory : " + memory);
         
         toDo.setMemoryId(memory.getMemoryId());
         
