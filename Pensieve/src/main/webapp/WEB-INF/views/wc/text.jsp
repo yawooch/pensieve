@@ -129,10 +129,10 @@ div.attatchedFileList>div>ul
                             <div>
                                 <label for="category" class="form-label mb-3">카테고리 선택</label>
                                 <select class="form-select" id="category" name="category">
-                                    <option value=""   selected>default</option>
-                                    <option value="primary"   class="bg-primary text-white">일정  </option>
-                                    <option value="info"      class="bg-info text-white"   >정보  </option>
-                                    <option value="warning"   class="bg-warning text-white">기념일</option>
+                                    <option value="default"   selected>default</option>
+                                    <option value="일정"   >일정  </option>
+                                    <option value="정보"   >정보  </option>
+                                    <option value="기념일" >기념일</option>
                                 </select>
                             </div>
                         </div>

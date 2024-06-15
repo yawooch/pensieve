@@ -132,7 +132,21 @@ function eventDropResizeFunction(arg) {
       
     //memorySaveAjax생각보다 많이 쓰이네
     memorySaveAjax(formData,
-    (data)=>{ let event = returnEvent(data.event); },
+    (data)=>
+    { 
+      console.log('textStatus : ' + textStatus);
+      if(jqXHR.getResponseHeader("REQUIRE_LOGIN") === 'true')
+      {
+          if(confirm('로그인이 필요한 기능입니다.\n로그인페이지로 가시겠습니까?'))
+          {
+              location.href = path + '/login';
+          }
+      }
+      else
+      {
+        let event = returnEvent(data.event); 
+      }
+    },
     ()=>{ $('#myModal').modal('hide');});
 }
 
@@ -145,7 +159,7 @@ function saveModalMemory()
   let todoYn         = category==='secondary'?'Y':null;//controller에 보낼때 이렇게 보내데?
   let strDate        = selectProps.start;
   let endDate        = selectProps.end;
-  let repeatPeriod   = $('#repeatPeriod>option:selected').val();
+  let repeatPeriod   = $('#repeatYn:checked').val() ==='Y'?$('#repeatPeriod>option:selected').val():null;
 
   thisCalendar.unselect();
   let viewType = selectProps.view.type;
@@ -177,15 +191,26 @@ function saveModalMemory()
 
 
   //memorySaveAjax생각보다 많이 쓰이네
-  memorySaveAjax(formData, function(data)
+  memorySaveAjax(formData, function(data, textStatus, jqXHR)
   {
-    let event = returnEvent(data.event);
-
-    thisCalendar.addEvent(event);
-    
-    //사용한 전역변수는 클리어
-    thisCalendar = {};
-    selectProps  = {};
+    console.log('textStatus : ' + textStatus);
+    if(jqXHR.getResponseHeader("REQUIRE_LOGIN") === 'true')
+    {
+        if(confirm('로그인이 필요한 기능입니다.\n로그인페이지로 가시겠습니까?'))
+        {
+            location.href = path + '/login';
+        }
+    }
+    else
+    {
+      let event = returnEvent(data.event);
+  
+      thisCalendar.addEvent(event);
+      
+      //사용한 전역변수는 클리어
+      thisCalendar = {};
+      selectProps  = {};
+    }
   },
   ()=>{ $('#myModal').modal('hide');});
 }

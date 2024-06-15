@@ -191,11 +191,22 @@ $('input').on('keyup focusout',(event)=>
         }
     }
 });
-
+$('input[name=login-password]').on('keyup', (event)=>
+{
+   if(event.key !== 'Enter')
+   {
+       return ;
+   }
+   login();
+});
 // 로그인 버튼을 눌렀을떄
 $('#btnLogin').on('click',(event)=>
 {
-	//전송하기전에 잘못된 입력이 있을 경우를 체크한다
+    login();
+});
+function login()
+{
+    //전송하기전에 잘못된 입력이 있을 경우를 체크한다
     if($('.form.sign-in input.is-valid').length !== 2)
     {
         $('#btnLogin').prop('disabled', true);  
@@ -210,9 +221,8 @@ $('#btnLogin').on('click',(event)=>
             }
         }); 
     }
-	
-	$('#loginForm').submit();
-});
+    $('#loginForm').submit();
+}
 // 회원가입 버튼을 눌렀을떄
 $('#btnJoin').on('click',(event)=>
 {
@@ -249,7 +259,6 @@ $('#btnJoin').on('click',(event)=>
         data        : JSON.stringify(data),
         success     : (data)=>
         {
-        	console.log(data);
             if(data.result === 0)
             {
                 alert('회원 등록 중 에러가 발생했습니다.');

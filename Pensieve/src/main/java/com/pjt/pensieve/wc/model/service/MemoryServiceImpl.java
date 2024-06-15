@@ -70,9 +70,7 @@ public class MemoryServiceImpl implements MemoryService
     @Transactional // 에러가 생기면 자동 롤백 
     public int saveTodo(MemoryAjax requestMemory, Todo toDo)
     {
-        int result = 0;
-        
-        result = memorymapper.deleteTodo(toDo.getMemoryId());
+        memorymapper.deleteTodo(toDo.getMemoryId());
         
         DateTimeFormatter formatter     = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter longFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH24:mm:ss");
@@ -96,9 +94,7 @@ public class MemoryServiceImpl implements MemoryService
         toDo.setStrDate(strDate);
         toDo.setEndDate(endDate);
 
-        result = memorymapper.insertTodo(toDo);
-
-        return result;
+        return memorymapper.insertTodo(toDo);
     }
 
     @Override

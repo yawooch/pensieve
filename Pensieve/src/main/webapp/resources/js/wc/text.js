@@ -159,11 +159,22 @@ function memorySaveAjax(data, completeFunction)
         // data        : JSON.stringify(data),
         // contentType : 'application/json;charset=utf-8',
         data        : data,
-        success:function(data)
+        success:function(data, textStatus, jqXHR)
         {
-            varMemories.set(data.memory.memoryId, data.memory);
-
-            addCardMemory('prepend', data.memory);
+            console.log('textStatus : ' + textStatus);
+            if(jqXHR.getResponseHeader("REQUIRE_LOGIN") === 'true')
+            {
+                if(confirm('로그인이 필요한 기능입니다.\n로그인페이지로 가시겠습니까?'))
+                {
+                    location.href = path + '/login';
+                }
+            }
+            else
+            {
+                varMemories.set(data.memory.memoryId, data.memory);
+    
+                addCardMemory('prepend', data.memory);
+            }
         },
         error:function(data)
         {
@@ -275,9 +286,6 @@ function addCardMemory(addEleStr, oneMemory)
 //카드형식으로 된 요소를 추가한다.
 function cardMemoryMaker(oneMemory)
 {
-    let contextPath = $('#contextPath').val();
-    let cardColor = '';
-    
     let cardParent = $('<div></div>');
     cardParent.addClass('col-lg-4 mb-3');
     cardParent.attr('memory-data', oneMemory.memoryId);
@@ -287,7 +295,7 @@ function cardMemoryMaker(oneMemory)
 
     if(oneMemory.todoYn == "Y"&& succDateStr === null)
     {
-        cardColor = ' border-secondary';
+        cardParent.find('div.card').css('border-color', '#f3969a');
     }
     else if(oneMemory.todoYn == "Y" &&  succDateStr !== null)
     {
@@ -296,13 +304,13 @@ function cardMemoryMaker(oneMemory)
         chileStamp.text('complete');
         chileStamp.prepend('<div>' + parseDate((oneMemory.todo.succDate),'long') + '</div>');
         cardParent.prepend(chileStamp.prop('outerHTML'));
-        cardColor = ' border-success';
+        cardParent.find('div.card').css('border-color', '#56cc9d');
     }
-    else
+
+    if(oneMemory.categoryColor !== 'default')
     {
-        cardColor = ' border-' + oneMemory.category;
+        cardParent.find('div.card').css('border-color', oneMemory.categoryColor);
     }
-    cardParent.find('div.card').addClass(cardColor);
     
     //카드 헤더 요소를 만들어주는 문자열을 만든다.
     let cardHeaderEle = $('<div class="card-header mb-1 "></div>');
@@ -563,11 +571,21 @@ function deleteMemory(memoryId)
     let path         = $('#contextPath').val();
 
     $.ajax({
-        url : `${ path }/wc/text/memoryDelete/?memoryId=${memoryId}`,
+        url : `${ path }/wc/text/memoryDelete?memoryId=${memoryId}`,
         type : 'POST',
         contentType : 'json',
-        success : ()=>{
-            location.reload();
+        success : (data, textStatus, jqXHR)=>{
+            if(jqXHR.getResponseHeader("REQUIRE_LOGIN") === 'true')
+            {
+                if(confirm('로그인이 필요한 기능입니다.\n로그인페이지로 가시겠습니까?'))
+                {
+                    location.href = path + '/login';
+                }
+            }
+            else
+            {
+                location.reload();
+            }
         }
     });
 }

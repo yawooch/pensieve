@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -21,13 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pjt.pensieve.main.common.PageInfo;
+import com.pjt.pensieve.main.model.vo.Member;
 import com.pjt.pensieve.wc.model.service.MemoryCalendarService;
 import com.pjt.pensieve.wc.model.service.MemoryFileService;
 import com.pjt.pensieve.wc.model.service.MemoryService;
 import com.pjt.pensieve.wc.model.vo.Event;
 import com.pjt.pensieve.wc.model.vo.Memory;
 import com.pjt.pensieve.wc.model.vo.MemoryAjax;
-import com.pjt.pensieve.wc.model.vo.Schedule;
 import com.pjt.pensieve.wc.model.vo.Todo;
 
 import lombok.RequiredArgsConstructor;
@@ -58,7 +60,7 @@ public class WoochanMemoController
     }
 
     @PostMapping("/memorySave")
-    public ResponseEntity<Map<String, Object>> memorySave(MemoryAjax requestMemory, @RequestParam(value="imageFile", required=false) List<MultipartFile> imageFiles)
+    public ResponseEntity<Map<String, Object>> memorySave(MemoryAjax requestMemory, @RequestParam(value="imageFile", required=false) List<MultipartFile> imageFiles, HttpServletRequest request)
     {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         int result = 0;
@@ -67,11 +69,13 @@ public class WoochanMemoController
         System.out.println("requestMemory : " + requestMemory);
         
         memory.setMemoryId(   requestMemory.getMemoryId().equals("")?0 :Integer.parseInt(requestMemory.getMemoryId())) ;
-        memory.setContent(    requestMemory.getContent() ==null?"":requestMemory.getContent());
-        memory.setContentOrig(requestMemory.getContent() ==null?"":requestMemory.getContent());
-        memory.setTitle(      requestMemory.getTitle()   ==null?"":requestMemory.getTitle());
-        memory.setCategory(   requestMemory.getCategory()==null?"":requestMemory.getCategory());
-        memory.setMemberId(null);
+        memory.setContent(    requestMemory.getContent().equals( "null")||requestMemory.getContent()  == null?"":requestMemory.getContent());
+        memory.setContentOrig(requestMemory.getContent().equals( "null")||requestMemory.getContent()  == null?"":requestMemory.getContent());
+        memory.setTitle(      requestMemory.getTitle().equals(   "null")||requestMemory.getTitle()    == null?"":requestMemory.getTitle());
+        memory.setCategory(   requestMemory.getCategory().equals("null")||requestMemory.getCategory() == null?"":requestMemory.getCategory());
+     
+        Member loginMember = (Member)request.getSession().getAttribute("loginMember");
+        memory.setMemberId((loginMember == null?request.getRemoteAddr():loginMember.getMemberId()));
         
         //여기서 null이 들어가면 insert 될때 null을 넣을수 없음 에러발생
         memory.setTodoYn(requestMemory.getTodoYn()== null||requestMemory.getTodoYn().equals("null")?"N":"Y");

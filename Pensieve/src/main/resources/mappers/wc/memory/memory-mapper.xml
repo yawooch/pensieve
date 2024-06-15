@@ -6,17 +6,18 @@
 
 <mapper namespace="com.pjt.pensieve.wc.model.mapper.MemoryMapper">
 
-    <resultMap  id="memoryResultMap"   type="Memory" >
-        <id     property="memoryId"    column="MEMORY_ID"  />
-        <result property="content"     column="CONTENT"    />
-        <result property="contentOrig" column="CONTENT"    />
-        <result property="title"       column="TITLE"      />
-        <result property="createDate"  column="CREATE_DATE"/>
-        <result property="modifyDate"  column="MODIFY_DATE"/>
-        <result property="category"    column="CATEGORY"   />
-        <result property="todoYn"      column="TODO_YN"    />
-        <result property="memberId"    column="MEMBER_ID"  />
-        <result property="showDiv"     column="SHOW_DIV"   />
+    <resultMap  id="memoryResultMap"        type="Memory" >
+        <id     property="memoryId"         column="MEMORY_ID"  />
+        <result property="content"          column="CONTENT"    />
+        <result property="contentOrig"      column="CONTENT"    />
+        <result property="title"            column="TITLE"      />
+        <result property="createDate"       column="CREATE_DATE"/>
+        <result property="modifyDate"       column="MODIFY_DATE"/>
+        <result property="category"         column="CATEGORY"   />
+        <result property="categoryColor"    column="CATEGORY_COLOR"/>
+        <result property="todoYn"           column="TODO_YN"    />
+        <result property="memberId"         column="MEMBER_ID"  />
+        <result property="showDiv"          column="SHOW_DIV"   />
         <association property="todo"        columnPrefix="T_" resultMap="todoResultMap"/>
         <collection  property="memoryFiles" columnPrefix="F_" resultMap="memoryFileResultMap"/>
     </resultMap>
@@ -56,7 +57,7 @@
              , #{title} 
              , #{category} 
              , #{todoYn}
-             , 'woochan'
+             , #{memberId}
         )
     </insert>
     
@@ -68,6 +69,7 @@
              , M.CREATE_DATE
              , M.MODIFY_DATE
              , M.CATEGORY
+             , NVL(C.CTGR_COLOR, 'default') AS CATEGORY_COLOR
              , M.TODO_YN
              , M.MEMBER_ID
              , M.SHOW_DIV
@@ -89,6 +91,10 @@
           LEFT OUTER JOIN
                WC_MEMORY_FILE   F
             ON F.FILE_RELA_MEMORY_ID = M.MEMORY_ID
+          LEFT OUTER JOIN
+               WC_CATEGORY_COLOR   C
+            ON C.CATEGORY = M.CATEGORY
+           AND C.MEMBER_ID = M.MEMBER_ID
          WHERE M.SHOW_DIV = 'Y'
            AND M.MEMORY_ID = #{memoryId}
     </select>
@@ -100,6 +106,7 @@
              , CREATE_DATE
              , MODIFY_DATE
              , CATEGORY
+             , CATEGORY_COLOR
              , TODO_YN
              , MEMBER_ID
              , T_MEMORY_ID
@@ -120,6 +127,7 @@
                     , M.CREATE_DATE
                     , M.MODIFY_DATE
                     , M.CATEGORY
+                    , NVL(C.CTGR_COLOR, 'default') AS CATEGORY_COLOR
                     , M.TODO_YN
                     , M.MEMBER_ID
                     , T.MEMORY_ID            AS T_MEMORY_ID
@@ -140,6 +148,10 @@
                  LEFT OUTER JOIN
                       WC_MEMORY_FILE   F
                    ON F.FILE_RELA_MEMORY_ID = M.MEMORY_ID
+                 LEFT OUTER JOIN
+                      WC_CATEGORY_COLOR   C
+                   ON C.CATEGORY = M.CATEGORY
+                  AND C.MEMBER_ID = M.MEMBER_ID
                 WHERE M.SHOW_DIV = 'Y'
                 <if test="searchWord != ''">
                   AND (
@@ -208,7 +220,7 @@
              , TITLE       = #{title}    
              , CATEGORY    = #{category} 
              , TODO_YN     = #{todoYn}   
-             , MEMBER_ID   = 'woochan'   
+             , MEMBER_ID   = #{memberId}
              , MODIFY_DATE = SYSDATE  
          WHERE MEMORY_ID = #{memoryId}   
     </update>
