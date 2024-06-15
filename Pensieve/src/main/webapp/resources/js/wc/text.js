@@ -359,7 +359,10 @@ function cardMemoryMaker(oneMemory)
 
 
     let cardBodyFileList = '';
-    //파일 정보가 있을때 처리
+    //파일 정보(이미지)가 있을때 처리 - 
+    // 1) 상단에 첨부파일 이미지가 나타나도록 처리
+    // 2) 마크다운으로 이미지를 추가했을때는 
+    //      <p><img></p> 형식으로 변환되기 때문에 첨부파일도 여기에 따른다.
     if(oneMemory.memoryFiles.length != 0)
     {
         cardBodyFileList += '<p>';
@@ -423,7 +426,13 @@ function cardMemoryMaker(oneMemory)
     cardBodyEle = $('<div>' + tempBodyStr + '</div>');
 
     cardBodyEle.find('div').addClass('card-body');
-    cardBodyEle.find('div').has('img').removeClass('card-body').css('text-align','center');
+    cardBodyEle.find('div').has('img').removeClass('card-body').css({'height':'250px', 'background':'center / cover'});
+    // 이미지 높이를 250px로 조절하기위해 background 속성을 준다.
+    cardBodyEle.find('div').has('img').each((idx, ele)=>
+    {
+        $(ele).css('background-image', 'url(' + $(ele).children('img').attr('src') + ')');
+        $(ele).children('img').remove();
+    });
 
     //카드 푸터 요소를 만들어주는 문자열을 만든다.
     let editDate      = oneMemory.modifyDate==null? oneMemory.createDate:oneMemory.modifyDate;

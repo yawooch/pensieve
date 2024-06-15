@@ -122,7 +122,7 @@
                 <c:if test="${ empty loginMember }">
 
                     <ul class="navbar-nav ms-md-auto">
-                        <li class="nav-item"><a target="_blank" rel="noopener"
+                        <li class="nav-item"><a target="_self" rel="noopener"
                             class="nav-link" href="${path}/login"> <i
                                 class="bi bi-box-arrow-in-right"></i>
                         </a></li>

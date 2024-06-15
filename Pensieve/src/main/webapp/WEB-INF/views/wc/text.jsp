@@ -165,11 +165,23 @@ div.attatchedFileList>div>ul
 
     <div class="row collapse" id="searchBox">
         <div class="col-lg-12">
-            <div class="d-flex gap-2 justify-content-center pb-5">
+            <div class="d-flex gap-2 justify-content-center">
                 <div class="input-group mb-3">
                     <span class="input-group-text bg-primary text-white" id=""><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control form-control-lg" id="searchInput" name="searchWord" placeholder="Search Keywords" aria-describedby="button-addon2">
                 </div>
+            </div>
+        </div>
+        <div class="col-lg-12  pb-5">
+            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                    <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" name="categories" value="TODO">
+                    <label class="btn btn-outline-primary" for="btncheck1">TODO</label>
+                    <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off" name="categories" value="일정">
+                    <label class="btn btn-outline-primary" for="btncheck2">일정</label>
+                    <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off" name="categories" value="기념일">
+                    <label class="btn btn-outline-primary" for="btncheck3">기념일</label>
+                    <input type="checkbox" class="btn-check" id="btncheck4" autocomplete="off" name="categories" value="정보">
+                    <label class="btn btn-outline-primary" for="btncheck4">정보</label>
             </div>
         </div>
     </div>
