@@ -34,7 +34,7 @@
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
     
-       <!-- 인터셉터 설정 -->
+   <!-- 인터셉터 설정 -->
    <interceptors>
       <interceptor>
          

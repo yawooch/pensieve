@@ -1,10 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib uri="http://www.springframework.org/security/tags"
-    prefix="security"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"              prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"               prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"         prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"   prefix="security"%>
 
 <c:set var="path" value="${ pageContext.request.contextPath }" />
 
@@ -35,6 +33,7 @@
 <script src="${path}/js/bootstrap/custom.js"></script>
 </head>
 <body>
+<security:authentication property="principal"    var="loginMember"/>
     <div class="navbar navbar-expand-lg fixed-top bg-primary"
         data-bs-theme="dark">
         <div class="container">
@@ -140,14 +139,24 @@
                             aria-label="Toggle theme"> <i class="bi bi-person-circle"></i>
                         </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <c:if test="${ 'ROLE_ADMIN' ne loginMember.role }">
                                 <li>
-                                    <button type="button"
+                                    <a type="button"  href="${path}/mypage"
                                         class="dropdown-item d-flex align-items-center"
                                         data-bs-theme-value="light" aria-pressed="false">
                                         <i class="bi bi-person"></i><span class="ms-2">My Page</span>
-<!--                                         <i class="bi wrench-adjustable-circle"></i><span class="ms-2">Admin Page</span> -->
-                                    </button>
+                                    </a>
                                 </li>
+                                </c:if>
+                                <c:if test="${ 'ROLE_ADMIN' eq loginMember.role }">
+                                <li>
+                                    <a type="button" href="${path}/admin"
+                                        class="dropdown-item d-flex align-items-center"
+                                        data-bs-theme-value="light" aria-pressed="false">
+                                        <i class="bi bi-wrench-adjustable-circle"></i><span class="ms-2">Admin Page</span>
+                                    </a>
+                                </li>
+                                </c:if>
                                 <li>
                                     <a type="button" href="${path}/logout"
                                         class="dropdown-item d-flex align-items-center"

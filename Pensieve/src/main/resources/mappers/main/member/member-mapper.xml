@@ -11,6 +11,7 @@
        <id     property="memberNo"    column="MEMBER_NO"  />
        <result property="memberId"    column="MEMBER_ID"  />
        <result property="memberPw"    column="MEMBER_PW"  />
+       <result property="role"        column="ROLE"       />
        <result property="createDate"  column="CREATE_DATE"/>
   </resultMap>
     
@@ -23,6 +24,7 @@
         SELECT MEMBER_NO
              , MEMBER_ID
              , MEMBER_PW
+             , ROLE
              , CREATE_DATE
           FROM MEMBER
          WHERE MEMBER_ID = #{memberId}

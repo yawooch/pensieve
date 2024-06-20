@@ -4,17 +4,51 @@
 	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!-- 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd" -->
 
 	<bean id="bcryptPasswordEncoder"
 		  class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 		  
-<!--    	<security:http pattern="/resources/**" security="none"></security:http> -->
+<!--     <bean id="memberDetailsService" class="com.pjt.pensieve.main.model.service.MemberDetailsService"/> -->
+    
+<!--    	<security:http pattern="/resources/**" security="none"/> -->
+<!--     <security:http pattern="/js/**" security="none" /> -->
+<!--     <security:http pattern="/css/**" security="none" /> -->
+<!--     <security:http pattern="/img/**" security="none" /> -->
 
-<!-- 	<security:http auto-config="true" use-expressions="false"> -->
-<!-- 		<security:intercept-url pattern="/login" access="permitAll"/> -->
-<!-- 		<security:intercept-url pattern="/**" access="isAuthenticated()"/> -->
+<!-- 	<security:http auto-config="true" use-expressions="true"> -->
+
+<!--         <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" /> -->
+<!--         <security:intercept-url pattern="/yw/**" access="permitAll"/> -->
+<!--         <security:intercept-url pattern="/ja/**" access="permitAll"/> -->
+<!--         <security:intercept-url pattern="/jy/**" access="permitAll"/> -->
+<!--         <security:intercept-url pattern="/yh/**" access="permitAll"/> -->
+<!--         <security:intercept-url pattern="/m" access="permitAll"/> -->
+<!--         <security:intercept-url pattern="/main/**" access="permitAll"/> -->
+<!--         <security:intercept-url pattern="/wc/text/**" access="isAuthenticated()" /> -->
+<!--         <security:intercept-url pattern="/wc/memorySave" access="isAuthenticated()" /> -->
+        
+<!--         권한마다 로그인후 이동하는 화면을 다르게 해줄때 -->
+<!--         <security:form-login -->
+<!--             login-page="/login" -->
+<!--             username-parameter="login-username" -->
+<!--             password-parameter="login-password" -->
+<!--         /> -->
+        
+<!--         <security:logout -->
+<!--             logout-url="/logout" -->
+<!--             logout-success-url="/" -->
+<!--         /> -->
+        
+<!--         <security:access-denied-handler error-page="/pageError"/> -->
+        
+<!--          로그인 세션 1개만 유지하기 -->
+<!--         invalid-session-url 세션이 만료되었을때 이동할 url  -->
+<!--         -->
+<!--         <security:session-management invalid-session-url="/login"> -->
+<!--             <security:concurrency-control max-sessions="1" expired-url="/"/> -->
+<!--         </security:session-management> -->
 <!-- 	</security:http> -->
 
 <!-- 	<security:authentication-manager> -->
@@ -27,6 +61,7 @@
 <!--   			</security:user-service> -->
 <!--   		</security:authentication-provider> -->
 <!--   	</security:authentication-manager> -->
+
 <!--         <security:authentication-manager> -->
 <!--             <security:authentication-provider user-service-ref="memberDetailsService"> -->
 <!--                 <security:password-encoder ref="bcryptPasswordEncoder"/> -->

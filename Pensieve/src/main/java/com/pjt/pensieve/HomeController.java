@@ -70,7 +70,7 @@ public class HomeController
         modelAndView.setViewName("main/timeline");
         return modelAndView;
     }
-    @RequestMapping(value = "/common/pageError")
+    @RequestMapping(value = "/pageError")
     public ModelAndView pageError(ModelAndView modelAndView)
     {
         modelAndView.setViewName("common/pageError");
