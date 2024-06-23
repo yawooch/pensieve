@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core"              prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"               prefix="fmt" %>
@@ -11,6 +12,7 @@
 <link href="${path}/css/bootstrap-treeview.css"  rel="stylesheet"/>
 <script src="${path}/js/bootstrap/bootstrap-treeview.js"></script>
 <script src="${path}/js/admin/settings.js"></script>
+<input type="hidden" id="contextPath" value="${ pageContext.request.contextPath }"/>
 <div class="container">
       <div class="row">
         <div class="col-lg-12">

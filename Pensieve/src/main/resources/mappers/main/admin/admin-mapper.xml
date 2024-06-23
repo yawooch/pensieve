@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pjt.pensieve.main.model.mapper.AdminMapper">
+
+
+    <resultMap id="menuResultMap"        type="MenuVo" >
+       <id     property="menuId"         column="MENU_ID"          />
+       <result property="menuUrl"        column="MENU_URL"         />
+       <result property="menuName"       column="MENU_NAME"        />
+       <result property="menuLv"         column="MENU_LV"          />
+       <result property="menuParentId"   column="MENU_PARENT_ID"   />
+       <result property="menuCreateDate" column="MENU_CREATE_DATE" />
+  </resultMap>
+    
+    
+    <select id="selectOneMenuById" parameterType="String" resultMap="menuResultMap">
+     SELECT MENU_ID
+          , MENU_URL
+          , MENU_NAME
+          , MENU_LV
+          , MENU_PARENT_ID
+          , TO_CHAR(MENU_CREATE_DATE, 'YYYY-MM-DD HH:MI:SS') AS MENU_CREATE_DATE
+       FROM MENU
+      WHERE MENU_ID = #{menuId}
+    </select>
+    
+    <insert id="insertMenu" parameterType="MenuVo">
+     INSERT
+       INTO MENU
+          (
+            MENU_ID
+          , MENU_URL
+          , MENU_NAME
+          , MENU_LV
+          , MENU_PARENT_ID
+          )
+     VALUES (
+            #{menuId}
+          , #{menuUrl}
+          , #{menuName}
+          , #{menuLv}
+          , #{menuParentId}
+          )
+    </insert>
+    
+    
+</mapper>
