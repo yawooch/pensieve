@@ -41,6 +41,7 @@
          <mapping path="/admin/**"/>
          <mapping path="/wc/text/memoryDelete"/>
          <mapping path="/wc/memorySave"/>
+         <mapping path="/mypage"/>
          
          <!-- 인터셉터를 등록 -->
          <beans:bean id="loginCheckInterceptor" class="com.pjt.pensieve.main.common.interceptor.LoginCheckInterceptor"/>

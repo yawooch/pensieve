@@ -4,6 +4,9 @@ package com.pjt.pensieve.main.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,5 +89,22 @@ public class MemberController {
         status.setComplete();
         
         return "redirect:/";
+    }
+
+    /** 마이페이지로 간다. */
+    @GetMapping("/mypage")
+    public ModelAndView mypage(ModelAndView modelAndView, HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        
+        Member loginMember = (Member)session.getAttribute("loginMember");
+        String memberId = loginMember.getMemberId(); 
+        String memberPw = loginMember.getMemberPw(); 
+        System.out.println("memberId : " + memberId);
+        System.out.println("memberPw : " + memberPw);
+
+        modelAndView.setViewName("main/settings");
+        
+        return modelAndView; 
     }
 }

@@ -15,22 +15,25 @@ public class LoginCheckInterceptor implements HandlerInterceptor
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
-        log.info("preHandle() È£Ãâ");
+        log.info("preHandle() í˜¸ì¶œ");
 
         Member loginMember = (Member) request.getSession().getAttribute("loginMember");
 
-        //·Î±×ÀÎ ¼¼¼ÇÀÌ ÀÖ´ÂÁö È®ÀÎ
+        //ë¡œê·¸ì¸ ì„¸ì…˜ì´ ìˆëŠ”ì§€ í™•ì¸
         if (loginMember == null || request.getSession() == null)
         {
-            //Ajax ¿äÃ»ÀÎÁö È®ÀÎÇÑ´Ù.ajax successÇÔ¼ö¿¡µµ Ã³¸®ÇØÁà¾ßÇÑ´Ù.
-            if(request.getHeader("X-Requested-With").equals("XMLHttpRequest"))
+            //Ajax ìš”ì²­ì¸ì§€ í™•ì¸í•œë‹¤.ajax successí•¨ìˆ˜ì—ë„ ì²˜ë¦¬í•´ì¤˜ì•¼í•œë‹¤.
+            if(request.getHeader("X-Requested-With") != null)
             {
-                response.setHeader("REQUIRE_LOGIN", "true");
-
-                return false;
+                if(request.getHeader("X-Requested-With").equals("XMLHttpRequest"))
+                {
+                    response.setHeader("REQUIRE_LOGIN", "true");
+                    
+                    return false;
+                }
             }
             
-            request.setAttribute("msg", "·Î±×ÀÎ ÈÄ ÀÌ¿ëÀÌ °¡´ÉÇÕ´Ï´Ù.");
+            request.setAttribute("msg", "ë¡œê·¸ì¸ í›„ ì´ìš©ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.");
             request.setAttribute("location", "/login");
             request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp").forward(request, response);
 
