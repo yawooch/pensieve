@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MenuVo
 {
-    private String menuId;        //¸Ş´º¾ÆÀÌµğ
-    private String menuUrl;       //¸Ş´ºÁÖ¼Ò
-    private String menuName;      //¸Ş´ºÀÌ¸§
-    private int    menuLv;        //¸Ş´º·¹º§
-    private String menuParentId;  //¸Ş´ººÎ¸ğ¾ÆÀÌµğ
-    private String menuCreateDate;//¸Ş´º»ı¼ºÀÏÀÚ
+    private String menuId;        //ë©”ë‰´ì•„ì´ë””
+    private String menuUrl;       //ë©”ë‰´ì£¼ì†Œ
+    private String menuName;      //ë©”ë‰´ì´ë¦„
+    private int    menuLv;        //ë©”ë‰´ë ˆë²¨
+    private String menuParentId;  //ë©”ë‰´ë¶€ëª¨ì•„ì´ë””
+    private String menuCreateDate;//ë©”ë‰´ìƒì„±ì¼ì
 }

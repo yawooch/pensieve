@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Member
 {
-    private int    memberNo;  //»ç¿ëÀÚ°¡ÀÔÀÏ
-    private String memberId;  //»ç¿ëÀÚ¹øÈ£
-    private String memberPw;  //»ç¿ëÀÚ¾ÆÀÌµğ
-    private String role;      //»ç¿ëÀÚ¾ÆÀÌµğ
-    private Date   createDate;//»ç¿ëÀÚºñ¹Ğ¹øÈ£
+    private int    memberNo;  //ì‚¬ìš©ìê°€ì…ì¼
+    private String memberId;  //ì‚¬ìš©ìë²ˆí˜¸
+    private String memberPw;  //ì‚¬ìš©ìì•„ì´ë””
+    private String role;      //ì‚¬ìš©ìì•„ì´ë””
+    private Date   createDate;//ì‚¬ìš©ìë¹„ë°€ë²ˆí˜¸
 }

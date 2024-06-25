@@ -77,13 +77,13 @@ public class WoochanMemoController
         Member loginMember = (Member)request.getSession().getAttribute("loginMember");
         memory.setMemberId((loginMember == null?request.getRemoteAddr():loginMember.getMemberId()));
         
-        //¿©±â¼­ nullÀÌ µé¾î°¡¸é insert µÉ¶§ nullÀ» ³ÖÀ»¼ö ¾øÀ½ ¿¡·¯¹ß»ı
+        //ì—¬ê¸°ì„œ nullì´ ë“¤ì–´ê°€ë©´ insert ë ë•Œ nullì„ ë„£ì„ìˆ˜ ì—†ìŒ ì—ëŸ¬ë°œìƒ
         memory.setTodoYn(requestMemory.getTodoYn()== null||requestMemory.getTodoYn().equals("null")?"N":"Y");
         
         System.out.println("\nmemory before: " + memory);
         result = memoryservice.saveMemory(memory);
 
-        //memroyId °¡ ¾øÀ»¶§ save ÇÏ°í schedule ¿¡ insertÇÒ requestMemory¸¦ ¼¼ÆÃÇØÁØ´Ù.
+        //memroyId ê°€ ì—†ì„ë•Œ save í•˜ê³  schedule ì— insertí•  requestMemoryë¥¼ ì„¸íŒ…í•´ì¤€ë‹¤.
         requestMemory.setMemoryId(Integer.toString(memory.getMemoryId()));
         
         Todo         toDo = new Todo();
@@ -92,12 +92,12 @@ public class WoochanMemoController
         
         toDo.setMemoryId(memory.getMemoryId());
         
-        //memoryId °¡ »ı¼ºµÈ ÈÄ¿¡ Todo VO¸¦ insertÇÑ´Ù.
+        //memoryId ê°€ ìƒì„±ëœ í›„ì— Todo VOë¥¼ insertí•œë‹¤.
         if(memory.getTodoYn().equals("Y"))
         {
             result = memoryservice.saveTodo(requestMemory, toDo);
         }
-        //Todo °¡ ¾Æ´Ï¸é SCHEDULE¿¡ insert ÇÑ´Ù.
+        //Todo ê°€ ì•„ë‹ˆë©´ SCHEDULEì— insert í•œë‹¤.
         else
         {
             result = memoryCalendarService.saveSchedule(requestMemory);
@@ -140,10 +140,10 @@ public class WoochanMemoController
     {
         Map<String, Object> resultMap = new HashMap<>();
 
-        // ÀüÃ¼ °Ô½Ã¹° ¼ö Á¶È¸
+        // ì „ì²´ ê²Œì‹œë¬¼ ìˆ˜ ì¡°íšŒ
         int listCount = memoryservice.getMemoryCount(searchWord);
 
-        // ÆäÀÌÂ¡Ã³¸®
+        // í˜ì´ì§•ì²˜ë¦¬
         PageInfo pageInfo = new PageInfo(currPage, 5, listCount, 6);
 
         List<Memory> memories = new ArrayList<Memory>();
@@ -152,7 +152,7 @@ public class WoochanMemoController
         
         for (Memory memory : memories)
         {
-            //content¸¦ html Çü½ÄÀ¸·Î ¹Ù²Ù¾îÁÖ´Â commonMark API
+            //contentë¥¼ html í˜•ì‹ìœ¼ë¡œ ë°”ê¾¸ì–´ì£¼ëŠ” commonMark API
             Parser parser = Parser.builder().build();
             Node document = parser.parse(memory.getContent());
             HtmlRenderer rederer = HtmlRenderer.builder().build();

@@ -34,7 +34,7 @@ public class MemoryFileServiceImpl implements MemoryFileService
 
         memoryFile.setFileRelaMemoryId(memoryId);
 
-        // ÆÄÀÏ ÀúÀå
+        // íŒŒì¼ ì €ì¥
         if (upfile == null || upfile.isEmpty()){ return 0; }
         
         try
@@ -44,7 +44,7 @@ public class MemoryFileServiceImpl implements MemoryFileService
             String originalFileName = upfile.getOriginalFilename();
             
             location = resourceLoader.getResource(resourcePath).getFile().getPath();
-            //ÆÄÀÏ¸íÀ» ÀçÁ¤ÀÇ ÇØ¼­ ¾÷·ÎµåÇÑ´Ù
+            //íŒŒì¼ëª…ì„ ì¬ì •ì˜ í•´ì„œ ì—…ë¡œë“œí•œë‹¤
             renamedFileName = originalFileName.substring(0, originalFileName.lastIndexOf(".")) + "_" 
                                 + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmssSSS"))
                                 + originalFileName.substring(originalFileName.lastIndexOf("."));
@@ -81,7 +81,7 @@ public class MemoryFileServiceImpl implements MemoryFileService
         List<MemoryFile> memoryFileList = new ArrayList<MemoryFile>();
         int result = 0;
 
-        // ÆÄÀÏ ÀúÀå
+        // íŒŒì¼ ì €ì¥
         if (upfiles == null || upfiles.isEmpty()){ return 0; }
         
         for (MultipartFile upfile : upfiles)
@@ -90,7 +90,7 @@ public class MemoryFileServiceImpl implements MemoryFileService
             
             memoryFile.setFileRelaMemoryId(memoryId);
             
-            // ÆÄÀÏ ÀúÀå
+            // íŒŒì¼ ì €ì¥
             if (upfile == null || upfile.isEmpty()){ return 0; }
             
             String location        = null;
@@ -99,7 +99,7 @@ public class MemoryFileServiceImpl implements MemoryFileService
             
 //                location = resourceLoader.getResource(resourcePath).getFile().getPath();
             location = new File(resourcePath).getPath();
-            //ÆÄÀÏ¸íÀ» ÀçÁ¤ÀÇ ÇØ¼­ ¾÷·ÎµåÇÑ´Ù
+            //íŒŒì¼ëª…ì„ ì¬ì •ì˜ í•´ì„œ ì—…ë¡œë“œí•œë‹¤
             renamedFileName = originalFileName.substring(0, originalFileName.lastIndexOf(".")) + "_" 
                     + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmssSSS"))
                     + originalFileName.substring(originalFileName.lastIndexOf("."));

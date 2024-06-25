@@ -1,8 +1,9 @@
-
 let menuObj        = new Map();
 let selectedObj    = false;
 let isNodeSelected = false;
-let dummyData = [{
+let tempData = null;
+let defaultData = [
+{
     text         : 'Root',
     href         : '#parent1',
     menuId       : '00',
@@ -10,495 +11,404 @@ let dummyData = [{
     menuName     : 'Root',
     menuLv       : 0,
     menuParentId : null,
-    tags         : ['8']
-    }
-    ];
-// let dummyData   = [
-// {
-// text         : 'Root',
-// href         : '#parent1',
-// menuId       : '00',
-// menuUrl      : '/',
-// menuName     : 'Root',
-// menuLv       : 0,
-// menuParentId : null,
-// tags         : ['4'],
-// nodes        : [
-//     {
-//         text         : 'Main',
-//         href         : '/main/home',
-//         menuId       : '01',
-//         menuUrl      : '/main/home',
-//         menuName     : 'Main',
-//         menuLv       : 1,
-//         menuParentId : '00',
-//         tags         : ['4'],
-//         nodes        : [
-//         {
-//             text         : 'Text',
-//             href         : '/main/text',
-//             menuId       : '0101',
-//             menuUrl      : '/main/text',
-//             menuName     : 'Text',
-//             menuLv       : 2,
-//             menuParentId : '01',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar',
-//             href         : '/main/calendar',
-//             menuId       : '0102',
-//             menuUrl      : '/main/calendar',
-//             menuName     : 'Calendar',
-//             menuLv       : 2,
-//             menuParentId : '01',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Timeline',
-//             href         : '/main/timeline',
-//             menuId       : '0103',
-//             menuUrl      : '/main/timeline',
-//             menuName     : 'Timeline',
-//             menuLv       : 2,
-//             menuParentId : '01',
-//             tags         : ['4']
-//         }
-//     ]},
-//     {
-//         text         : '우찬',
-//         href         : '/wc',
-//         menuId       : '02',
-//         menuUrl      : '/wc',
-//         menuName     : '우찬',
-//         menuLv       : 1,
-//         menuParentId : '00',
-//         tags         : ['4'],
-//         nodes        : [
-//         {
-//             text         : 'Text',
-//             href         : '/wc/text',
-//             menuId       : '0201',
-//             menuUrl      : '/wc/text',
-//             menuName     : 'Text',
-//             menuLv       : 2,
-//             menuParentId : '02',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar',
-//             href         : '/wc/calendar',
-//             menuId       : '0202',
-//             menuUrl      : '/wc/calendar',
-//             menuName     : 'calendar',
-//             menuLv       : 2,
-//             menuParentId : '02',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Timeline',
-//             href         : '/wc/timeline',
-//             menuId       : '0204',
-//             menuUrl      : '/wc/timeline',
-//             menuName     : 'Timeline',
-//             menuLv       : 2,
-//             menuParentId : '02',
-//             tags         : ['4']
-//         }
-//     ]},
-//     {
-//         text         : '영우',
-//         href         : '/yw/text',
-//         menuId       : '03',
-//         menuUrl      : '/yw/text',
-//         menuName     : '영우',
-//         menuLv       : 1,
-//         menuParentId : '00',
-//         tags         : ['4'],
-//         nodes        : [
-//         {
-//             text         : 'Text',
-//             href         : '/yw/text',
-//             menuId       : '0301',
-//             menuUrl      : '/yw/text',
-//             menuName     : 'Text',
-//             menuLv       : 2,
-//             menuParentId : '03',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar',
-//             href         : '/yw/calendar',
-//             menuId       : '0302',
-//             menuUrl      : '/yw/calendar',
-//             menuName     : 'Calendar',
-//             menuLv       : 2,
-//             menuParentId : '03',
-//             tags         : ['4']
-//         }
-//     ]},
-//     {
-//         text         : '주연',
-//         href         : '/jy/memo',
-//         menuId       : '04',
-//         menuUrl      : '/jy/memo',
-//         menuName     : '주연',
-//         menuLv       : 1,
-//         menuParentId : '00',
-//         tags         : ['4'],
-//         nodes        : [
-//         {
-//             text         : 'Memo',
-//             href         : '/jy/memo',
-//             menuId       : '0401',
-//             menuUrl      : '/jy/memo',
-//             menuName     : 'Memo',
-//             menuLv       : 2,
-//             menuParentId : '04',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar',
-//             href         : '/jy/calendar',
-//             menuId       : '0402',
-//             menuUrl      : '/jy/calendar',
-//             menuName     : 'Calendar',
-//             menuLv       : 2,
-//             menuParentId : '04',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Todo List',
-//             href         : '/jy/todo',
-//             menuId       : '0403',
-//             menuUrl      : '/jy/todo',
-//             menuName     : 'Todo List',
-//             menuLv       : 2,
-//             menuParentId : '04',
-//             tags         : ['4']
-//         }
-//     ]},
-//     {
-//         text         : '연희',
-//         href         : '/yh/calendar',
-//         menuId       : '05',
-//         menuUrl      : '/yh/calendar',
-//         menuName     : '연희',
-//         menuLv       : 1,
-//         menuParentId : '00',
-//         tags         : ['4'],
-//         nodes        : [
-//         {
-//             text         : 'calendar',
-//             href         : '/yh/calendar',
-//             menuId       : '0501',
-//             menuUrl      : '/yh/calendar',
-//             menuName     : 'calendar',
-//             menuLv       : 2,
-//             menuParentId : '05',
-//             tags         : ['4']
-//         }
-//     ]},
-//     {
-//         text         : '정아',
-//         href         : '/ja/text',
-//         menuId       : '06',
-//         menuUrl      : '/ja/text',
-//         menuName     : '정아',
-//         menuLv       : 1,
-//         menuParentId : '00',
-//         tags         : ['4'],
-//         nodes        : [
-//         {
-//             text         : 'Text',
-//             href         : '/ja/text',
-//             menuId       : '0601',
-//             menuUrl      : '/ja/text',
-//             menuName     : 'Text',
-//             menuLv       : 2,
-//             menuParentId : '06',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar',
-//             href         : '/ja/calendar',
-//             menuId       : '0602',
-//             menuUrl      : '/ja/calendar',
-//             menuName     : 'Calendar',
-//             menuLv       : 2,
-//             menuParentId : '06',
-//             tags         : ['4']
-//         }
-//     ]},
-//     {
-//         text         : 'Template',
-//         href         : '/template/themePage',
-//         menuId       : '07',
-//         menuUrl      : '/template/themePage',
-//         menuName     : 'Template',
-//         menuLv       : 1,
-//         menuParentId : '00',
-//         tags         : ['4'],
-//         nodes        : [
-//         {
-//             text         : 'Theme',
-//             href         : '/template/themePage',
-//             menuId       : '0701',
-//             menuUrl      : '/template/themePage',
-//             menuName     : 'Theme',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Text',
-//             href         : '/template/text',
-//             menuId       : '0702',
-//             menuUrl      : '/template/text',
-//             menuName     : 'Text',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Timeline',
-//             href         : '/template/timeline',
-//             menuId       : '0703',
-//             menuUrl      : '/template/timeline',
-//             menuName     : 'Timeline',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar1',
-//             href         : '/template/calendar1',
-//             menuId       : '0704',
-//             menuUrl      : '/template/calendar1',
-//             menuName     : 'Calendar1',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar2',
-//             href         : '/template/calendar2',
-//             menuId       : '0705',
-//             menuUrl      : '/template/calendar2',
-//             menuName     : 'Calendar2',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar3',
-//             href         : '/template/calendar3',
-//             menuId       : '0706',
-//             menuUrl      : '/template/calendar3',
-//             menuName     : 'Calendar3',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar4',
-//             href         : '/template/calendar4',
-//             menuId       : '0707',
-//             menuUrl      : '/template/calendar4',
-//             menuName     : 'Calendar4',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar5',
-//             href         : '/template/calendar5',
-//             menuId       : '0708',
-//             menuUrl      : '/template/calendar5',
-//             menuName     : 'Calendar5',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar6',
-//             href         : '/template/calendar6',
-//             menuId       : '0709',
-//             menuUrl      : '/template/calendar6',
-//             menuName     : 'Calendar6',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar7',
-//             href         : '/template/calendar7',
-//             menuId       : '0710',
-//             menuUrl      : '/template/calendar7',
-//             menuName     : 'Calendar7',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar8',
-//             href         : '/template/calendar8',
-//             menuId       : '0711',
-//             menuUrl      : '/template/calendar8',
-//             menuName     : 'Calendar8',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar9',
-//             href         : '/template/calendar9',
-//             menuId       : '0712',
-//             menuUrl      : '/template/calendar9',
-//             menuName     : 'Calendar9',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar10',
-//             href         : '/template/calendar10',
-//             menuId       : '0713',
-//             menuUrl      : '/template/calendar10',
-//             menuName     : 'Calendar10',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar11',
-//             href         : '/template/calendar11',
-//             menuId       : '0714',
-//             menuUrl      : '/template/calendar11',
-//             menuName     : 'Calendar11',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar12',
-//             href         : '/template/calendar12',
-//             menuId       : '0715',
-//             menuUrl      : '/template/calendar12',
-//             menuName     : 'Calendar12',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         },
-//         {
-//             text         : 'Calendar13',
-//             href         : '/template/calendar13',
-//             menuId       : '0716',
-//             menuUrl      : '/template/calendar13',
-//             menuName     : 'Calendar13',
-//             menuLv       : 2,
-//             menuParentId : '07',
-//             tags         : ['4']
-//         }
-//     ]}
-// ]}];
-let defaultData = [
+    tags         : ['4']
+}]
+
+let dummyData   = [
+{
+text         : 'Root',
+href         : '#parent1',
+menuId       : '00',
+menuUrl      : '/',
+menuName     : 'Root',
+menuLv       : 0,
+menuParentId : null,
+tags         : ['4'],
+nodes        : [
     {
-      text         : 'Parent 1',
-      href         : '#parent1',
-      tags         : ['4'],
-      menuId       : 0,
-      menuUrl      : '/',
-      menuName     : 'Parent 1',
-      menuLv       : 0,
-      menuParentId : null,
-      nodes: [
+        text         : 'Main',
+        href         : '/main/home',
+        menuId       : '01',
+        menuUrl      : '/main/home',
+        menuName     : 'Main',
+        menuLv       : 1,
+        menuParentId : '00',
+        tags         : ['4'],
+        nodes        : [
         {
-          text: 'Child 1',
-          href: '#child1',
-          tags: ['2'],
-          menuId       : 0,
-          menuUrl      : '/',
-          menuName     : 'Root',
-          menuLv       : 0,
-          menuParentId : 0,
-          nodes: [
-            {
-              text: 'Grandchild 1',
-              href: '#grandchild1',
-              tags: ['0'],
-              menuId       : 0,
-              menuUrl      : '/',
-              menuName     : 'Root',
-              menuLv       : 0,
-              menuParentId : 0,
-            },
-            {
-              text: 'Grandchild 2',
-              href: '#grandchild2',
-              tags: ['0'],
-              menuId       : 0,
-              menuUrl      : '/',
-              menuName     : 'Root',
-              menuLv       : 0,
-              menuParentId : 0,
-            }
-          ]
+            text         : 'Text',
+            href         : '/main/text',
+            menuId       : '0101',
+            menuUrl      : '/main/text',
+            menuName     : 'Text',
+            menuLv       : 2,
+            menuParentId : '01',
+            tags         : ['4']
         },
         {
-          text: 'Child 2',
-          href: '#child2',
-          tags: ['0'],
-          menuId       : 0,
-          menuUrl      : '/',
-          menuName     : 'Root',
-          menuLv       : 0,
-          menuParentId : 0,
+            text         : 'Calendar',
+            href         : '/main/calendar',
+            menuId       : '0102',
+            menuUrl      : '/main/calendar',
+            menuName     : 'Calendar',
+            menuLv       : 2,
+            menuParentId : '01',
+            tags         : ['4']
+        },
+        {
+            text         : 'Timeline',
+            href         : '/main/timeline',
+            menuId       : '0103',
+            menuUrl      : '/main/timeline',
+            menuName     : 'Timeline',
+            menuLv       : 2,
+            menuParentId : '01',
+            tags         : ['4']
         }
-      ]
-    },
+    ]},
     {
-      text: 'Parent 2',
-      href: '#parent2',
-      tags: ['0'],
-      menuId       : 0,
-      menuUrl      : '/',
-      menuName     : 'Root',
-      menuLv       : 0,
-      menuParentId : 0,
-    },
+        text         : '우찬',
+        href         : '/wc',
+        menuId       : '02',
+        menuUrl      : '/wc',
+        menuName     : '우찬',
+        menuLv       : 1,
+        menuParentId : '00',
+        tags         : ['4'],
+        nodes        : [
+        {
+            text         : 'Text',
+            href         : '/wc/text',
+            menuId       : '0201',
+            menuUrl      : '/wc/text',
+            menuName     : 'Text',
+            menuLv       : 2,
+            menuParentId : '02',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar',
+            href         : '/wc/calendar',
+            menuId       : '0202',
+            menuUrl      : '/wc/calendar',
+            menuName     : 'calendar',
+            menuLv       : 2,
+            menuParentId : '02',
+            tags         : ['4']
+        },
+        {
+            text         : 'Timeline',
+            href         : '/wc/timeline',
+            menuId       : '0204',
+            menuUrl      : '/wc/timeline',
+            menuName     : 'Timeline',
+            menuLv       : 2,
+            menuParentId : '02',
+            tags         : ['4']
+        }
+    ]},
     {
-      text: 'Parent 3',
-      href: '#parent3',
-       tags: ['0'],
-       menuId       : 0,
-       menuUrl      : '/',
-       menuName     : 'Root',
-       menuLv       : 0,
-       menuParentId : 0,
-    },
+        text         : '영우',
+        href         : '/yw/text',
+        menuId       : '03',
+        menuUrl      : '/yw/text',
+        menuName     : '영우',
+        menuLv       : 1,
+        menuParentId : '00',
+        tags         : ['4'],
+        nodes        : [
+        {
+            text         : 'Text',
+            href         : '/yw/text',
+            menuId       : '0301',
+            menuUrl      : '/yw/text',
+            menuName     : 'Text',
+            menuLv       : 2,
+            menuParentId : '03',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar',
+            href         : '/yw/calendar',
+            menuId       : '0302',
+            menuUrl      : '/yw/calendar',
+            menuName     : 'Calendar',
+            menuLv       : 2,
+            menuParentId : '03',
+            tags         : ['4']
+        }
+    ]},
     {
-      text: 'Parent 4',
-      href: '#parent4',
-      tags: ['0'],
-      menuId       : 0,
-      menuUrl      : '/',
-      menuName     : 'Root',
-      menuLv       : 0,
-      menuParentId : 0,
-    },
+        text         : '주연',
+        href         : '/jy/memo',
+        menuId       : '04',
+        menuUrl      : '/jy/memo',
+        menuName     : '주연',
+        menuLv       : 1,
+        menuParentId : '00',
+        tags         : ['4'],
+        nodes        : [
+        {
+            text         : 'Memo',
+            href         : '/jy/memo',
+            menuId       : '0401',
+            menuUrl      : '/jy/memo',
+            menuName     : 'Memo',
+            menuLv       : 2,
+            menuParentId : '04',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar',
+            href         : '/jy/calendar',
+            menuId       : '0402',
+            menuUrl      : '/jy/calendar',
+            menuName     : 'Calendar',
+            menuLv       : 2,
+            menuParentId : '04',
+            tags         : ['4']
+        },
+        {
+            text         : 'Todo List',
+            href         : '/jy/todo',
+            menuId       : '0403',
+            menuUrl      : '/jy/todo',
+            menuName     : 'Todo List',
+            menuLv       : 2,
+            menuParentId : '04',
+            tags         : ['4']
+        }
+    ]},
     {
-      text: 'Parent 5',
-      href: '#parent5'  ,
-      tags: ['0'],
-      menuId       : 0,
-      menuUrl      : '/',
-      menuName     : 'Root',
-      menuLv       : 0,
-      menuParentId : 0,
-    }
-  ];
+        text         : '연희',
+        href         : '/yh/calendar',
+        menuId       : '05',
+        menuUrl      : '/yh/calendar',
+        menuName     : '연희',
+        menuLv       : 1,
+        menuParentId : '00',
+        tags         : ['4'],
+        nodes        : [
+        {
+            text         : 'calendar',
+            href         : '/yh/calendar',
+            menuId       : '0501',
+            menuUrl      : '/yh/calendar',
+            menuName     : 'calendar',
+            menuLv       : 2,
+            menuParentId : '05',
+            tags         : ['4']
+        }
+    ]},
+    {
+        text         : '정아',
+        href         : '/ja/text',
+        menuId       : '06',
+        menuUrl      : '/ja/text',
+        menuName     : '정아',
+        menuLv       : 1,
+        menuParentId : '00',
+        tags         : ['4'],
+        nodes        : [
+        {
+            text         : 'Text',
+            href         : '/ja/text',
+            menuId       : '0601',
+            menuUrl      : '/ja/text',
+            menuName     : 'Text',
+            menuLv       : 2,
+            menuParentId : '06',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar',
+            href         : '/ja/calendar',
+            menuId       : '0602',
+            menuUrl      : '/ja/calendar',
+            menuName     : 'Calendar',
+            menuLv       : 2,
+            menuParentId : '06',
+            tags         : ['4']
+        }
+    ]},
+    {
+        text         : 'Template',
+        href         : '/template/themePage',
+        menuId       : '07',
+        menuUrl      : '/template/themePage',
+        menuName     : 'Template',
+        menuLv       : 1,
+        menuParentId : '00',
+        tags         : ['4'],
+        nodes        : [
+        {
+            text         : 'Theme',
+            href         : '/template/themePage',
+            menuId       : '0701',
+            menuUrl      : '/template/themePage',
+            menuName     : 'Theme',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Text',
+            href         : '/template/text',
+            menuId       : '0702',
+            menuUrl      : '/template/text',
+            menuName     : 'Text',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Timeline',
+            href         : '/template/timeline',
+            menuId       : '0703',
+            menuUrl      : '/template/timeline',
+            menuName     : 'Timeline',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar1',
+            href         : '/template/calendar1',
+            menuId       : '0704',
+            menuUrl      : '/template/calendar1',
+            menuName     : 'Calendar1',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar2',
+            href         : '/template/calendar2',
+            menuId       : '0705',
+            menuUrl      : '/template/calendar2',
+            menuName     : 'Calendar2',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar3',
+            href         : '/template/calendar3',
+            menuId       : '0706',
+            menuUrl      : '/template/calendar3',
+            menuName     : 'Calendar3',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar4',
+            href         : '/template/calendar4',
+            menuId       : '0707',
+            menuUrl      : '/template/calendar4',
+            menuName     : 'Calendar4',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar5',
+            href         : '/template/calendar5',
+            menuId       : '0708',
+            menuUrl      : '/template/calendar5',
+            menuName     : 'Calendar5',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar6',
+            href         : '/template/calendar6',
+            menuId       : '0709',
+            menuUrl      : '/template/calendar6',
+            menuName     : 'Calendar6',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar7',
+            href         : '/template/calendar7',
+            menuId       : '0710',
+            menuUrl      : '/template/calendar7',
+            menuName     : 'Calendar7',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar8',
+            href         : '/template/calendar8',
+            menuId       : '0711',
+            menuUrl      : '/template/calendar8',
+            menuName     : 'Calendar8',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar9',
+            href         : '/template/calendar9',
+            menuId       : '0712',
+            menuUrl      : '/template/calendar9',
+            menuName     : 'Calendar9',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar10',
+            href         : '/template/calendar10',
+            menuId       : '0713',
+            menuUrl      : '/template/calendar10',
+            menuName     : 'Calendar10',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar11',
+            href         : '/template/calendar11',
+            menuId       : '0714',
+            menuUrl      : '/template/calendar11',
+            menuName     : 'Calendar11',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar12',
+            href         : '/template/calendar12',
+            menuId       : '0715',
+            menuUrl      : '/template/calendar12',
+            menuName     : 'Calendar12',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        },
+        {
+            text         : 'Calendar13',
+            href         : '/template/calendar13',
+            menuId       : '0716',
+            menuUrl      : '/template/calendar13',
+            menuName     : 'Calendar13',
+            menuLv       : 2,
+            menuParentId : '07',
+            tags         : ['4']
+        }
+    ]}
+]}];
   
+let treeViewOption = {
+    data: defaultData,
+    onNodeSelected: onNodeSelect,
+    onNodeUnselected: onNodeSelect
+};
 //data 를 읽어서 menuId를 key로 하는 Map형식의 menuObj 에 값을 넣어준다.
 let dataToObj = function(array)
 {
@@ -711,24 +621,48 @@ function getFormObject()
         tags         : ['0']
     };
 }
+//메뉴 목록을 가져오는 ajax, root 는 가져오지 않고 js 에서 처리
+function loadMenus($selectableTree) {
+    $.ajax(
+    {
+        type: 'POST',
+        url: $('#contextPath').val() + '/admin/getMenu',
+        success: (data, textStatus, jqXHR) => {
+            if (jqXHR.getResponseHeader("REQUIRE_LOGIN") === 'true') {
+                if (confirm('로그인이 필요한 기능입니다.\n로그인페이지로 가시겠습니까?')) {
+                    location.href = path + '/login';
+                }
+                return;
+            }
+            if (data.result === 0) {
+                alert(`${data.msg}`);
+                return;
+            }
+            if (data.result !== 1) {
+                alert('뭔가 이상해...');
+                return;
+            }
+            let modifiedData = defaultData.slice(); //Root 배열 복사
+            modifiedData[0]['nodes'] = data.nodes;
+            tempData = modifiedData;
 
+            menuObj.clear();//dataToObj 하기전에 미리 menuObj를 초기화한다.
+            dataToObj(modifiedData);
+            treeViewOption['data'] = modifiedData;
+            $selectableTree.treeview(treeViewOption);
+            //form을 초기화한다
+            setModifyForm();
+        }
+    });
+}
 $(document).ready(()=>
 {
-    
-    var treeViewOption = {
-            data: dummyData,
-            onNodeSelected  : onNodeSelect,
-            onNodeUnselected: onNodeSelect
-    };
-    
-    
-    var initSelectableTree = function() {
+    var initSelectableTree = () => {
         return $('#treeview2').treeview(treeViewOption);
-      };
-
-      menuObj.clear();//dataToObj 하기전에 미리 menuObj를 초기화한다.
-      dataToObj(dummyData);
-      var $selectableTree = initSelectableTree();
+    };
+    var $selectableTree = initSelectableTree();
+    loadMenus($selectableTree);
+    
       
       $('#chngFirst').on('click', (event)=>
       {
@@ -798,7 +732,7 @@ $(document).ready(()=>
       {
           $selectableTree.treeview('collapseAll', { silent: true });
       });
-      $('#addMenu').on('click', ()=>
+      $('#addMenu, #modMenu').on('click', ()=>
       {
           let addDataObject = getFormObject();
 
@@ -809,11 +743,19 @@ $(document).ready(()=>
             dataType    : 'json',
             contentType : 'application/json;charset=utf-8',
             data        : JSON.stringify(addDataObject),
-            success : (data)=>
+            success : (data, textStatus, jqXHR)=>
             {
+                if(jqXHR.getResponseHeader("REQUIRE_LOGIN") === 'true')
+                {
+                    if(confirm('로그인이 필요한 기능입니다.\n로그인페이지로 가시겠습니까?'))
+                    {
+                        location.href = path + '/login';
+                    }
+                    return;
+                }
                 if(data.result === 0)
                 {
-                    alert(`$${data.msg}`);
+                    alert(`${data.msg}`);
                     return ;
                 }
                 if(data.result !== 1)
@@ -821,46 +763,50 @@ $(document).ready(()=>
                     alert('뭔가 이상해...');
                     return ;
                 }
-                alert('메뉴를 추가하였습니다.');
-                //원본데이터에 생성한 데이터를 추가한다.
-                addToObj(dummyData, addDataObject);
-                
-                menuObj.clear();//dataToObj 하기전에 미리 menuObj를 초기화한다.
-                dataToObj(dummyData);
-                treeViewOption['data'] = dummyData;
-                $selectableTree.treeview(treeViewOption);
-                //form을 초기화한다
-                setModifyForm();
+                alert(`${data.msg}`);
+
+                loadMenus($selectableTree);
             }
           });
 
       });
-      $('#modMenu').on('click', ()=>
-      {
-          let addDataObject = getFormObject();
-          //원본데이터에 수정한 데이터를 추가한다.
-          edtToObj(dummyData, addDataObject);
-
-          menuObj.clear();//dataToObj 하기전에 미리 menuObj를 초기화한다.
-          dataToObj(dummyData);
-          treeViewOption['data'] = dummyData;
-          $selectableTree.treeview(treeViewOption);
-          //form을 초기화한다
-          setModifyForm();
-      });
       $('#delMenu').on('click', ()=>
       {
-          let addDataObject = getFormObject();
-          //원본데이터에 선택한 데이터를 삭제한다.
-          delToObj(dummyData, addDataObject);
-          
-          menuObj.clear();//dataToObj 하기전에 미리 menuObj를 초기화한다.
-          dataToObj(dummyData);
-          treeViewOption['data'] = dummyData;
-          $selectableTree.treeview(treeViewOption);
-          
-          //form을 초기화한다
-          setModifyForm();
+        let addDataObject = getFormObject();
+
+        if(!confirm('선택된 메뉴를 삭제하시겠습니까?\n하위 메뉴까지 삭제됩니다.'))
+        {
+            return;
+        }
+
+        $.ajax(
+        {
+          type        : 'POST',
+          url         : $('#contextPath').val() + '/admin/deleteMenu',
+          dataType    : 'json',
+          contentType : 'application/json;charset=utf-8',
+          data        : JSON.stringify(addDataObject),
+          success : (data, textStatus, jqXHR)=>
+          {
+              if(jqXHR.getResponseHeader("REQUIRE_LOGIN") === 'true')
+              {
+                  if(confirm('로그인이 필요한 기능입니다.\n로그인페이지로 가시겠습니까?'))
+                  {
+                      location.href = path + '/login';
+                  }
+                  return;
+              }
+              if(data.result === 0)
+              {
+                  alert(`${data.msg}`);
+                  return ;
+              }
+              alert(`${data.msg}`);
+
+              loadMenus($selectableTree);
+          }
+        });
       });
 
 });
+

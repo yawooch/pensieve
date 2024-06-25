@@ -1,7 +1,7 @@
-
 package com.pjt.pensieve.main.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjt.pensieve.main.model.service.AdminService;
 import com.pjt.pensieve.main.model.vo.Member;
 import com.pjt.pensieve.main.model.vo.MenuVo;
@@ -27,9 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminController {
     private final AdminService adminService;
     
-    //2. Authentication À» ¸Å°³º¯¼ö·Î Á÷Á¢°¡Á®¿À´Â ¹æ¹ı ¹æ¹ı
+    //2. Authentication ì„ ë§¤ê°œë³€ìˆ˜ë¡œ ì§ì ‘ê°€ì ¸ì˜¤ëŠ” ë°©ë²• ë°©ë²•
     //public String adminView(Authentication authentication){
-    //3. @AuthenticationPrincipal »ç¿ëÇÏ´Â ¹æ¹ı
+    //3. @AuthenticationPrincipal ì‚¬ìš©í•˜ëŠ” ë°©ë²•
     @GetMapping("/admin")
     public ModelAndView adminView(ModelAndView modelAndView, HttpServletRequest request)
     {
@@ -39,7 +38,7 @@ public class AdminController {
         
         modelAndView.setViewName("admin/settings");
         
-        //1. SecurityContextHolder »ç¿ëÇÏ´Â ¹æ¹ı
+        //1. SecurityContextHolder ì‚¬ìš©í•˜ëŠ” ë°©ë²•
         //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //Member loginMember = (Member)authentication.getPrincipal();
         return modelAndView; 
@@ -50,24 +49,66 @@ public class AdminController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         int result = 0;
 
+        MenuVo getMenu = adminService.getMenuById(menu.getMenuId());
+        
+        if(getMenu == null)
+        {
+            resultMap.put("msg", "ë©”ë‰´ê°€ ì¶”ê°€ ë˜ì—ˆìŠµë‹ˆë‹¤.");
+        }
+        else 
+        {
+            resultMap.put("msg", "ë©”ë‰´ê°€ ìˆ˜ì • ë˜ì—ˆìŠµë‹ˆë‹¤.");
+            menu.setMenuCreateDate(getMenu.getMenuCreateDate());
+        }
+        
+        result = adminService.saveMenu(menu);
+        
+        resultMap.put("result", result); 
+        
+        return ResponseEntity.ok(resultMap);
+    }
+
+    @PostMapping("/admin/getMenu")
+    public ResponseEntity<Map<String, Object>> getMenu()
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        List<Map<String, Object>> nodes = adminService.getMenuForNodes();  
+        
+        if(nodes == null || nodes.size() == 0)
+        {
+            resultMap.put("result", 0);
+            resultMap.put("msg", "ë©”ë‰´ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
+            return ResponseEntity.ok(resultMap);
+        }
+        
+        resultMap.put("result", 1); 
+        resultMap.put("nodes" , nodes); 
+        
+        return ResponseEntity.ok(resultMap);
+    }
+
+    @PostMapping("/admin/deleteMenu")
+    public ResponseEntity<Map<String, Object>> deleteMenu(@RequestBody MenuVo menu)
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        int result = 0;
+
         log.info("MenuVo : {}", menu);
         log.info("MenuVo.getMenuId() : {}", menu.getMenuId());
         
-        ObjectMapper objectMapper = new ObjectMapper();
-//        @SuppressWarnings("unchecked")
-//        Map<String, Object> map = objectMapper.convertValue(menu, Map.class);
-        
         MenuVo getMenu = adminService.getMenuById(menu.getMenuId());
         
-        if(getMenu != null)
+        if(getMenu.getMenuId() == null)
         {
             resultMap.put("result", result);
-            resultMap.put("msg", "ÀÌ¹Ì ¸Ş´º ¾ÆÀÌµğ°¡ Á¸ÀçÇÕ´Ï´Ù.");
+            resultMap.put("msg", "ë©”ë‰´ ì•„ì´ë””ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
             return ResponseEntity.ok(resultMap);
         }
-
-        result = adminService.saveMenu(menu);
-        resultMap.put("result", result);
+        result = adminService.deleteMenu(menu);
+        
+        resultMap.put("result", result); 
+        resultMap.put("msg", result + "ê°œì˜ ë©”ë‰´ê°€ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
         
         return ResponseEntity.ok(resultMap);
     }

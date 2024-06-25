@@ -25,7 +25,7 @@ public class MemoryServiceImpl implements MemoryService
     private final MemoryMapper memorymapper;
 
     @Override
-    @Transactional // ¿¡·¯°¡ »ı±â¸é ÀÚµ¿ ·Ñ¹é 
+    @Transactional // ì—ëŸ¬ê°€ ìƒê¸°ë©´ ìë™ ë¡¤ë°± 
     public int saveMemory(Memory memory)
     {
         int result = 0;
@@ -67,7 +67,7 @@ public class MemoryServiceImpl implements MemoryService
     }
 
     @Override
-    @Transactional // ¿¡·¯°¡ »ı±â¸é ÀÚµ¿ ·Ñ¹é 
+    @Transactional // ì—ëŸ¬ê°€ ìƒê¸°ë©´ ìë™ ë¡¤ë°± 
     public int saveTodo(MemoryAjax requestMemory, Todo toDo)
     {
         memorymapper.deleteTodo(toDo.getMemoryId());
@@ -90,7 +90,7 @@ public class MemoryServiceImpl implements MemoryService
             endDate = java.sql.Date.valueOf(LocalDate.parse(endDateObj,useFormatter));
         }
         
-        //LocalDate¸¦ Date·Î º¯È¯ÇÏ´Â °úÁ¤(Date¸¦ ¹Ù·Î¾²¸é try ¾²±â ±ÍÂú¾Æ¼­...
+        //LocalDateë¥¼ Dateë¡œ ë³€í™˜í•˜ëŠ” ê³¼ì •(Dateë¥¼ ë°”ë¡œì“°ë©´ try ì“°ê¸° ê·€ì°®ì•„ì„œ...
         toDo.setStrDate(strDate);
         toDo.setEndDate(endDate);
 
@@ -98,21 +98,21 @@ public class MemoryServiceImpl implements MemoryService
     }
 
     @Override
-    @Transactional // ¿¡·¯°¡ »ı±â¸é ÀÚµ¿ ·Ñ¹é 
+    @Transactional // ì—ëŸ¬ê°€ ìƒê¸°ë©´ ìë™ ë¡¤ë°± 
     public int deleteTodo(int memoryId)
     {
         return memorymapper.deleteTodo(memoryId);
     }
 
     @Override
-    @Transactional // ¿¡·¯°¡ »ı±â¸é ÀÚµ¿ ·Ñ¹é 
+    @Transactional // ì—ëŸ¬ê°€ ìƒê¸°ë©´ ìë™ ë¡¤ë°± 
     public int deleteMemory(int memoryId)
     {
         return memorymapper.deleteMemory(memoryId);
     }
 
     @Override
-    @Transactional // ¿¡·¯°¡ »ı±â¸é ÀÚµ¿ ·Ñ¹é 
+    @Transactional // ì—ëŸ¬ê°€ ìƒê¸°ë©´ ìë™ ë¡¤ë°± 
     public int checkTodo(int memoryId, LocalDateTime succDate)
     {
         return memorymapper.updateTodo(memoryId, succDate);

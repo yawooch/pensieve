@@ -27,6 +27,32 @@
        FROM MENU
       WHERE MENU_ID = #{menuId}
     </select>
+    <select id="selectMenusByParentId" parameterType="String" resultMap="menuResultMap">
+     SELECT MENU_ID
+          , MENU_URL
+          , MENU_NAME
+          , MENU_LV
+          , MENU_PARENT_ID
+          , TO_CHAR(MENU_CREATE_DATE, 'YYYY-MM-DD HH:MI:SS') AS MENU_CREATE_DATE
+       FROM MENU
+      WHERE MENU_PARENT_ID = #{menuId}
+    </select>
+    
+    <select id="selectAll" parameterType="String" resultMap="menuResultMap">
+     SELECT MENU_ID
+          , MENU_URL
+          , MENU_NAME
+          , MENU_LV
+          , MENU_PARENT_ID
+       FROM MENU
+      WHERE MENU_PARENT_ID IS NOT NULL
+      ORDER BY
+            MENU_ID
+    </select>
+    <select id="selectMaxLevel" parameterType="String" resultType="_int">
+     SELECT MAX(MENU_LV) 
+       FROM MENU
+    </select>
     
     <insert id="insertMenu" parameterType="MenuVo">
      INSERT
@@ -46,6 +72,20 @@
           , #{menuParentId}
           )
     </insert>
+    <update id="updateMenu" parameterType="MenuVo">
+     UPDATE MENU
+        SET MENU_URL       = #{menuUrl}
+          , MENU_NAME      = #{menuName}
+          , MENU_LV        = #{menuLv}
+          , MENU_PARENT_ID = #{menuParentId}
+      WHERE MENU_ID        = #{menuId}
+    </update>
+    
+    <delete id="deleteMenu" parameterType="MenuVo">
+     DELETE 
+       FROM MENU
+      WHERE MENU_ID = #{menuId}
+    </delete>
     
     
 </mapper>

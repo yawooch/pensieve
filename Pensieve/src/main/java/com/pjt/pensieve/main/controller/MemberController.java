@@ -1,4 +1,3 @@
-
 package com.pjt.pensieve.main.controller;
 
 import java.util.HashMap;
@@ -28,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
     private final MemberService memberService;
     
-    /** memberId Áßº¹°Ë»ç¸¦ÇÏ´Â request */
+    /** memberId ì¤‘ë³µê²€ì‚¬ë¥¼í•˜ëŠ” request */
     @GetMapping("/idCheck")
     public ResponseEntity<Map<String,Object>> idCheck(@RequestParam String memberId)
     {
@@ -39,7 +38,7 @@ public class MemberController {
         return ResponseEntity.ok(resultMap); 
     }
     
-    /** È¸¿øÀ» µî·ÏÇÑ´Ù */
+    /** íšŒì›ì„ ë“±ë¡í•œë‹¤ */
     @PostMapping("/joinMember")
     public ResponseEntity<Map<String,Object>> joinMember(@RequestBody Member requestMember)
     {
@@ -57,7 +56,7 @@ public class MemberController {
         return ResponseEntity.ok(resultMap); 
     }
 
-    /** ·Î±×ÀÎ Ã³¸®ÇÑ´Ù. */
+    /** ë¡œê·¸ì¸ ì²˜ë¦¬í•œë‹¤. */
     @PostMapping("/login")
     public ModelAndView login(ModelAndView modelAndView,
                           @RequestParam("login-username") String memberId,
@@ -85,13 +84,13 @@ public class MemberController {
     @GetMapping("/logout")
     public String logout(SessionStatus status) 
     {
-        // ¼¼¼Ç ¿µ¿ªÀ¸·Î È®ÀåµÈ Attribute¸¦ Áö¿öÁØ´Ù.
+        // ì„¸ì…˜ ì˜ì—­ìœ¼ë¡œ í™•ì¥ëœ Attributeë¥¼ ì§€ì›Œì¤€ë‹¤.
         status.setComplete();
         
         return "redirect:/";
     }
 
-    /** ¸¶ÀÌÆäÀÌÁö·Î °£´Ù. */
+    /** ë§ˆì´í˜ì´ì§€ë¡œ ê°„ë‹¤. */
     @GetMapping("/mypage")
     public ModelAndView mypage(ModelAndView modelAndView, HttpServletRequest request)
     {

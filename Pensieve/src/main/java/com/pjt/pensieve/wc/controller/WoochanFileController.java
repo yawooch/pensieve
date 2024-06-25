@@ -61,11 +61,11 @@ public class WoochanFileController
 
         try
         {
-            // 1. Å¬¶óÀÌ¾ğÆ®·Î Àü¼ÛÇÒ ÆÄÀÏÀ» °¡Á®¿Â´Ù.
+            // 1. í´ë¼ì´ì–¸íŠ¸ë¡œ ì „ì†¡í•  íŒŒì¼ì„ ê°€ì ¸ì˜¨ë‹¤.
 //            resource = resourceLoader.getResource("resources/img/upload/wc/memo/" + rname);
             resource = resourceLoader.getResource("Z:/studyFileServer/img/upload/wc/memo/" + rname);
 
-            // 2. ºê¶ó¿ìÀúº° ÀÎÄÚµù Ã³¸®
+            // 2. ë¸Œë¼ìš°ì €ë³„ ì¸ì½”ë”© ì²˜ë¦¬
             boolean isMSIE = userAgent.indexOf("MSIE") != -1 || userAgent.indexOf("Trident") != -1;
 
             if (isMSIE)
@@ -76,7 +76,7 @@ public class WoochanFileController
                 downName = new String(oname.getBytes("UTF-8"), "ISO-8859-1");
             }
 
-            // 3. ÀÀ´ä ¸Ş½ÃÁö ÀÛ¼º & Å¬¶óÀÌ¾ğÆ®·Î Ãâ·Â(Àü¼Û)ÇÏ±â
+            // 3. ì‘ë‹µ ë©”ì‹œì§€ ì‘ì„± & í´ë¼ì´ì–¸íŠ¸ë¡œ ì¶œë ¥(ì „ì†¡)í•˜ê¸°
             return ResponseEntity.ok()
 //                       .header("Content-Type", "application/octet-stream")
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
@@ -108,7 +108,7 @@ public class WoochanFileController
 
         try
         {
-            // 1. Å¬¶óÀÌ¾ğÆ®·Î Àü¼ÛÇÒ ÆÄÀÏÀ» °¡Á®¿Â´Ù.
+            // 1. í´ë¼ì´ì–¸íŠ¸ë¡œ ì „ì†¡í•  íŒŒì¼ì„ ê°€ì ¸ì˜¨ë‹¤.
             resource = resourceLoader.getResource("resources/img/upload/wc/memo/" + rname);
             File file = resource.getFile();
             location = resourceLoader.getResource("resources/img/delete/wc/memo/").getFile().getPath();
@@ -122,7 +122,7 @@ public class WoochanFileController
             IOUtils.copy(input, outputStream);
             MultipartFile partFile = new CommonsMultipartFile(fileItem);
 
-            // locationÀÌ ½ÇÁ¦·Î Á¸ÀçÇÏÁö ¾ÊÀ¸¸é Æú´õ¸¦ »ı¼ºÇÏ´Â ·ÎÁ÷
+            // locationì´ ì‹¤ì œë¡œ ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´ í´ë”ë¥¼ ìƒì„±í•˜ëŠ” ë¡œì§
             File folder = new File(location);
 
             if (!folder.exists())
@@ -130,13 +130,13 @@ public class WoochanFileController
                 folder.mkdirs();
             }
 
-            // ¾÷·ÎµåÇÑ ÆÄÀÏ µ¥ÀÌÅÍ¸¦ ÁöÁ¤ÇÑ ÆÄÀÏ¿¡ ÀúÀåÇÑ´Ù.
+            // ì—…ë¡œë“œí•œ íŒŒì¼ ë°ì´í„°ë¥¼ ì§€ì •í•œ íŒŒì¼ì— ì €ì¥í•œë‹¤.
             partFile.transferTo(new File(location + "/" + rname));
             
             file.delete();
         } catch (IllegalStateException | IOException e)
         {
-            log.error("ÆÄÀÏ Àü¼Û ¿¡·¯");
+            log.error("íŒŒì¼ ì „ì†¡ ì—ëŸ¬");
             e.printStackTrace();
             result = 0;
         }
