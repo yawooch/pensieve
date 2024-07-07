@@ -9,7 +9,43 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/masonry/">
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
- 
+
+<style>
+.submenu-list
+{
+    box-sizing: content-box;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+</style>
+<script>
+$(document).ready(()=>
+{
+    $('.submenu').on('mouseover',(event)=>
+    {
+        let ordinal = parseInt($(event.target).index()) + 1;
+        
+        if($(event.target).next().hasClass('submenu-list'))
+        {
+            $(event.target).next('.submenu-list').addClass('show');
+            $(event.target).next('.submenu-list').css('top', 32*ordinal);
+        }
+    });
+    $('.submenu-list').on('mouseleave',(event)=>
+    {
+        $(event.target).parents('.submenu-list').addClass('show');
+        $(event.target).next('.submenu-list').removeClass('show');
+    });
+    $('.submenu').on('mouseleave',(event)=>{$(event.target).next('.submenu-list').removeClass('show');});
+
+    $('[data-bs-toggle=dropdown]').on('hide.bs.dropdown', (event)=>
+    {
+        $('.submenu-list').removeClass('show');
+    });
+})
+</script>
     
 <div class="modal fade" id="myModal">
   <div class="modal-dialog" role="document">
@@ -68,6 +104,19 @@
 	                  <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
 	                    <a class="dropdown-item" href="#">수정</a>
 	                    <a class="dropdown-item" href="#">삭제</a>
+	                    <a class="dropdown-item submenu" href="#"  id="btnGroupDrop2"  >공개여부<i class="bi bi-chevron-compact-down"></i></a>
+	                    <div class="dropdown-menu submenu-list">
+                            <a class="dropdown-item submenu-item" href="#">전체</a>
+                            <a class="dropdown-item submenu-item" href="#">회원만</a>
+                            <a class="dropdown-item submenu" href="#">비공개<i class="bi bi-chevron-compact-down"></i></a>
+		                    <div class="dropdown-menu submenu-list">
+		                        <a class="dropdown-item submenu-item" href="#">삭제</a>
+                                <a class="dropdown-item submenu" href="#">비공개<i class="bi bi-chevron-compact-down"></i></a>
+                                <div class="dropdown-menu submenu-list">
+		                            <a class="dropdown-item submenu-item" href="#">삭제</a>
+		                        </div>
+		                    </div>
+	                    </div>
 	                  </div>
 	              </div>
               </div>
