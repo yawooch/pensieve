@@ -33,7 +33,7 @@
                       </div>
                       <input type="button" class="btn btn-primary" id="btnCollapse" value="Collapse All">
                       <div id="treeview2" class=""></div>
-                      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group" style="display:none;">
+                      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group" style="display:block;">
                         <input type="checkbox" class="btn-check" id="chngFirst" autocomplete="off">
                         <label class="btn btn-primary mt-2" for="chngFirst">Change First Data</label>
                       </div>
@@ -72,7 +72,7 @@
                               <input type="text" class="form-control form-control-sm" placeholder="menuName" id="menuName">
                           </span>
                       </div>
-                      <input type="button" class="btn btn-primary mt-3"  id="addMenu" value="추가" style="display:none;">
+                      <input type="button" class="btn btn-primary mt-3"  id="addMenu" value="추가" style="display:block;">
                       <div class="btn-group mt-3" style="display:none;" id="btnGroup">
                       <input type="button" class="btn btn-primary"  id="modMenu" value="수정">
                       <input type="button" class="btn btn-danger"   id="delMenu" value="삭제">

@@ -14,10 +14,10 @@ public class PageInfo {
    private int listLimit;   
 
    /**
-    * @param currentPage ?˜„?¬ ?˜?´ì§?
-    * @param pageLimit ?•œ ?˜?´ì§??— ë³´ì´?Š” ?˜?´ì§??˜ ?ˆ˜ 
-    * @param listCount ? „ì²? ë¦¬ìŠ¤?Š¸?˜ ?ˆ˜
-    * @param listLimit ?•œ ?˜?´ì§??— ?‘œ?‹œ?  ë¦¬ìŠ¤?Š¸?˜ ?ˆ˜
+    * @param currentPage ÇöÀç ÆäÀÌÁö
+    * @param pageLimit ÇÑ ÆäÀÌÁö¿¡ º¸ÀÌ´Â ÆäÀÌÁöÀÇ ¼ö 
+    * @param listCount ÀüÃ¼ ¸®½ºÆ®ÀÇ ¼ö
+    * @param listLimit ÇÑ ÆäÀÌÁö¿¡ Ç¥½ÃµÉ ¸®½ºÆ®ÀÇ ¼ö
     */
    public PageInfo(int currentPage, int pageLimit, int listCount, int listLimit) {
       this.currentPage = currentPage;
@@ -27,24 +27,24 @@ public class PageInfo {
    }
 
    /**    
-    * @return ? „ì²? ?˜?´ì§? ì¤? ê°??¥ ë§ˆì?ë§? ?˜?´ì§?
+    * @return ÀüÃ¼ ÆäÀÌÁö Áß °¡Àå ¸¶Áö¸· ÆäÀÌÁö
     */
    public int getMaxPage() {
       /*
           listCount = 100, listLimit = 10
-          100 / 10 = 10.0      => 10?˜?´ì§?
-          101 / 10 = 10.1      => 11?˜?´ì§?
-          103 / 10 = 10.3      => 11?˜?´ì§?
-          109 / 10 = 10.9      => 11?˜?´ì§?
-          110 / 10 = 11.0      => 11?˜?´ì§?
-          111 / 10 = 11.1      => 12?˜?´ì§?
+          100 / 10 = 10.0      => 10ÆäÀÌÁö
+          101 / 10 = 10.1      => 11ÆäÀÌÁö
+          103 / 10 = 10.3      => 11ÆäÀÌÁö
+          109 / 10 = 10.9      => 11ÆäÀÌÁö
+          110 / 10 = 11.0      => 11ÆäÀÌÁö
+          111 / 10 = 11.1      => 12ÆäÀÌÁö
        */
       return (int) Math.ceil((double) this.listCount / this.listLimit);
    }
 
    /**
     * 
-    * @return ?˜?´ì§? ?œ ?˜?´ì§? ì¤? ?‹œ?‘ ?˜?´ì§?
+    * @return ÆäÀÌÂ¡ µÈ ÆäÀÌÁö Áß ½ÃÀÛ ÆäÀÌÁö
     */
    public int getStartPage() {
       /*   
@@ -68,7 +68,7 @@ public class PageInfo {
 
    /**
     * 
-    * @return ?˜?´ì§? ?œ ?˜?´ì§? ì¤? ë§ˆì?ë§? ?˜?´ì§?
+    * @return ÆäÀÌÂ¡ µÈ ÆäÀÌÁö Áß ¸¶Áö¸· ÆäÀÌÁö
     */ 
    public int getEndPage() {
       // 10, 20, 30, 40, .... 
@@ -80,7 +80,7 @@ public class PageInfo {
 
    /**
     * 
-    * @return ?˜„?¬ ?˜?´ì§?
+    * @return ÇöÀç ÆäÀÌÁö
     */ 
    public int getCurrentPage() {
       return this.currentPage;
@@ -88,7 +88,7 @@ public class PageInfo {
 
    /**
     * 
-    * @return ?´? „ ?˜?´ì§?
+    * @return ÀÌÀü ÆäÀÌÁö
     */ 
    public int getPrevPage() {
       int prevPage = this.getCurrentPage() - 1;
@@ -98,7 +98,7 @@ public class PageInfo {
 
    /**
     * 
-    * @return ?‹¤?Œ ?˜?´ì§?
+    * @return ´ÙÀ½ ÆäÀÌÁö
     */ 
    public int getNextPage() {
       int nextPage = this.getCurrentPage() + 1;
@@ -108,7 +108,7 @@ public class PageInfo {
 
    /**
     * 
-    * @return ?˜?´ì§??˜ ?‹œ?‘ ë¦¬ìŠ¤?Š¸ 
+    * @return ÆäÀÌÁöÀÇ ½ÃÀÛ ¸®½ºÆ® 
     */    
    public int getStartList() {
       return (this.getCurrentPage() - 1) * this.listLimit + 1;
@@ -116,7 +116,7 @@ public class PageInfo {
 
    /**
     * 
-    * @return ?˜?´ì§??˜ ë§ˆì?ë§? ë¦¬ìŠ¤?Š¸
+    * @return ÆäÀÌÁöÀÇ ¸¶Áö¸· ¸®½ºÆ®
     */    
    public int getEndList() {
       int endList = this.getStartList() + this.listLimit - 1;
